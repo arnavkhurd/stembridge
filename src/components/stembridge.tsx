@@ -34,8 +34,11 @@ import {
   EmptyState,
   Modal,
   SectionHeading,
+  SearchField,
 } from "@/components/ui";
 import { CatalogCard, CommunityCard, PersonCard } from "@/components/cards";
+import { MemberDialog } from "@/components/member-dialog";
+import { catalogMatchesSearch, personMatchesSearch } from "@/lib/discovery";
 import {
   AuthDialog,
   OpportunityDialog,
@@ -70,12 +73,24 @@ const navigation = [
 ] as const;
 
 export function StemBridge() {
+  const { user } = useWorkspace();
+  // Discard private drafts and open dialogs immediately when the account changes.
+  return <WorkspaceScreen key={user?.id ?? "preview"} />;
+}
+
+function WorkspaceScreen() {
   const ws = useWorkspace();
   const [view, setView] = useState<View>("hub");
   const [communityId, setCommunityId] = useState<DomainId>("data-ai");
   const [category, setCategory] = useState<CatalogKind | "all">("all");
   const [filterDomain, setFilterDomain] = useState<DomainId | "all">("all");
   const [savedOnly, setSavedOnly] = useState(false);
+  const [catalogQuery, setCatalogQuery] = useState("");
+  const [peopleQuery, setPeopleQuery] = useState("");
+  const [memberTarget, setMemberTarget] = useState<{
+    person: Profile;
+    goal: CatalogItem;
+  } | null>(null);
   const [peopleRole, setPeopleRole] = useState<"all" | "mentor" | "peer">(
     "all",
   );
@@ -212,7 +227,7 @@ export function StemBridge() {
       setAuthOpen(true);
       return;
     }
-    if (person.id.startsWith("sample-")) {
+    if (person.is_demo || person.id.startsWith("sample-")) {
       notify(
         "This is a sample profile. Choose a registered member to send a real request.",
       );
@@ -277,6 +292,9 @@ export function StemBridge() {
         key={match.person.id}
         match={match}
         role={role}
+        onOpen={() =>
+          setMemberTarget({ person: match.person, goal: selectedGoal })
+        }
         onRequest={() =>
           request(
             match.person,
@@ -476,7 +494,7 @@ export function StemBridge() {
       { ...ws.learner, interests: [communityId], goal_id: goal.id },
       goal,
       peopleRole === "all" ? undefined : peopleRole,
-    );
+    ).filter((match) => personMatchesSearch(match.person, peopleQuery));
     const relevantItems = catalog
       .filter(
         (i) =>
@@ -524,7 +542,7 @@ export function StemBridge() {
           <div>
             <h2>Community members</h2>
             <p className="small muted" style={{ marginTop: 6 }}>
-              Support for {goal.title.toLowerCase()}.
+              Find support for: {goal.title}
             </p>
           </div>
           <div className="segmented" aria-label="Filter community people">
@@ -544,8 +562,15 @@ export function StemBridge() {
             ))}
           </div>
         </div>
+        <SearchField
+          id="people-search"
+          label="Search members"
+          placeholder="Search by name, skill, or topic"
+          value={peopleQuery}
+          onChange={setPeopleQuery}
+        />
         <div className="filter-bar">
-          <span className="filter-count">
+          <span className="filter-count" aria-live="polite">
             {matches.length} {matches.length === 1 ? "person" : "people"}{" "}
             available
           </span>
@@ -570,6 +595,7 @@ export function StemBridge() {
                 key={match.person.id}
                 match={match}
                 role={peopleRole === "all" ? undefined : peopleRole}
+                onOpen={() => setMemberTarget({ person: match.person, goal })}
                 onRequest={() =>
                   request(
                     match.person,
@@ -583,15 +609,28 @@ export function StemBridge() {
             ))}
           </div>
         ) : (
-          <EmptyState icon={<Users size={24} />} title="No members found yet">
-            Join this community or try another filter to find people.
+          <EmptyState
+            icon={<Users size={24} />}
+            title={
+              peopleQuery
+                ? "No people match that search"
+                : "No members found yet"
+            }
+          >
+            {peopleQuery
+              ? "Try another name, skill, or topic."
+              : "Join this community or try another filter to find people."}
             <Button
               variant="secondary"
               onClick={() =>
-                ws.user ? setProfileOpen(true) : setAuthOpen(true)
+                peopleQuery
+                  ? setPeopleQuery("")
+                  : ws.user
+                    ? setProfileOpen(true)
+                    : setAuthOpen(true)
               }
             >
-              Set up your profile
+              {peopleQuery ? "Clear search" : "Set up your profile"}
               <ArrowUpRight size={15} />
             </Button>
           </EmptyState>
@@ -633,7 +672,8 @@ export function StemBridge() {
         (category === "all" || item.kind === category) &&
         (filterDomain === "all" || item.domain === filterDomain) &&
         (!savedOnly || ws.learner.saved_ids.includes(item.id)) &&
-        (!ws.learner.online_only || item.format === "online"),
+        (!ws.learner.online_only || item.format === "online") &&
+        catalogMatchesSearch(item, catalogQuery),
     );
     const tabs: { id: CatalogKind | "all"; label: string }[] = [
       { id: "all", label: "All" },
@@ -654,6 +694,13 @@ export function StemBridge() {
             </p>
           </div>
         </div>
+        <SearchField
+          id="catalog-search"
+          label="Search opportunities"
+          placeholder="Search topics, skills, or opportunities"
+          value={catalogQuery}
+          onChange={setCatalogQuery}
+        />
         <div className="tabbar" aria-label="Filter catalogue by type">
           {tabs.map((tab) => (
             <button
@@ -704,7 +751,7 @@ export function StemBridge() {
               Online only
             </label>
           </div>
-          <span className="filter-count">
+          <span className="filter-count" aria-live="polite">
             {items.length} {items.length === 1 ? "result" : "results"}
           </span>
         </div>
@@ -726,18 +773,21 @@ export function StemBridge() {
           <EmptyState
             icon={<Compass size={25} />}
             title={
-              savedOnly ? "Nothing saved yet" : "No matches for these filters"
+              savedOnly && !ws.learner.saved_ids.length
+                ? "Nothing saved yet"
+                : "No matches for these filters"
             }
           >
-            {savedOnly
+            {savedOnly && !ws.learner.saved_ids.length
               ? "Save a resource or opportunity to find it here later."
-              : "Try another field or turn off the online-only filter."}
+              : "Try another search, choose a different field, or turn off online only."}
             <Button
               variant="secondary"
               onClick={() => {
                 setSavedOnly(false);
                 setCategory("all");
                 setFilterDomain("all");
+                setCatalogQuery("");
               }}
             >
               Browse all
@@ -1158,6 +1208,15 @@ export function StemBridge() {
         open={authOpen}
         onClose={() => setAuthOpen(false)}
         onNotice={notify}
+      />
+      <MemberDialog
+        person={memberTarget?.person ?? null}
+        currentGoal={memberTarget?.goal ?? selectedGoal}
+        onClose={() => setMemberTarget(null)}
+        onRequest={(person, type) =>
+          request(person, memberTarget?.goal ?? selectedGoal, type)
+        }
+        onAuth={() => setAuthOpen(true)}
       />
       <ProfileDialog
         open={profileOpen}

@@ -37,7 +37,11 @@ export function personMatchesSearch(person: Profile, query: string) {
     person.headline,
     person.bio,
     domainLabel(person.domain),
-    person.role === "both" ? "mentor peer" : person.role === "learner" ? "peer" : "mentor",
+    person.role === "both"
+      ? "mentor peer"
+      : person.role === "learner"
+        ? "peer"
+        : "mentor",
     ...person.help_topics,
     ...person.skills.map(getSkillLabel),
   ]);

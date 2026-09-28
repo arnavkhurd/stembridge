@@ -980,6 +980,41 @@ summary:focus-visible {
   margin: 26px 0;
   flex-wrap: wrap;
 }
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 4px 12px 4px 20px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 14px;
+  margin: 26px 0;
+  color: var(--muted);
+}
+.search-field:focus-within {
+  border-color: #83998a;
+  box-shadow: 0 0 0 3px #83998a22;
+}
+.search-field > svg {
+  flex-shrink: 0;
+}
+.search-field input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  padding: 12px 0;
+  font-size: 16px;
+}
+.search-field input:focus-visible {
+  outline: none;
+}
+.search-field input::-webkit-search-cancel-button {
+  display: none;
+}
 .filter-left {
   display: flex;
   flex-wrap: wrap;
@@ -1061,6 +1096,7 @@ summary:focus-visible {
   max-height: calc(100dvh - 48px);
   overflow-y: auto;
   overscroll-behavior: contain;
+  overflow-wrap: anywhere;
   padding: 36px;
   border-radius: 26px;
   background: #fff;
@@ -1078,6 +1114,9 @@ summary:focus-visible {
 }
 .modal-heading h2 {
   font-size: 29px;
+}
+.modal-heading > div {
+  min-width: 0;
 }
 .modal-heading p {
   margin-top: 12px;

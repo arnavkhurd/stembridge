@@ -27,6 +27,7 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "happy-dom": "^20.14.5",
     "prettier": "^3.9.9",
     "tailwindcss": "latest",
     "typescript": "latest",

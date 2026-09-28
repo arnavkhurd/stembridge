@@ -1,6 +1,6 @@
 "use client";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, ArrowUpRight, Cpu, Orbit } from "lucide-react";
+import { X, ArrowUpRight, Cpu, Orbit, Search } from "lucide-react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn, initials } from "@/lib/utils";
 import type { DomainId } from "@/lib/types";
@@ -139,6 +139,48 @@ export function EmptyState({
       <h3>{title}</h3>
       <p>{children}</p>
       {action}
+    </div>
+  );
+}
+
+export function SearchField({
+  id,
+  label,
+  placeholder,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="search-field">
+      <Search size={20} aria-hidden="true" />
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
+      <input
+        id={id}
+        type="search"
+        autoComplete="off"
+        maxLength={160}
+        value={value}
+        placeholder={placeholder}
+        onChange={(event) => onChange(event.target.value)}
+      />
+      {value && (
+        <button
+          className="icon-button"
+          type="button"
+          aria-label={`Clear ${label.toLowerCase()}`}
+          onClick={() => onChange("")}
+        >
+          <X size={18} aria-hidden="true" />
+        </button>
+      )}
     </div>
   );
 }

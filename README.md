@@ -6,6 +6,8 @@ STEMBridge helps women exploring STEM turn a project goal into a practical next 
 
 Choose a goal, confirm the skills you already bring, and inspect the listed requirements. The app connects the remaining requirements to learning resources and relevant people. An online-only preference changes the recommendations. Signed-in members can join a circle, save opportunities, and send requests that another account can accept or decline.
 
+Search opportunities by topic or skill, search members by their public profile information, and open a member's full profile before choosing guidance or collaboration. Search works alongside the existing filters.
+
 The sample preview uses fictional people and illustrative opportunities. Live networking requires a configured Supabase project and real registered test accounts; sample cards are not a live community. The current verification record is in [BUILD_STATUS.md](BUILD_STATUS.md).
 
 ## Run locally
@@ -58,13 +60,13 @@ npm run start
 
 The test suite covers requirement comparison, data integrity, online-only filtering, matching reasons and distinct pathways. It also executes the actual SQL schema in PGlite PostgreSQL to check row permissions, signup initialization, request transitions and forbidden actions. The external Supabase Auth boundary is emulated in these local tests. The two-account browser flow and third-account hosted privacy checks are documented in [docs/RLS_CHECKS.sql](docs/RLS_CHECKS.sql); local tests do not substitute for those hosted checks.
 
-**Current results: 43/43 tests, TypeScript and the production build pass**, including the final visual redesign checks at approximately 13:54–13:55 IST on 28 September 2026. The suite contains 15 matching/catalog tests, 10 PostgreSQL/RLS tests and 18 mocked AI-endpoint tests. At 1440px desktop and 390px mobile widths, self-hosted Manrope loaded, body text was 16px, and pages had no horizontal overflow. Skill changes correctly moved coverage 3/7 → 4/7 → 3/7; the keyboard-operable plan modal, catalog filtering and wrapping mobile tabs also passed. Hosted REST connectivity and anonymous-access denial pass; authenticated Supabase/request lifecycle, live Gemini and deployment remain pending verification.
+**Verification:** all 65 tests across six files, TypeScript and the production build passed at approximately 14:08 IST on 28 September 2026; `git diff --check` found no whitespace errors. Desktop and 390px mobile browser checks passed for combined search/filter results, empty results and clearing search, member details and sign-in handoff, consecutive bookmarks surviving reload, and confirmed-skill changes updating coverage and the suggested resources. There was no horizontal page overflow, and browser error logs were empty. The audit also fixed queued state writes, repeated membership changes, account draft isolation and negated AI skill evidence; no SQL migration was needed. Hosted REST connectivity and anonymous-access denial pass; authenticated Supabase/request lifecycle, live Gemini and deployment remain pending verification.
 
-See [JUDGE_NOTES.md](JUDGE_NOTES.md) for the demonstration, [DATA_SOURCES.md](DATA_SOURCES.md) for provenance, and [BUILD_STATUS.md](BUILD_STATUS.md) for actual verification outcomes and remaining setup.
+See [JUDGE_NOTES.md](JUDGE_NOTES.md) for the demonstration, [DATA_SOURCES.md](DATA_SOURCES.md) for provenance, and [BUILD_STATUS.md](BUILD_STATUS.md) for actual verification outcomes and remaining setup. [The feature roadmap](docs/FEATURES.md) separates implemented features, useful later additions and work to avoid before the updated **4:10 PM IST** deadline.
 
 ## Optional Vercel deployment
 
-1. This workspace already has `origin` configured as [arnavkhurd/stembridge](https://github.com/arnavkhurd/stembridge) and is on `main`; reuse it. No commit had been created at the latest setup checkpoint. Do not create another repository or add a second `origin`.
+1. This workspace already has `origin` configured as [arnavkhurd/stembridge](https://github.com/arnavkhurd/stembridge) and is on `main`, with local commit `5186322` (`first commit`) and uncommitted changes at the latest inspection. Reuse that repository and remote. This local evidence does not confirm that the latest changes were pushed or deployed.
 2. In the project terminal, run the following after your final checks. Before committing, confirm `.env.local`, `node_modules` and `.next` are absent from the staged-file list; `.env.example` is safe because it contains no key values.
 
 ```powershell

@@ -83,6 +83,16 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const isStringArray = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((item) => typeof item === "string");
 const unique = <T,>(values: T[]) => [...new Set(values)];
+const REQUEST_TIMEOUT_MS = 15_000;
+
+function changedFields<T extends object>(current: T, next: T): Partial<T> {
+  const changed: Partial<T> = {};
+  for (const key of Object.keys(next) as (keyof T)[]) {
+    if (JSON.stringify(current[key]) !== JSON.stringify(next[key]))
+      changed[key] = next[key];
+  }
+  return changed;
+}
 
 function sampleState(index = 0): PreviewState {
   const sample = sampleLearners[index] ?? sampleLearners[0];
@@ -108,6 +118,7 @@ function validPreview(value: unknown): value is PreviewState {
     s.user_id === PREVIEW_ID &&
     p.is_demo === true &&
     typeof p.display_name === "string" &&
+    p.display_name.trim().length > 0 &&
     p.display_name.length <= 80 &&
     typeof p.headline === "string" &&
     p.headline.length <= 160 &&
@@ -116,16 +127,19 @@ function validPreview(value: unknown): value is PreviewState {
     isDomain(p.domain) &&
     ["learner", "mentor", "both"].includes(String(p.role)) &&
     isStringArray(p.skills) &&
+    p.skills.length <= 40 &&
     p.skills.every((id) => skillIds.has(id)) &&
     isStringArray(p.support_modes) &&
     p.support_modes.every(
       (mode) => mode === "online" || mode === "in-person",
     ) &&
     isStringArray(p.help_topics) &&
+    p.help_topics.length <= 20 &&
     p.help_topics.every((topic) => topic.length <= 120) &&
     typeof p.discoverable === "boolean" &&
     typeof p.open_to_requests === "boolean" &&
     isStringArray(s.confirmed_skills) &&
+    s.confirmed_skills.length <= 40 &&
     s.confirmed_skills.every((id) => skillIds.has(id)) &&
     Array.isArray(s.interests) &&
     s.interests.every(isDomain) &&
@@ -135,6 +149,7 @@ function validPreview(value: unknown): value is PreviewState {
     typeof s.intro === "string" &&
     s.intro.length <= 2500 &&
     isStringArray(s.saved_ids) &&
+    s.saved_ids.length <= 100 &&
     s.saved_ids.every((id) => itemIds.has(id))
   );
 }
@@ -206,20 +221,34 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<WorkspaceUser | null>(null);
   const [authResolved, setAuthResolved] = useState(false);
   const [ready, setReady] = useState(false);
-  const [profile, setProfile] = useState<Profile | null>(
+  const [profile, setProfileState] = useState<Profile | null>(
     () => sampleState().profile,
   );
-  const [learner, setLearner] = useState<LearnerState>(
+  const [learner, setLearnerState] = useState<LearnerState>(
     () => sampleState().learner,
   );
   const [people, setPeople] = useState<Profile[]>(sampleProfiles);
-  const [memberships, setMemberships] = useState<Membership[]>([]);
+  const [memberships, setMembershipState] = useState<Membership[]>([]);
   const [requests, setRequests] = useState<ConnectionRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pendingActions, setPendingActions] = useState(0);
   const activeUserId = useRef<string | null>(null);
   const authGeneration = useRef(0);
   const loadSequence = useRef(0);
+  const writeQueue = useRef<Promise<unknown>>(Promise.resolve());
+  const snapshot = useRef({ profile, learner, memberships });
+  const setProfile = useCallback((value: Profile | null) => {
+    snapshot.current.profile = value;
+    setProfileState(value);
+  }, []);
+  const setLearner = useCallback((value: LearnerState) => {
+    snapshot.current.learner = value;
+    setLearnerState(value);
+  }, []);
+  const setMemberships = useCallback((value: Membership[]) => {
+    snapshot.current.memberships = value;
+    setMembershipState(value);
+  }, []);
 
   const restorePreview = useCallback(() => {
     const saved = readPreview();
@@ -242,10 +271,31 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         if (generation === authGeneration.current) setError(failure.message);
         throw failure;
       } finally {
-        setPendingActions((count) => Math.max(0, count - 1));
+        if (generation === authGeneration.current)
+          setPendingActions((count) => Math.max(0, count - 1));
       }
     },
     [],
+  );
+
+  // Each action reads the latest confirmed state when its turn starts. A failed
+  // write cannot poison the queue, and work queued for another session is dropped.
+  const runInSequence = useCallback(
+    <T,>(operation: () => Promise<T>): Promise<T> => {
+      const generation = authGeneration.current;
+      return run(() => {
+        const pending = writeQueue.current
+          .catch(() => undefined)
+          .then(() => {
+            if (generation !== authGeneration.current)
+              throw new Error("Your session changed. Please try again.");
+            return operation();
+          });
+        writeQueue.current = pending.catch(() => undefined);
+        return pending;
+      });
+    },
+    [run],
   );
 
   const loadLive = useCallback(
@@ -254,26 +304,35 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       if (activeUserId.current !== userId) return;
       const generation = authGeneration.current;
       const sequence = ++loadSequence.current;
+      const signal = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
       const isCurrent = () =>
         activeUserId.current === userId &&
         authGeneration.current === generation &&
         loadSequence.current === sequence;
       const results = await Promise.all([
-        client.from("profiles").select("*").eq("id", userId).single(),
+        client
+          .from("profiles")
+          .select("*")
+          .eq("id", userId)
+          .abortSignal(signal)
+          .single(),
         client
           .from("learner_state")
           .select("*")
           .eq("user_id", userId)
+          .abortSignal(signal)
           .maybeSingle(),
         client
           .from("profiles")
           .select("*")
           .eq("discoverable", true)
+          .abortSignal(signal)
           .order("display_name"),
-        client.from("community_memberships").select("*"),
+        client.from("community_memberships").select("*").abortSignal(signal),
         client
           .from("connection_requests")
           .select("*")
+          .abortSignal(signal)
           .order("created_at", { ascending: false }),
       ]);
       if (!isCurrent()) return;
@@ -292,11 +351,18 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         };
         const created = await client
           .from("learner_state")
-          .upsert(initial, { onConflict: "user_id" })
-          .select("*")
-          .single();
+          .upsert(initial, { onConflict: "user_id", ignoreDuplicates: true })
+          .abortSignal(signal);
         if (created.error) throw readableError(created.error);
-        ownLearner = created.data as LearnerState;
+        if (!isCurrent()) return;
+        const restored = await client
+          .from("learner_state")
+          .select("*")
+          .eq("user_id", userId)
+          .abortSignal(signal)
+          .single();
+        if (restored.error) throw readableError(restored.error);
+        ownLearner = restored.data as LearnerState;
       }
       if (!isCurrent()) return;
       setProfile(ownProfile);
@@ -315,11 +381,17 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     }
     let disposed = false;
     let authEventVersion = 0;
+    let sessionWasResolved = false;
+    let sessionTimer: ReturnType<typeof setTimeout> | undefined;
     const applyUser = (next: WorkspaceUser | null) => {
       if (disposed) return;
+      sessionWasResolved = true;
+      clearTimeout(sessionTimer);
       if (activeUserId.current !== (next?.id ?? null)) {
         ++authGeneration.current;
         ++loadSequence.current;
+        writeQueue.current = Promise.resolve();
+        setPendingActions(0);
         setReady(false);
         setProfile(null);
         setLearner(defaultLearnerState(next?.id ?? PREVIEW_ID));
@@ -348,6 +420,18 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       );
     });
     const initialEventVersion = authEventVersion;
+    sessionTimer = setTimeout(() => {
+      if (
+        disposed ||
+        sessionWasResolved ||
+        authEventVersion !== initialEventVersion
+      )
+        return;
+      setError(
+        "Restoring your session is taking too long. You can keep browsing and retry signing in.",
+      );
+      setAuthResolved(true);
+    }, REQUEST_TIMEOUT_MS);
     void client.auth
       .getSession()
       .then(({ data, error: sessionError }) => {
@@ -369,6 +453,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       });
     return () => {
       disposed = true;
+      clearTimeout(sessionTimer);
       subscription.unsubscribe();
     };
   }, [client]);
@@ -471,74 +556,138 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
 
   const refresh = useCallback(
     () =>
-      run(async () => {
+      runInSequence(async () => {
         if (activeUserId.current !== (user?.id ?? null))
           throw new Error("Your session changed. Please try again.");
         if (user) await loadLive(user.id);
         else restorePreview();
       }),
-    [user, loadLive, restorePreview, run],
+    [user, loadLive, restorePreview, runInSequence],
+  );
+
+  const persistProfile = useCallback(
+    async (
+      profilePatch: Partial<Profile>,
+      learnerPatch: Partial<LearnerState>,
+    ) => {
+      if (activeUserId.current !== (user?.id ?? null))
+        throw new Error(
+          "Your session changed. Reopen your profile and try again.",
+        );
+      const current = snapshot.current;
+      if (!current.profile)
+        throw new Error(
+          "Your profile has not loaded. Refresh your workspace and try again.",
+        );
+      const nextProfile = {
+        ...current.profile,
+        ...profilePatch,
+        id: current.profile.id,
+        is_demo: current.profile.is_demo,
+      };
+      const nextLearner = learnerFields(
+        { ...current.learner, ...learnerPatch },
+        user?.id ?? PREVIEW_ID,
+      );
+      if (learnerPatch.confirmed_skills)
+        nextProfile.skills = nextLearner.confirmed_skills;
+      else if (profilePatch.skills)
+        nextLearner.confirmed_skills = unique(profilePatch.skills);
+      const saved: PreviewState = {
+        version: 1,
+        profile: {
+          ...nextProfile,
+          ...profileFields(nextProfile),
+          id: PREVIEW_ID,
+          is_demo: true,
+        },
+        learner: { ...nextLearner, user_id: PREVIEW_ID },
+      };
+      // Validate the complete draft before either live table is changed.
+      if (!validPreview(saved))
+        throw new Error(
+          "Check your profile fields and select skills and opportunities from the available options.",
+        );
+      if (!user) {
+        writePreview(saved);
+        setProfile(saved.profile);
+        setLearner(saved.learner);
+        return;
+      }
+      const live = requireUser();
+      const generation = authGeneration.current;
+      const ensureCurrent = () => {
+        if (
+          generation !== authGeneration.current ||
+          activeUserId.current !== live.user.id
+        )
+          throw new Error(
+            "Your session changed. Reopen your profile and try again.",
+          );
+      };
+      const profileChanges = changedFields(
+        profileFields(current.profile),
+        profileFields(nextProfile),
+      );
+      const learnerChanges = changedFields(
+        learnerFields(current.learner, live.user.id),
+        nextLearner,
+      );
+      let completedWrites = 0;
+      try {
+        if (Object.keys(profileChanges).length) {
+          ensureCurrent();
+          const profileResult = await live.client
+            .from("profiles")
+            .update(profileChanges)
+            .eq("id", live.user.id)
+            .select("*")
+            .abortSignal(AbortSignal.timeout(REQUEST_TIMEOUT_MS))
+            .single();
+          if (profileResult.error) throw readableError(profileResult.error);
+          ensureCurrent();
+          setProfile(profileResult.data as Profile);
+          completedWrites++;
+        }
+        if (Object.keys(learnerChanges).length) {
+          ensureCurrent();
+          const learnerResult = await live.client
+            .from("learner_state")
+            .update(learnerChanges)
+            .eq("user_id", live.user.id)
+            .select("*")
+            .abortSignal(AbortSignal.timeout(REQUEST_TIMEOUT_MS))
+            .single();
+          if (learnerResult.error) throw readableError(learnerResult.error);
+          ensureCurrent();
+          setLearner(learnerResult.data as LearnerState);
+          completedWrites++;
+        }
+      } catch (cause) {
+        await loadLive(live.user.id).catch(() => undefined);
+        if (completedWrites > 0 && generation === authGeneration.current)
+          throw new Error(
+            `Some changes were saved, but the full profile could not be saved. Review and retry. ${readableError(cause).message}`,
+          );
+        throw cause;
+      }
+      if (completedWrites > 0) {
+        try {
+          await loadLive(live.user.id);
+        } catch {
+          throw new Error(
+            "Your changes were saved, but the workspace could not be refreshed. Please refresh to reload recommendations.",
+          );
+        }
+      }
+    },
+    [user, requireUser, loadLive],
   );
 
   const saveProfile = useCallback(
     (profilePatch: Partial<Profile>, learnerPatch: Partial<LearnerState>) =>
-      run(async () => {
-        if (activeUserId.current !== (user?.id ?? null))
-          throw new Error(
-            "Your session changed. Reopen your profile and try again.",
-          );
-        if (!profile)
-          throw new Error(
-            "Your profile has not loaded. Refresh your workspace and try again.",
-          );
-        const nextProfile = {
-          ...profile,
-          ...profilePatch,
-          id: profile.id,
-          is_demo: profile.is_demo,
-        };
-        const nextLearner = learnerFields(
-          { ...learner, ...learnerPatch },
-          user?.id ?? PREVIEW_ID,
-        );
-        if (learnerPatch.confirmed_skills)
-          nextProfile.skills = nextLearner.confirmed_skills;
-        if (!user) {
-          const saved: PreviewState = {
-            version: 1,
-            profile: {
-              ...nextProfile,
-              ...profileFields(nextProfile),
-              id: PREVIEW_ID,
-              is_demo: true,
-            },
-            learner: nextLearner,
-          };
-          writePreview(saved);
-          setProfile(saved.profile);
-          setLearner(saved.learner);
-          return;
-        }
-        const live = requireUser();
-        try {
-          const profileResult = await live.client
-            .from("profiles")
-            .update(profileFields(nextProfile))
-            .eq("id", live.user.id)
-            .select("id")
-            .single();
-          if (profileResult.error) throw readableError(profileResult.error);
-          const learnerResult = await live.client
-            .from("learner_state")
-            .upsert(nextLearner, { onConflict: "user_id" });
-          if (learnerResult.error) throw readableError(learnerResult.error);
-        } catch (cause) {
-          await loadLive(live.user.id).catch(() => undefined);
-          throw cause;
-        }
-        await loadLive(live.user.id);
-      }),
-    [profile, learner, user, requireUser, loadLive, run],
+      runInSequence(() => persistProfile(profilePatch, learnerPatch)),
+    [persistProfile, runInSequence],
   );
 
   const updateLearner = useCallback(
@@ -547,26 +696,26 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   );
 
   const toggleSaved = useCallback(
-    (id: string) => {
-      if (!itemIds.has(id))
-        return Promise.reject(
-          new Error("This opportunity is no longer available."),
-        );
-      const saved_ids = learner.saved_ids.includes(id)
-        ? learner.saved_ids.filter((value) => value !== id)
-        : [...learner.saved_ids, id];
-      return updateLearner({ saved_ids });
-    },
-    [learner.saved_ids, updateLearner],
+    (id: string) =>
+      runInSequence(async () => {
+        if (!itemIds.has(id))
+          throw new Error("This opportunity is no longer available.");
+        const current = snapshot.current.learner;
+        const saved_ids = current.saved_ids.includes(id)
+          ? current.saved_ids.filter((value) => value !== id)
+          : [...current.saved_ids, id];
+        await persistProfile({}, { saved_ids });
+      }),
+    [persistProfile, runInSequence],
   );
 
   const toggleMembership = useCallback(
     (domainId: DomainId) =>
-      run(async () => {
+      runInSequence(async () => {
         if (!user)
           throw new Error("Sign in to join a community and meet its members.");
         const live = requireUser();
-        const joined = memberships.some(
+        const joined = snapshot.current.memberships.some(
           (membership) =>
             membership.user_id === user.id &&
             membership.community_id === domainId,
@@ -577,13 +726,15 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
               .delete()
               .eq("user_id", user.id)
               .eq("community_id", domainId)
+              .abortSignal(AbortSignal.timeout(REQUEST_TIMEOUT_MS))
           : await live.client
               .from("community_memberships")
-              .insert({ user_id: user.id, community_id: domainId });
+              .insert({ user_id: user.id, community_id: domainId })
+              .abortSignal(AbortSignal.timeout(REQUEST_TIMEOUT_MS));
         if (result.error) throw readableError(result.error);
         await loadLive(user.id);
       }),
-    [user, memberships, requireUser, loadLive, run],
+    [user, requireUser, loadLive, runInSequence],
   );
 
   const sendRequest = useCallback(
@@ -593,48 +744,54 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       helpType: ConnectionRequest["help_type"],
       message: string,
     ) =>
-      run(async () => {
+      runInSequence(async () => {
         if (!user)
           throw new Error("Sign in to send a real connection request.");
         const live = requireUser();
-        const result = await live.client.rpc("create_connection_request", {
-          p_recipient_id: recipientId,
-          p_opportunity_id: itemId,
-          p_help_type: helpType,
-          p_message: message.trim(),
-        });
+        const result = await live.client
+          .rpc("create_connection_request", {
+            p_recipient_id: recipientId,
+            p_opportunity_id: itemId,
+            p_help_type: helpType,
+            p_message: message.trim(),
+          })
+          .abortSignal(AbortSignal.timeout(REQUEST_TIMEOUT_MS));
         if (result.error) throw readableError(result.error);
         await loadLive(user.id);
       }),
-    [user, requireUser, loadLive, run],
+    [user, requireUser, loadLive, runInSequence],
   );
 
   const respondRequest = useCallback(
     (id: string, status: "accepted" | "declined", nextStep: string) =>
-      run(async () => {
+      runInSequence(async () => {
         const live = requireUser();
-        const result = await live.client.rpc("respond_to_request", {
-          p_request_id: id,
-          p_status: status,
-          p_next_step: nextStep.trim(),
-        });
+        const result = await live.client
+          .rpc("respond_to_request", {
+            p_request_id: id,
+            p_status: status,
+            p_next_step: nextStep.trim(),
+          })
+          .abortSignal(AbortSignal.timeout(REQUEST_TIMEOUT_MS));
         if (result.error) throw readableError(result.error);
         await loadLive(live.user.id);
       }),
-    [requireUser, loadLive, run],
+    [requireUser, loadLive, runInSequence],
   );
 
   const cancelRequest = useCallback(
     (id: string) =>
-      run(async () => {
+      runInSequence(async () => {
         const live = requireUser();
-        const result = await live.client.rpc("cancel_connection_request", {
-          p_request_id: id,
-        });
+        const result = await live.client
+          .rpc("cancel_connection_request", {
+            p_request_id: id,
+          })
+          .abortSignal(AbortSignal.timeout(REQUEST_TIMEOUT_MS));
         if (result.error) throw readableError(result.error);
         await loadLive(live.user.id);
       }),
-    [requireUser, loadLive, run],
+    [requireUser, loadLive, runInSequence],
   );
 
   const loadSample = useCallback(
@@ -648,6 +805,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       try {
         const saved = sampleState(index);
         writePreview(saved);
+        ++authGeneration.current;
+        ++loadSequence.current;
+        writeQueue.current = Promise.resolve();
+        setPendingActions(0);
         setProfile(saved.profile);
         setLearner(saved.learner);
         setPeople(sampleProfiles);

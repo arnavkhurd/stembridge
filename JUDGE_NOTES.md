@@ -7,7 +7,7 @@
 ## Demonstration: about three minutes
 
 1. Open the sample learner Priya and review her three stated skills. Choose the first ML project, click **See my plan**, and show the genuine **3 of 7 listed requirements** comparison.
-2. Show the foundation resources, practice project and relevant mentor/peer recommendations. Explain one recommendation using its actual skill and domain links.
+2. Show the foundation resources, practice project and relevant mentor/peer recommendations. Search for a skill or a member and open a full profile. Explain one recommendation using the person's actual skill and domain links.
 3. Change online-only and point to an in-person profile disappearing or returning. Switch to Aisha briefly to show a genuinely different robotics pathway.
 4. In a configured live workspace, sign in as the learner, open a registered supporter's profile, and send a specific request such as “Could you review my first notebook's train/test explanation?”
 5. In a second browser signed in as the supporter, open or refresh Connections, accept, and suggest a next step. Refresh the learner's inbox to show the shared accepted state.
@@ -21,14 +21,15 @@ If Supabase has not been configured and verified, present steps 1–3 as the pre
 | Area | Current status |
 | --- | --- |
 | Typed profiles, requirement comparison, linked paths and online-only matching | Implemented; all 15 matching/catalog tests pass, including the dual-role regression |
+| Member/opportunity search and full member profiles | Implemented; four discovery tests and desktop/mobile search, filter, empty-state and profile checks pass |
 | Two distinct sample learners, sample people and opportunity catalog | Fictional/illustrative content, explicitly labelled |
 | Account signup/sign-in, private learner state and circle membership | Supabase configured and hosted public community read verified. Account lifecycle still needs accepted user-controlled email accounts. |
 | Pending requests, recipient accept/decline, sender cancellation | Implemented; 10 local PostgreSQL permission/lifecycle tests pass. Hosted two-account verification remains required. |
-| Optional AI profile suggestions with consent and confirmation | Implemented; 18 tests pass with mocked Auth/Gemini. Live provider verification remains required. |
+| Optional AI profile suggestions with consent and confirmation | Implemented; 22 mocked tests pass, including four negative-evidence regressions. Live provider verification remains required. |
 | Live internship feed, verified mentors, email notifications, chat | Not built |
 | Actual announced twist | Not supplied to this build yet; no adaptation is claimed |
 
-**Verification so far:** all 43 tests, TypeScript and the production build passed after the redesign at approximately 13:54–13:55 IST on 28 September 2026. Desktop/mobile checks confirmed the local font, readable sizing, no page overflow, changing skill coverage, keyboard plan modal and catalog filters. Hosted Supabase returns two community records and denies anonymous reads of private tables. Signup is enabled, but **Confirm email is currently ON** and must be turned off manually for the immediate-signup prototype. Synthetic email addresses were rejected; no test accounts were created and the real two-browser request flow remains unverified. The Gemini key is empty, so live AI is not connected. Update pending results before submission; a mocked provider test is not a live API demonstration.
+**Verification so far:** all 65 tests across six files, TypeScript, the production build and `git diff --check` passed at approximately 14:08 IST on 28 September 2026. Desktop and 390px mobile checks passed for search/filter combinations, member details, sign-in handoff, repeated bookmark persistence and skill-dependent plan updates; browser error logs were empty and there was no horizontal page overflow. The audit fixed queued state writes, repeated membership changes, account draft isolation and negated AI evidence without a SQL migration. Hosted Supabase returns two communities and denies anonymous reads of private tables, but the real two-browser request flow remains unverified. Confirm email is still ON and requires the participant's manual change for immediate prototype signup. Gemini's key is empty, and deployment remains unverified. The submission target is **4:10 PM IST**; keep presentation claims limited to completed evidence.
 
 ## Explain the implementation plainly
 

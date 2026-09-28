@@ -17,14 +17,22 @@ describe("discovery search", () => {
   });
 
   it("finds a member by skills or help offered and tolerates accents", () => {
-    const person = { ...sampleProfiles[0], display_name: "Ánanya Rao", help_topics: ["Project feedback"] };
+    const person = {
+      ...sampleProfiles[0],
+      display_name: "Ánanya Rao",
+      help_topics: ["Project feedback"],
+    };
     expect(personMatchesSearch(person, "ananya feedback")).toBe(true);
     expect(personMatchesSearch(person, "numpy")).toBe(true);
     expect(personMatchesSearch(person, "nonexistent topic")).toBe(false);
   });
 
   it("never searches identifiers or extra private fields", () => {
-    const person = { ...sampleProfiles[0], id: "privateidentifier", email: "privateemail@example.com" };
+    const person = {
+      ...sampleProfiles[0],
+      id: "privateidentifier",
+      email: "privateemail@example.com",
+    };
     expect(personMatchesSearch(person, "privateidentifier")).toBe(false);
     expect(personMatchesSearch(person, "privateemail")).toBe(false);
   });

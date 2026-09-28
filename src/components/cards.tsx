@@ -215,7 +215,7 @@ export function CommunityCard({
           {joined ? (
             <>
               <Check size={13} />
-              Joined
+              Leave community
             </>
           ) : (
             <>
