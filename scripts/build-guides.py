@@ -235,7 +235,8 @@ def parse_markdown(source: Path, number: str) -> tuple[list, str]:
             while index < len(lines) and not lines[index].strip().startswith("```"):
                 code_lines.append(normalize(lines[index]))
                 index += 1
-            story.append(XPreformatted(html.escape("\n".join(code_lines)), style["code"]))
+            code_block = XPreformatted(html.escape("\n".join(code_lines)), style["code"])
+            story.append(KeepTogether([code_block]) if len(code_lines) <= 40 else code_block)
             index += 1
             continue
         if line.startswith("|"):

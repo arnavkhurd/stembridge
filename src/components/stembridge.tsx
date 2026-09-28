@@ -553,30 +553,12 @@ function WorkspaceScreen() {
             (i) => i.kind === "project" && i.domain === communityId,
           )!;
     const candidates = membersFor(communityId);
-    const ownProfile = ws.user ? ws.profile : null;
-    // Recommendations exclude self; the community listing also shows your
-    // public membership, independently of whether you accept new requests.
-    const ownMatches: PersonMatch[] =
-      ownProfile?.discoverable &&
-      ws.memberships.some(
-        (m) => m.user_id === ownProfile.id && m.community_id === communityId,
-      ) &&
-      (!ws.learner.online_only ||
-        ownProfile.support_modes.includes("online")) &&
-      (peopleRole === "all" ||
-        ownProfile.role === "both" ||
-        ownProfile.role === (peopleRole === "peer" ? "learner" : "mentor"))
-        ? [{ person: ownProfile, reasons: [], sharedSkills: [] }]
-        : [];
-    const matches = [
-      ...ownMatches,
-      ...matchPeople(
-        candidates,
-        { ...ws.learner, interests: [communityId], goal_id: goal.id },
-        goal,
-        peopleRole === "all" ? undefined : peopleRole,
-      ),
-    ].filter(
+    const matches = matchPeople(
+      candidates,
+      { ...ws.learner, interests: [communityId], goal_id: goal.id },
+      goal,
+      peopleRole === "all" ? undefined : peopleRole,
+    ).filter(
       (match) =>
         personMatchesSearch(match.person, peopleQuery) ||
         localizedSearch(peopleQuery, [
@@ -699,11 +681,6 @@ function WorkspaceScreen() {
                 key={match.person.id}
                 match={match}
                 role={peopleRole === "all" ? undefined : peopleRole}
-                onEdit={
-                  match.person.id === ws.user?.id
-                    ? () => setProfileOpen(true)
-                    : undefined
-                }
                 onOpen={() => setMemberTarget({ person: match.person, goal })}
                 onRequest={() =>
                   request(
