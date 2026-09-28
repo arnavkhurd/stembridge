@@ -40,6 +40,16 @@ export const dialogsMarathi: Record<string, string> = {
     "AI ची सूचना समजण्याजोग्या स्वरूपात आली नाही. माहिती स्वतः संपादित करा.",
   "AI took too long. Your introduction is preserved; you can continue manually.":
     "AI ला जास्त वेळ लागला. तुमचा परिचय सुरक्षित आहे; माहिती स्वतः भरा.",
+  "The selected AI model is not available. Ask the website owner to update the AI model. Your text is preserved; continue with manual editing.":
+    "निवडलेले AI मॉडेल उपलब्ध नाही. वेबसाइटच्या व्यवस्थापकाला AI मॉडेल बदलण्यास सांगा. तुमचा मजकूर सुरक्षित आहे; माहिती स्वतः संपादित करा.",
+  "The AI service configuration was rejected. Ask the website owner to check the AI setup. Your text is preserved; continue with manual editing.":
+    "AI सेवेची मांडणी स्वीकारली गेली नाही. वेबसाइटच्या व्यवस्थापकाला AI जोडणी तपासण्यास सांगा. तुमचा मजकूर सुरक्षित आहे; माहिती स्वतः संपादित करा.",
+  "The AI key or its permissions need attention. Ask the website owner to check AI access. Your text is preserved; continue with manual editing.":
+    "AI की किंवा तिच्या परवानग्या तपासणे आवश्यक आहे. वेबसाइटच्या व्यवस्थापकाला AI प्रवेश तपासण्यास सांगा. तुमचा मजकूर सुरक्षित आहे; माहिती स्वतः संपादित करा.",
+  "The AI request limit or quota has been reached. Your text is preserved; continue with manual editing or retry later.":
+    "AI विनंत्यांची किंवा वापराची मर्यादा गाठली आहे. तुमचा मजकूर सुरक्षित आहे; माहिती स्वतः संपादित करा किंवा नंतर पुन्हा प्रयत्न करा.",
+  "The AI provider is temporarily unavailable. Your text is preserved; continue with manual editing or retry later.":
+    "AI सेवा तात्पुरती उपलब्ध नाही. तुमचा मजकूर सुरक्षित आहे; माहिती स्वतः संपादित करा किंवा नंतर पुन्हा प्रयत्न करा.",
   "Please add the name you would like the community to use.":
     "समुदायाने तुम्हाला कोणत्या नावाने ओळखावे, ते भरा.",
   "Choose at least one way you are open to connecting.":

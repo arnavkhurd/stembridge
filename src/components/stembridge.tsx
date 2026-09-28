@@ -287,10 +287,12 @@ function WorkspaceScreen() {
   const membersFor = (id: DomainId) =>
     ws.preview
       ? ws.people.filter((p) => p.domain === id)
-      : ws.people.filter((p) =>
-          ws.memberships.some(
-            (m) => m.user_id === p.id && m.community_id === id,
-          ),
+      : ws.people.filter(
+          (p) =>
+            p.discoverable &&
+            ws.memberships.some(
+              (m) => m.user_id === p.id && m.community_id === id,
+            ),
         );
   const communityCard = (id: DomainId, selected = false) => {
     const community = communities.find((c) => c.id === id)!;
@@ -299,7 +301,7 @@ function WorkspaceScreen() {
         key={id}
         community={community}
         people={membersFor(id)}
-        count={ws.memberships.filter((m) => m.community_id === id).length}
+        count={membersFor(id).length}
         preview={ws.preview}
         joined={ws.memberships.some(
           (m) => m.user_id === ws.user?.id && m.community_id === id,
@@ -553,24 +555,31 @@ function WorkspaceScreen() {
             (i) => i.kind === "project" && i.domain === communityId,
           )!;
     const candidates = membersFor(communityId);
-    const matches = matchPeople(
-      candidates,
-      { ...ws.learner, interests: [communityId], goal_id: goal.id },
-      goal,
-      peopleRole === "all" ? undefined : peopleRole,
-    ).filter(
-      (match) =>
-        personMatchesSearch(match.person, peopleQuery) ||
-        localizedSearch(peopleQuery, [
-          domainLabel(match.person.domain),
-          ...match.person.skills.map(getSkillLabel),
-          ...(match.person.role === "both"
-            ? ["Mentors", "Peers"]
-            : match.person.role === "mentor"
-              ? ["Mentors"]
-              : ["Peers"]),
-        ]),
-    );
+    // Use the same membership roster as the circle avatars and total. Goal,
+    // primary-field and request-availability rules belong to recommendations.
+    const matches: PersonMatch[] = candidates
+      .filter(
+        (person) =>
+          (!ws.learner.online_only ||
+            person.support_modes.includes("online")) &&
+          (peopleRole === "all" ||
+            person.role === "both" ||
+            person.role === (peopleRole === "peer" ? "learner" : "mentor")),
+      )
+      .map((person) => ({ person, reasons: [], sharedSkills: [] }))
+      .filter(
+        (match) =>
+          personMatchesSearch(match.person, peopleQuery) ||
+          localizedSearch(peopleQuery, [
+            domainLabel(match.person.domain),
+            ...match.person.skills.map(getSkillLabel),
+            ...(match.person.role === "both"
+              ? ["Mentors", "Peers"]
+              : match.person.role === "mentor"
+                ? ["Mentors"]
+                : ["Peers"]),
+          ]),
+      );
     const relevantItems = catalog
       .filter(
         (i) =>
@@ -614,9 +623,7 @@ function WorkspaceScreen() {
             {ws.preview
               ? t("Demo community")
               : t("{count} visible members", {
-                  count: ws.memberships.filter(
-                    (m) => m.community_id === communityId,
-                  ).length,
+                  count: candidates.length,
                 })}
           </Badge>
         </div>
@@ -624,7 +631,7 @@ function WorkspaceScreen() {
           <div>
             <h2>{t("Community members")}</h2>
             <p className="small muted" style={{ marginTop: 6 }}>
-              {t("Find support for: {goal}", { goal: t(goal.title) })}
+              {t("Browse everyone who has joined this community.")}
             </p>
           </div>
           <div className="segmented" aria-label={t("Filter community people")}>
@@ -655,8 +662,8 @@ function WorkspaceScreen() {
           <span className="filter-count" aria-live="polite">
             {t(
               matches.length === 1
-                ? "{count} person available"
-                : "{count} people available",
+                ? "{count} member shown"
+                : "{count} members shown",
               { count: matches.length },
             )}
           </span>
@@ -681,6 +688,11 @@ function WorkspaceScreen() {
                 key={match.person.id}
                 match={match}
                 role={peopleRole === "all" ? undefined : peopleRole}
+                onEdit={
+                  match.person.id === ws.user?.id
+                    ? () => setProfileOpen(true)
+                    : undefined
+                }
                 onOpen={() => setMemberTarget({ person: match.person, goal })}
                 onRequest={() =>
                   request(

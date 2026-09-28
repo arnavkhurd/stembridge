@@ -57,6 +57,40 @@ function failure(error: string, status: number) {
   );
 }
 
+function providerFailure(status: number) {
+  // Provider details can contain secrets or learner text. Return only fixed,
+  // actionable messages; provider authentication is separate from account auth.
+  if (status === 404)
+    return failure(
+      "The selected AI model is not available. Ask the website owner to update the AI model. Your text is preserved; continue with manual editing.",
+      503,
+    );
+  if (status === 400)
+    return failure(
+      "The AI service configuration was rejected. Ask the website owner to check the AI setup. Your text is preserved; continue with manual editing.",
+      503,
+    );
+  if (status === 401 || status === 403)
+    return failure(
+      "The AI key or its permissions need attention. Ask the website owner to check AI access. Your text is preserved; continue with manual editing.",
+      503,
+    );
+  if (status === 429)
+    return failure(
+      "The AI request limit or quota has been reached. Your text is preserved; continue with manual editing or retry later.",
+      429,
+    );
+  if (status >= 500)
+    return failure(
+      "The AI provider is temporarily unavailable. Your text is preserved; continue with manual editing or retry later.",
+      502,
+    );
+  return failure(
+    "AI could not process this description. Your text is preserved; continue with manual editing.",
+    502,
+  );
+}
+
 function supportedQuote(text: string, quote: string) {
   if (!text.includes(quote)) return false;
   // Reject evidence in explicitly aspirational or negative clauses. This is a
@@ -70,7 +104,9 @@ function supportedQuote(text: string, quote: string) {
     clauses.some(
       (clause) =>
         clause.includes(phrase) &&
-        !negativeOrDesired.test(clause.normalize("NFKC").replace(/[’‘ʼ＇]/g, "'")),
+        !negativeOrDesired.test(
+          clause.normalize("NFKC").replace(/[’‘ʼ＇]/g, "'"),
+        ),
     )
   );
 }
@@ -128,7 +164,7 @@ export async function POST(request: Request) {
       429,
     );
 
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
   if (!/^[a-zA-Z0-9._-]+$/.test(model))
     return failure(
       "AI configuration is unavailable. Continue with manual editing.",
@@ -198,13 +234,7 @@ export async function POST(request: Request) {
         }),
       },
     );
-    if (!response.ok)
-      return failure(
-        response.status === 429
-          ? "The AI provider is busy or its quota is reached. Continue with manual editing or retry later."
-          : "AI could not process this description. Your text is preserved; continue with manual editing.",
-        response.status === 429 ? 429 : 502,
-      );
+    if (!response.ok) return providerFailure(response.status);
 
     const envelope: unknown = await response.json();
     const envelopeSchema = z.object({

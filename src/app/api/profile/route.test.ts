@@ -31,7 +31,7 @@ const providerResponse = (value: unknown) =>
 beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv("GEMINI_API_KEY", "unit-test-key-not-a-real-secret");
-  vi.stubEnv("GEMINI_MODEL", "gemini-2.5-flash-lite");
+  vi.stubEnv("GEMINI_MODEL", "gemini-3.5-flash-lite");
   vi.stubGlobal("fetch", mocks.fetch);
   vi.spyOn(Date, "now").mockReturnValue(1_000_000 + ++testNumber * 61_000);
   mocks.createClient.mockResolvedValue(null);
@@ -45,6 +45,17 @@ afterEach(() => {
 });
 
 describe("profile assistance validates before sending learner text", () => {
+  it("uses the verified default model when no model is configured", async () => {
+    vi.stubEnv("GEMINI_MODEL", undefined);
+    const response = await POST(makeRequest());
+    expect(response.status).toBe(200);
+    expect(mocks.fetch).toHaveBeenCalledWith(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
+      expect.objectContaining({ method: "POST", cache: "no-store" }),
+    );
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
   it("rejects malformed JSON without contacting auth or Gemini", async () => {
     const response = await POST(
       new Request("http://localhost/api/profile", {
@@ -114,17 +125,26 @@ describe("profile suggestions must have affirmative evidence", () => {
     { text: "I don’t know Python.", skill: "python", quote: "know Python" },
     { text: "I haven’t used NumPy.", skill: "numpy", quote: "used NumPy" },
     { text: "I can’t use pandas.", skill: "pandas", quote: "use pandas" },
-    { text: "I have no experience with Python.", skill: "python", quote: "experience with Python" },
-  ])("rejects negative evidence with typographic apostrophes or no experience: $text", async ({ text, skill, quote }) => {
-    mocks.fetch.mockResolvedValue(providerResponse({
-      ...suggested,
-      skills: [skill],
-      evidence: [{ skill, quote }],
-    }));
-    const response = await POST(makeRequest({ text, consent: true }));
-    expect(response.status).toBe(200);
-    expect((await response.json()).skills).toEqual([]);
-  });
+    {
+      text: "I have no experience with Python.",
+      skill: "python",
+      quote: "experience with Python",
+    },
+  ])(
+    "rejects negative evidence with typographic apostrophes or no experience: $text",
+    async ({ text, skill, quote }) => {
+      mocks.fetch.mockResolvedValue(
+        providerResponse({
+          ...suggested,
+          skills: [skill],
+          evidence: [{ skill, quote }],
+        }),
+      );
+      const response = await POST(makeRequest({ text, consent: true }));
+      expect(response.status).toBe(200);
+      expect((await response.json()).skills).toEqual([]);
+    },
+  );
 
   it("preserves exact affirmative quotes, deduplicates skills and removes negative or aspirational evidence", async () => {
     mocks.fetch.mockResolvedValue(
@@ -194,16 +214,37 @@ describe("profile suggestions must have affirmative evidence", () => {
 
 describe("upstream failures preserve the manual flow", () => {
   it.each([
-    [429, 429],
-    [500, 502],
-  ])("handles provider status %i", async (upstream, expected) => {
-    mocks.fetch.mockResolvedValue(
-      new Response("Unavailable", { status: upstream }),
-    );
-    const response = await POST(makeRequest());
-    expect(response.status).toBe(expected);
-    expect((await response.json()).error).toMatch(/manual/i);
-  });
+    [400, 503, "configuration was rejected"],
+    [401, 503, "key or its permissions"],
+    [403, 503, "key or its permissions"],
+    [404, 503, "model is not available"],
+    [429, 429, "limit or quota"],
+    [500, 502, "temporarily unavailable"],
+    [503, 502, "temporarily unavailable"],
+    [418, 502, "could not process"],
+  ])(
+    "handles provider status %i without leaking upstream details",
+    async (upstream, expected, message) => {
+      const privateProviderDetails = {
+        error: `unit-test-key-not-a-real-secret ${introduction}`,
+      };
+      const upstreamResponse = Response.json(privateProviderDetails, {
+        status: upstream as number,
+      });
+      const readProviderBody = vi.spyOn(upstreamResponse, "json");
+      mocks.fetch.mockResolvedValue(upstreamResponse);
+      const response = await POST(makeRequest());
+      expect(response.status).toBe(expected);
+      expect(response.headers.get("cache-control")).toBe("private, no-store");
+      const result = await response.json();
+      expect(result.error).toContain(message);
+      expect(result.error).toMatch(/manual/i);
+      expect(result.error).toContain("text is preserved");
+      expect(result.error).not.toContain("unit-test-key-not-a-real-secret");
+      expect(result.error).not.toContain(introduction);
+      expect(readProviderBody).not.toHaveBeenCalled();
+    },
+  );
 
   it("returns a usable timeout response without waiting for a network call", async () => {
     const timeout = new Error("The mocked provider timed out");

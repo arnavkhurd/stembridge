@@ -113,11 +113,13 @@ export function PersonCard({
   match,
   onRequest,
   onOpen,
+  onEdit,
   role,
 }: {
   match: PersonMatch;
   onRequest: () => void;
   onOpen?: () => void;
+  onEdit?: () => void;
   role?: "mentor" | "peer";
 }) {
   const { t } = useLanguage();
@@ -128,13 +130,16 @@ export function PersonCard({
       <div className="person-card-head">
         <Avatar name={person.display_name} domain={person.domain} />
         <Badge className={isMentor ? "badge-violet" : "badge-orange"}>
-          {t(isMentor ? "Mentor" : "Peer")}
+          {t(onEdit ? "Your profile" : isMentor ? "Mentor" : "Peer")}
           {person.is_demo ? t(" · sample") : ""}
         </Badge>
       </div>
       <div>
         <h3>
-          <button className="catalog-title" onClick={onOpen ?? onRequest}>
+          <button
+            className="catalog-title"
+            onClick={onEdit ?? onOpen ?? onRequest}
+          >
             {person.display_name}
           </button>
         </h3>
@@ -161,8 +166,16 @@ export function PersonCard({
           )}
           {t(person.support_modes.includes("online") ? "Online" : "In person")}
         </span>
-        <button className="text-button" onClick={onOpen ?? onRequest}>
-          {t(onOpen ? "View profile" : isMentor ? "Ask for help" : "Connect")}
+        <button className="text-button" onClick={onEdit ?? onOpen ?? onRequest}>
+          {t(
+            onEdit
+              ? "Edit profile"
+              : onOpen
+                ? "View profile"
+                : isMentor
+                  ? "Ask for help"
+                  : "Connect",
+          )}
           <ArrowUpRight size={14} />
         </button>
       </div>
