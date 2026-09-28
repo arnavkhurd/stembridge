@@ -4,15 +4,17 @@
 
 STEMBridge helps women exploring STEM turn a project goal into a practical next step, relevant learning material, and a specific request for mentor or peer support. The prototype focuses on Data & AI and Robotics & Makers.
 
-Choose a goal, confirm the skills you already bring, and inspect the listed requirements. The app connects the remaining requirements to learning resources and relevant people. An online-only preference changes the recommendations. Signed-in members can join a circle, save opportunities, and send requests that another account can accept or decline.
+Choose a goal, confirm the skills you already bring, and inspect the listed requirements. The website connects the remaining requirements to learning resources and relevant people. An online-only preference changes the recommendations. Signed-in members can join a circle, save opportunities, and send requests that another account can accept or decline.
 
 Search opportunities by topic or skill, search members by their public profile information, and open a member's full profile before choosing guidance or collaboration. Search works alongside the existing filters.
 
 The sample preview uses fictional people and illustrative opportunities. Live networking requires a configured Supabase project and real registered test accounts; sample cards are not a live community. The current verification record is in [BUILD_STATUS.md](BUILD_STATUS.md).
 
-## Hackathon twist: keep learning offline
+## Multilingual twist, with offline continuity
 
-**Implemented:** prepare this browser once, then reopen the website, catalog and eight original STEM exercises without the website server. Notes and practice completion save on this device, survive reload, and export as a text file. The learning area is available in **English and Marathi**; this is not a translation of the entire website. Neither feature needs Gemini or another SQL migration.
+**Implemented:** a shared **English / Marathi** switch changes the main website: navigation, My Hub, communities, authored catalog content, profiles and account forms, plans, requests and offline exercises. The reading choice persists on this device. Search supports English and translated Marathi catalog/skill text. Personal names, bios, messages, notes and user-written next steps stay exactly as entered. External resources and unknown provider error messages keep their source language. No translation API, Gemini key or new SQL migration is needed.
+
+**Offline support remains available as an extra:** prepare this browser once, then reopen the website, catalog and eight original STEM exercises without the website server. Notes and practice completion save on this device, survive reload and export as a text file. Both reading languages remain available in the prepared website.
 
 A previously loaded account can read its own saved profile, goal, skills and bookmarks while its Supabase session remains unexpired. The saved copy is labelled and contains no directory or inbox. Account changes, sign-in and communication need internet; no requests queue for later. Device notes do not sync to the cloud and are cleared on explicit sign-out or a different account signing in. Automatic session expiry preserves the notes but locks them until the same account signs in again; preview cannot read, edit or export them. Download important work before an intentional sign-out.
 
@@ -23,7 +25,7 @@ npm run build
 npm run start -- -p 3001
 ```
 
-Open [http://localhost:3001](http://localhost:3001), choose **Offline learning**, and wait for **Ready on this device**. Prepare the exact deployed URL separately. The updated [owner guide](docs/OWNER_NEXT_STEPS.md), [teammate testing guide](docs/TEAM_TESTING_GUIDE.md) and [live judging guide](docs/LIVE_JUDGING_GUIDE.md) each include the offline twist, Marathi learning, current evidence and remaining checks. Their PDFs in `output/pdf/` replace the earlier versions. The separate [offline twist guide](docs/OFFLINE_TWIST_GUIDE.md) remains an optional focused reference.
+Open [http://localhost:3001](http://localhost:3001), choose **Offline learning**, and wait for **Ready on this device**. Prepare the exact deployed URL separately. The updated [owner guide](docs/OWNER_NEXT_STEPS.md), [teammate testing guide](docs/TEAM_TESTING_GUIDE.md) and [live judging guide](docs/LIVE_JUDGING_GUIDE.md) cover multilingual access, offline continuity, current evidence and remaining checks. Their PDFs in `output/pdf/` replace the earlier versions. The separate [offline twist guide](docs/OFFLINE_TWIST_GUIDE.md) remains an optional focused reference.
 
 ## Run locally
 
@@ -38,7 +40,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Without environment variables, use the labelled sample preview. Preview profile changes and saved items use this browser's local storage; preview cards cannot receive real requests.
 
-**Current local setup:** Supabase's URL and publishable key are already configured. Hosted REST returns two community records and denies anonymous reads of private learner, membership and request tables. Signup is enabled, but **Confirm email is currently ON**; manually turn it off under **Authentication → Sign In / Providers → Email** for immediate prototype signup. Use email addresses you control for the two-account test; placeholder `.invalid` and `example.com` addresses were rejected and created no accounts. `GEMINI_API_KEY` is currently empty.
+**Current local setup:** Supabase's URL and publishable key are already configured. Hosted REST returns two community records and denies anonymous reads of private learner, membership and request tables. Signup is enabled, but **Confirm email is currently ON**; manually turn it off under **Authentication → Sign In / Providers → Email** for immediate prototype signup. Use email addresses you control for the two-account test; placeholder `.invalid` and `example.com` addresses were rejected and created no accounts. `GEMINI_API_KEY` was confirmed empty at 3:25 PM IST.
 
 For a fresh checkout or a different Supabase project (the current workspace has already completed the project/schema/key setup):
 
@@ -77,7 +79,7 @@ npm run start
 
 The test suite covers requirement comparison, data integrity, online-only filtering, matching reasons and distinct pathways. It also executes the actual SQL schema in PGlite PostgreSQL to check row permissions, signup initialization, request transitions and forbidden actions. The external Supabase Auth boundary is emulated in these local tests. The two-account browser flow and third-account hosted privacy checks are documented in [docs/RLS_CHECKS.sql](docs/RLS_CHECKS.sql); local tests do not substitute for those hosted checks.
 
-**Verification:** all **115 tests across 12 files**, TypeScript and the production build passed at approximately **15:01 IST on 28 September 2026**. In the production browser at port 3001, the prepared website remained interactive after its server process was stopped: reload, catalog/details, exercise entry, edited notes surviving a second reload, Marathi preference, notes/completion and text export were checked. The downloaded Marathi-note file was verified on disk at approximately 14:53. At 390px width there was no horizontal overflow and Marathi letters rendered correctly. This proves the cached website works with its server unavailable; full browser **Network → Offline** testing and the hosted URL still need the guided participant check. Automated tests separately cover `navigator.onLine === false`, blocked writes, session expiry and account isolation. Hosted REST connectivity and anonymous-access denial pass; authenticated Supabase/request lifecycle, live Gemini and deployment remain pending verification.
+**Verification:** all **124 tests across 14 files**, TypeScript and the production build passed at approximately **15:30 IST on 28 September 2026**, including the main-site language integration. The production browser passed Marathi navigation, hub, goal plan, catalog search, signup/profile forms and a 390px layout without horizontal overflow; checkboxes were readable at 19 by 19 pixels. These are local checks, not hosted account proof. In the earlier production browser check at port 3001, the prepared website remained interactive after its server process was stopped: reload, catalog/details, exercise entry, edited notes surviving a second reload, Marathi preference, notes/completion and text export were checked. The downloaded Marathi-note file was verified on disk at approximately 14:53. At 390px width there was no horizontal overflow and Marathi letters rendered correctly. This proves the cached website works with its server unavailable; full browser **Network → Offline** testing and the hosted URL still need the guided participant check. Automated tests separately cover `navigator.onLine === false`, blocked writes, session expiry and account isolation. Hosted REST connectivity and anonymous-access denial pass; authenticated Supabase/request lifecycle, live Gemini and deployment remain pending verification.
 
 See [JUDGE_NOTES.md](JUDGE_NOTES.md) for the demonstration, [DATA_SOURCES.md](DATA_SOURCES.md) for provenance, and [BUILD_STATUS.md](BUILD_STATUS.md) for actual verification outcomes and remaining setup. [The feature roadmap](docs/FEATURES.md) separates implemented features, useful later additions and work to avoid before the updated **4:10 PM IST** deadline.
 

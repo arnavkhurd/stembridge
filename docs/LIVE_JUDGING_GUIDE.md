@@ -1,10 +1,10 @@
 # STEMBridge: prepare and present a clear live demonstration
 
-**Updated for the announced offline twist, approximately 3:06 PM IST, 28 September 2026. Submission deadline: 4:10 PM IST.** This guide includes the English/Marathi learning bonus. Freeze new features now and use the remaining time for the submitted website, real-account checks and rehearsal.
+**Updated for the main-site multilingual twist, approximately 3:30 PM IST, 28 September 2026. Submission deadline: 4:10 PM IST.** English and Marathi now cover the main website; the completed offline support remains an extra. Freeze new features now and use the remaining time for the submitted website, real-account checks and rehearsal.
 
-STEMBridge is a **website for women exploring STEM**. The story is: **choose a goal, keep learning when the connection drops, save a useful question, and reconnect with someone who can help.** Show that complete journey. You do not need to install a native app.
+STEMBridge is a **website for women exploring STEM**. The story is: **choose a reading language, understand a STEM goal and plan, find relevant support, and keep preparing even when the connection drops.** Show that complete journey. You do not need to install a native app.
 
-At the latest completed code checkpoint, **3:01 PM IST**, all **115 tests across 12 files**, TypeScript checks and the production build passed. In the production browser on port 3001, the website was prepared, its server was stopped, and the website reopened from its saved copy. Catalog reading, exercise use, editing notes, another reload, completion, Marathi and a downloaded UTF-8 notes file were checked. Marathi also displayed at a 390-pixel width without missing glyphs or horizontal overflow.
+At the latest completed code checkpoint, **3:30 PM IST**, all **124 tests across 14 files**, TypeScript checks and the production build passed, including the profile-checkbox CSS fix. The production browser passed Marathi navigation, hub, goal plan, catalog search and signup/profile forms. The 390px layout had no horizontal overflow, and checkboxes were readable at 19 by 19 pixels. The latest multilingual build also reopened with its server stopped: the saved Marathi choice, navigation and translated goal plan remained usable. This is a server-unavailable check; the full browser Network Offline check remains separate. In the earlier offline production browser check on port 3001, the website was prepared, its server was stopped, and the website reopened from its saved copy. Catalog reading, exercise use, editing notes, another reload, completion, Marathi and a downloaded UTF-8 notes file were checked. Marathi also displayed at a 390-pixel width without missing glyphs or horizontal overflow.
 
 That is evidence of a working saved website. It is **not the same test as disabling every browser network connection**. The available browser automation did not expose that switch. The owner must still run the real browser **Network > Offline** check on the exact presentation URL, and verify the hosted learner-to-mentor flow before presenting that flow as proven.
 
@@ -20,13 +20,24 @@ Write these down before rehearsal:
 - Real learner-to-mentor acceptance on this URL: Pass / Fail / Not tested
 - Presenter and person operating the second account: ____________________
 
-### Prepare the offline proof
+### Prepare the main language demonstration
+
+1. On the actual presentation URL, find the header's **English / Marathi** switch. The Marathi option is written in its own script. This is a shared website preference, not a separate language mode for each page.
+2. Switch to Marathi and visit My Hub, Communities, Explore, Connections and Offline learning. Open the goal plan, profile/account forms and a request form. Authored labels, instructions and content should change together.
+3. Rehearse a Marathi search: copy a word from a translated catalog title into Explore search and show the matching item. English technical terms such as NumPy still work. Names and user-written bios stay in the language their owner entered.
+4. Open a profile with a harmless saved bio. Show its translated field labels and unchanged personal wording. Close the form, switch language and reopen to compare. The global header switch is outside modal dialogs; do not close an unsaved form just to demonstrate a language change. Never display a private password.
+5. Reload once and confirm the language choice returns without changing the account, goal, saved items, notes or completion. Check on the actual phone/projector device too.
+6. Start the timed run in English so the global change is visible. Keep the goal and search example ready. No Gemini or translation API key is required.
+
+Unknown provider errors and external tutorial websites may retain their source language. The feature translates STEMBridge's authored interface and content; it does not rewrite people's names, bios, messages, notes or agreed next steps.
+
+### Prepare the retained offline proof
 
 1. Open the **production website**, with internet working, in the browser you will use on stage. If demonstrating locally, use the production build and `http://localhost:3001`; normal `next dev` at port 3000 is not the offline-reload demonstration.
 2. Open **Offline learning**. On a narrow phone, the navigation label is **Offline**.
 3. Wait for **Ready on this device**. Use **Prepare offline** or **Update offline copy** if needed. A registration alone is not readiness; the required website files must finish saving.
 4. Open the array exercise, **Make sense of an array**. Enter a short note such as: `My mentor question: why is this array's shape (2, 3)?` Check **I finished this exercise**, then reload and confirm both remain.
-5. Switch the learning language to Marathi and back to English. Confirm the exercise changes language, the letters display properly, and the note and completion do not change. The rest of the website remains English.
+5. Switch the learning language to Marathi and back to English. Confirm the exercise changes language, the letters display properly, and the note and completion do not change. The main website shares the same language choice; personal writing remains unchanged.
 6. Use **Download my notes** and open the downloaded file. Check that it contains the words you actually entered, including any Marathi text. Keep a backup before deliberately signing out, changing accounts or signing in from preview.
 7. Run the real browser network test below. Do it on the **submitted URL**, not only on localhost.
 8. Reconnect after testing. Leave the page in English and ready for the timed demonstration. Leave the demonstration exercise unticked so you can mark it complete live. Keep a short note ready to add to. Know where the real network switch is; do not hunt for it during judging.
@@ -64,16 +75,17 @@ Sign in shortly before the demonstration. A valid existing session can open its 
 
 ## 2. The three-minute main demonstration
 
-Use this run only after the exact URL has passed both the network-offline test and the real-account rehearsal. It totals **180 seconds**. The required twist receives **70 seconds of offline proof**, followed by a **10-second Marathi bonus**. Skip extra page tours.
+Use this run after the exact URL has passed the language checks. The real-account and offline segments require their own successful rehearsal too; use the honest short branch if they have not passed. The main run totals **180 seconds** and puts multilingual access first. Offline continuity is an extra, not the assigned challenge in this presentation.
 
-| Time      | What you show                                                                                    | What you say or do                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| --------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0:00-0:20 | Learner's My Hub and chosen goal                                                                 | “STEMBridge helps women exploring STEM turn an interest into a useful next step and find someone who can help. Our two pathways are Data & AI and Robotics & Makers.”                                                                                                                                                                                                                                                                          |
-| 0:20-0:45 | **See my plan**, or one **Find my first step** path                                              | “We start with her goal and the skills she already brings. We identify one manageable next action and a relevant kind of support.” Point to one gap and one useful exercise. Use only one panel.                                                                                                                                                                                                                                               |
-| 0:45-1:55 | **Offline learning**, readiness, real Offline setting, reload, exercise, note and another reload | “Our assigned twist was offline support. This browser has prepared the website. I am now disabling networking and reloading.” Show the real setting, reload, open the exercise, reveal its explanation, add a short mentor question, tick completion, then reload again. Point to the saved text and tick: “She can keep practising and prepare a useful question without internet. Completion records practice; it does not certify a skill.” |
-| 1:55-2:05 | Switch to Marathi while still offline                                                            | “We also added English and Marathi to this learning area. It works offline, and her own notes stay exactly as written.” Show the changed lesson and unchanged note. Switch back to English if convenient.                                                                                                                                                                                                                                      |
-| 2:05-2:45 | Reconnect; supporter accepts the prepared real request; learner refreshes                        | Restore the actual network setting. “Connecting with people needs internet. This is a separate account receiving her request.” In the supporter browser, accept the pending request with the prepared next step. Return to the learner, refresh sent requests and show the accepted action.                                                                                                                                                    |
-| 2:45-3:00 | Accepted next step and closing sentence                                                          | “The learning continues between connections, and the conversation starts from a specific task. Next we would test usefulness with women learners and mentors in a small community pilot.”                                                                                                                                                                                                                                                      |
+| Time      | What you show                                                                                        | What you say or do                                                                                                                                                                                                                    |
+| --------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0:00-0:20 | Learner's My Hub and chosen goal, initially in English                                               | “STEMBridge helps women exploring STEM understand their next step and find someone who can help. Language should not hide that next step.”                                                                                            |
+| 0:20-0:55 | Global switch to Marathi, navigation and **See my plan**                                             | “The same website can be read in English or Marathi. The navigation, goal, requirements and next actions change together.” Show one translated requirement and resource. The learner's identity and confirmed skills remain the same. |
+| 0:55-1:20 | Explore, a prepared Marathi search and its result                                                    | “Search also understands the translated catalog and skill labels. Familiar English technical terms still work.” Use the rehearsed Marathi word, open the matching item and point to its description.                                  |
+| 1:20-1:40 | Profile form, with a harmless saved bio                                                              | “Forms and guidance use the same language. Her own words remain hers.” Show translated field labels and the unchanged personal bio. Close without making changes.                                                                     |
+| 1:40-2:10 | Separate supporter account accepts the prepared request; learner refreshes                           | “The language support leads to a real human connection.” Accept the pre-arranged pending request and show the learner's accepted next step. Only use this segment if the two-account flow passed rehearsal.                           |
+| 2:10-2:45 | Prepared offline learning; real browser Offline setting, normal reload, note edit and another reload | “We also kept learning available between connections.” Reopen the prepared site, add a short question, reload and show it persisted. Both languages remain available offline. Restore networking afterward.                           |
+| 2:45-3:00 | Learner's goal or accepted next action                                                               | “She can understand the plan in her chosen language, keep preparing offline, and ask a specific question when connected. Next we would validate usefulness with women learners and mentors.”                                          |
 
 The request should be specific: `Could you review my array exercise and explain why its shape is (2, 3)?` If the demonstrated type is collaboration, call it peer collaboration. Do not describe every request as mentorship.
 
@@ -83,16 +95,15 @@ If reconnecting or accepting does not work promptly, use the failure wording bel
 
 ## 3. The 90-second short demonstration or account fallback
 
-This totals **90 seconds**. Use it when the judging slot is shorter, or when real accounts have not passed the hosted walkthrough. The offline proof still has to be prepared and tested on the URL shown.
+This totals **90 seconds**. Use it for a shorter slot, or when live accounts have not passed the hosted walkthrough. Label sample content clearly. Do not claim an offline test or live handoff that did not pass.
 
-| Time      | What you show                                                  | What you say or do                                                                                                                                                                                                                                                                                |
-| --------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0:00-0:15 | Goal and labelled sample preview                               | “STEMBridge connects a STEM goal with useful learning and support. This is a fictional sample profile. Our required twist is offline support.”                                                                                                                                                    |
-| 0:15-0:25 | Offline learning and **Ready on this device**                  | “The browser has saved the website and its original practice exercises.”                                                                                                                                                                                                                          |
-| 0:25-0:45 | Set real networking to Offline and reload normally             | “The website reopens even without a connection.” Show that it is interactive, not just a screenshot or a fallback notice.                                                                                                                                                                         |
-| 0:45-1:05 | One exercise, explanation, note, completion and another reload | Add a brief question, tick completion, reload and show that the work remains. “Learning can continue before the next mentor conversation.”                                                                                                                                                        |
-| 1:05-1:15 | Marathi, with the same note still visible                      | “This learning area also supports Marathi offline. User notes are never translated automatically.”                                                                                                                                                                                                |
-| 1:15-1:30 | Reconnect and explain the online continuation                  | “Requests and acceptance use separate online accounts. That flow is implemented, but we have not completed the hosted account demonstration.” If it was verified but omitted for time, say instead: “We verified the two-account flow separately; I can show that evidence after this short run.” |
+| Time      | What you show                                       | What you say or do                                                                                                                                                                                                                                              |
+| --------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0:00-0:15 | Goal in the labelled sample preview                 | “STEMBridge turns a STEM goal into a useful next step and support. This is a fictional sample profile. Our twist focus is multilingual access.”                                                                                                                 |
+| 0:15-0:40 | Global Marathi switch, navigation and goal plan     | “The main website and its authored guidance change language together. Existing skills and identity stay the same.”                                                                                                                                              |
+| 0:40-1:00 | Marathi catalog search and one account/profile form | Show a translated result and form labels. “Names and personal writing stay exactly as entered. This needs no translation API.”                                                                                                                                  |
+| 1:00-1:15 | Prepared offline exercise and saved note            | “We also retained offline exercises and device notes, including both reading languages.” If the network proof is not part of this short slot, offer the separately verified evidence instead of implying it just happened.                                      |
+| 1:15-1:30 | The online continuation and honest status           | If accounts remain unverified: “Requests and acceptance are implemented, but our hosted account demonstration remains unverified.” If verified separately: “Two separate accounts can agree on a next step; I can show that checked flow after this short run.” |
 
 Never act as though a sample profile received a message. Do not substitute a local mocked test for a hosted account demonstration. A clear boundary is more credible than an invented success.
 
@@ -125,9 +136,9 @@ For database detail, profiles, learner state, circles, memberships and requests 
 
 “The challenge concerns access to mentors, peers and opportunities for women exploring STEM. Our paths distinguish starting, returning and collaboration needs. We preserve existing skills, help compose a specific first request, make visibility opt-in and point to women-in-STEM communities. Offline practice and Marathi add ways to keep preparing between online conversations. These choices can help other people too; we do not infer ability from gender. A pilot with women learners and mentors would tell us which barriers we actually reduce. We have not measured impact yet.”
 
-### What did you do for the announced twist?
+### What did you do for the multilingual twist?
 
-“Our assigned requirement was offline support. After one successful preparation, the website reopens with its catalog and eight original exercises. Learners can read instructions, reveal explanations, write notes, mark practice complete and export their notes without internet. A valid current account can also read its own saved plan. We added English and Marathi to the learning area as a bonus.”
+“We added a shared English/Marathi choice across the main website: navigation, plans, communities, authored catalog content, account/profile forms, requests and exercises. The preference persists and search supports translated Marathi content alongside English. Personal writing is preserved. We also retained the completed offline exercises, local notes/export and prepared website reload as an extra.”
 
 ### Is the whole social network offline?
 
@@ -151,9 +162,9 @@ Do not claim local browser storage is encrypted against someone who controls the
 
 “No. The eight short exercises are original STEMBridge material, included in the website. The full official tutorials are separate links and still need internet. We are not claiming to download entire external courses.”
 
-### Is the entire website multilingual?
+### What exactly is translated?
 
-“The bonus covers the offline learning area in English and Marathi: authored lessons, instructions, explanations, prompts and controls. Account screens, catalog listings and other users' messages are not fully translated. The language choice is saved locally, and changing it never rewrites a learner's notes.”
+“English and Marathi cover STEMBridge's authored main interface and content, including navigation, hub, communities, catalog, plans, account/profile forms, request screens and exercises. One shared language choice is saved locally. Personal names, bios, messages, notes and next steps are not translated. External pages and unknown provider error messages keep their original language.”
 
 ### How does matching work? What does 3/7 mean?
 
@@ -163,7 +174,7 @@ Do not claim local browser storage is encrypted against someone who controls the
 
 “Gemini is optional profile assistance. With the learner's consent, it can suggest supported skills from her own description. The learner reviews and confirms them. The offline pack, Marathi, matching and connection workflow need no Gemini key.”
 
-If live Gemini has not been verified, add: “Its endpoint is implemented and tested with mocked responses; we are not claiming a verified live Gemini demonstration.” Do not improvise an API-key setup on stage.
+The Gemini key was confirmed empty at 3:25 PM. Unless it has since been connected and verified, add: “Its endpoint is implemented and tested with mocked responses; we are not claiming a verified live Gemini demonstration.” Do not improvise an API-key setup on stage.
 
 ### Are the people, opportunities and connections real?
 
@@ -173,7 +184,7 @@ After a successful hosted account rehearsal: “These two separate accounts shar
 
 ### What did you test, and what remains?
 
-“At 3:01 PM, 115 tests across 12 files, TypeScript and the production build passed. The checks include matching, database permissions, account boundaries, request lifecycle, offline caching, snapshots, notes and language behavior. The production browser also reopened the website with its server stopped, preserved edited notes and completion, displayed Marathi and exported the actual UTF-8 notes. The 390-pixel layout was checked.”
+“At 3:30 PM, 124 tests across 14 files, TypeScript and the production build passed with the main-site language integration and checkbox CSS correction. The checks include matching, database permissions, account boundaries, request lifecycle, offline caching, snapshots, notes and language behavior. The production browser also reopened the website with its server stopped, preserved edited notes and completion, displayed Marathi and exported the actual UTF-8 notes. The 390-pixel layout was checked.”
 
 Then state the owner's actual final results: “On this submitted URL, we also passed the real browser Offline test and the two-account flow” **only if both were performed successfully**. Otherwise name the missing check. Tests, server-stopped evidence and a deployed network-offline walkthrough are different evidence.
 
@@ -187,27 +198,28 @@ Then state the owner's actual final results: “On this submitted URL, we also p
 
 ## 7. If something fails during judging
 
-| Problem                                              | Honest response and next action                                                                                                                                                                                                         |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Offline preparation is incomplete                    | Stay online and retry preparation before the demonstration. Do not call a fallback page a working offline website. If stage time has started, state the failure and show only earlier successful evidence clearly labelled as recorded. |
-| Full offline reload fails on the submitted URL       | Name the URL-specific failure. You may show the verified local production run if the rules allow, but state that it is local. Do not imply the hosted offline requirement passed.                                                       |
-| Account session expires offline                      | Explain that the account view is locked. Reconnect and sign into the same account to recover account notes. Do not create a different account or clear the notebook as a supposed recovery step.                                        |
-| Notes cannot be saved                                | Keep the visible text and download or copy it. Read the storage warning. Do not claim reload persistence without checking it.                                                                                                           |
-| An update cannot be checked but the saved copy works | Explain the displayed saved-copy message and continue with the prepared version. Retry the update after reconnecting.                                                                                                                   |
-| A request is missing or acceptance fails             | Refresh the correct inbox once. If it still fails, use a previously verified accepted record or labelled recording, or state that the live account handoff is unavailable. Never show a sample as the recipient of a real request.      |
-| The network does not return promptly                 | Finish with the offline work and explain the intended online continuation. Do not promise that a request was queued or sent.                                                                                                            |
-| Marathi glyphs fail on the presentation device       | Switch to English, acknowledge the device-specific rendering issue and keep the required offline demonstration. Do not spend the slot debugging fonts.                                                                                  |
-| Gemini has no key or errors                          | Use manual skills. Offline and Marathi do not need Gemini.                                                                                                                                                                              |
-| The hosted site is unavailable                       | Use a prepared local production website only if event rules allow, and call it local. Give judges only links that have actually been checked.                                                                                           |
+| Problem                                              | Honest response and next action                                                                                                                                                                                                                                      |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Offline preparation is incomplete                    | Stay online and retry preparation before the demonstration. Do not call a fallback page a working offline website. If stage time has started, state the failure and show only earlier successful evidence clearly labelled as recorded.                              |
+| Full offline reload fails on the submitted URL       | Name the URL-specific failure. You may show the verified local production run if the rules allow, but state that it is local. Do not imply the hosted offline requirement passed.                                                                                    |
+| Account session expires offline                      | Explain that the account view is locked. Reconnect and sign into the same account to recover account notes. Do not create a different account or clear the notebook as a supposed recovery step.                                                                     |
+| Notes cannot be saved                                | Keep the visible text and download or copy it. Read the storage warning. Do not claim reload persistence without checking it.                                                                                                                                        |
+| An update cannot be checked but the saved copy works | Explain the displayed saved-copy message and continue with the prepared version. Retry the update after reconnecting.                                                                                                                                                |
+| A request is missing or acceptance fails             | Refresh the correct inbox once. If it still fails, use a previously verified accepted record or labelled recording, or state that the live account handoff is unavailable. Never show a sample as the recipient of a real request.                                   |
+| The network does not return promptly                 | Finish with the offline work and explain the intended online continuation. Do not promise that a request was queued or sent.                                                                                                                                         |
+| Marathi glyphs fail on the presentation device       | Switch to English, acknowledge the device-specific rendering issue and continue the English demonstration and acknowledge that multilingual rendering needs a fix. Keep any separately verified offline evidence as an extra. Do not spend the slot debugging fonts. |
+| Gemini has no key or errors                          | Use manual skills. Offline and Marathi do not need Gemini.                                                                                                                                                                                                           |
+| The hosted site is unavailable                       | Use a prepared local production website only if event rules allow, and call it local. Give judges only links that have actually been checked.                                                                                                                        |
 
 Do not fake offline mode by changing a label or an online flag. Do not describe a screenshot as an interactive reload, a plan as an implemented feature, or a sample mentor as a verified person.
 
 ## 8. Final rehearsal and submission
 
-From approximately **3:06 PM**, use the remaining time in this order: final submitted-URL preparation and tests, one timed rehearsal, fixes only for actual blockers, then submission. Aim to submit by **4:00 PM** so the **4:10 PM** deadline has a buffer. If setup takes longer, drop optional demonstration details instead of adding new features.
+From approximately **3:30 PM**, use the remaining time in this order: final submitted-URL language checks and account/offline tests, one timed rehearsal, fixes only for actual blockers, then submission. Aim to submit by **4:00 PM** so the **4:10 PM** deadline has a buffer. If setup takes longer, drop optional demonstration details instead of adding new features.
 
 - [ ] The exact submitted URL opens for someone outside the owner's account.
-- [ ] That URL is prepared in the presentation browser and shows readiness.
+- [ ] The shared English/Marathi switch, goal plan, search and forms pass on that URL, with personal writing unchanged.
+- [ ] The offline extra is prepared in the presentation browser and shows readiness.
 - [ ] The real browser Offline setting, normal reload, note edit and second reload passed on that URL.
 - [ ] The notebook download opens and contains the actual latest text.
 - [ ] Marathi displays correctly; switching language preserves notes and completion.
@@ -221,4 +233,4 @@ From approximately **3:06 PM**, use the remaining time in this order: final subm
 - [ ] Website, repository and any required video or presentation links are correct and accessible.
 - [ ] The team submits through the organizer's required channel before **4:10 PM IST**.
 
-The strongest finish is the evidence: the learner's work survives losing a connection, her question becomes more specific, and a real supporter can agree on the next step when they are online again.
+The strongest finish is the evidence: the learner understands the plan in her chosen language, her own words stay intact, and a real supporter can agree on a useful next step. Offline continuity adds value without replacing that story.

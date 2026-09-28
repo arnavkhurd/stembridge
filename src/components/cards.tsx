@@ -15,6 +15,8 @@ import {
 import { Avatar, Badge, Button, DomainIcon } from "@/components/ui";
 import { domainLabel } from "@/lib/data";
 import type { CatalogItem, Community, PersonMatch, Profile } from "@/lib/types";
+import { useLanguage } from "@/components/language-provider";
+import { translateAuthoredText } from "@/lib/i18n-content";
 import { cn } from "@/lib/utils";
 
 export const kindLabels = {
@@ -49,6 +51,7 @@ export function CatalogCard({
   onOpen: () => void;
   onSave: () => void;
 }) {
+  const { t } = useLanguage();
   return (
     <article className="catalog-card card">
       <div className="catalog-card-top">
@@ -56,11 +59,13 @@ export function CatalogCard({
           <span className={cn("catalog-type-icon", item.kind)}>
             <KindIcon kind={item.kind} />
           </span>
-          <span className="eyebrow">{kindLabels[item.kind]}</span>
+          <span className="eyebrow">{t(kindLabels[item.kind])}</span>
         </div>
         <button
           className={cn("icon-button", saved && "saved")}
-          aria-label={`${saved ? "Unsave" : "Save"} ${item.title}`}
+          aria-label={t(saved ? "Unsave {title}" : "Save {title}", {
+            title: t(item.title),
+          })}
           aria-pressed={saved}
           onClick={onSave}
         >
@@ -68,32 +73,36 @@ export function CatalogCard({
         </button>
       </div>
       <button className="catalog-title" onClick={onOpen}>
-        {item.title}
+        {t(item.title)}
       </button>
-      <p>{item.description.split(/(?<=[.!?])\s/)[0]}</p>
+      <p>{t(item.description).split(/(?<=[.!?।])\s/)[0]}</p>
       <div className="catalog-meta">
-        <span>{domainLabel(item.domain)}</span>
+        <span>{t(domainLabel(item.domain))}</span>
         <span aria-hidden="true">·</span>
         <span>
-          {item.cost === "hardware-required"
-            ? "Hardware required"
-            : item.format === "online"
-              ? "Online"
-              : item.format === "hybrid"
-                ? "Online + hands-on"
-                : "In person"}
+          {t(
+            item.cost === "hardware-required"
+              ? "Hardware required"
+              : item.format === "online"
+                ? "Online"
+                : item.format === "hybrid"
+                  ? "Online + hands-on"
+                  : "In person",
+          )}
         </span>
       </div>
       <div className="catalog-card-footer">
         <Badge className={item.isSample ? "badge-sample" : "badge-lime"}>
-          {item.isSample
-            ? item.kind === "resource" || item.kind === "project"
-              ? "Practice brief"
-              : "Sample listing"
-            : "Official resource"}
+          {t(
+            item.isSample
+              ? item.kind === "resource" || item.kind === "project"
+                ? "Practice brief"
+                : "Sample listing"
+              : "Official resource",
+          )}
         </Badge>
         <button className="text-button" onClick={onOpen}>
-          {item.kind === "resource" ? "View resource" : "View plan"}
+          {t(item.kind === "resource" ? "View resource" : "View plan")}
           <ArrowUpRight size={15} />
         </button>
       </div>
@@ -104,13 +113,16 @@ export function PersonCard({
   match,
   onRequest,
   onOpen,
+  onEdit,
   role,
 }: {
   match: PersonMatch;
   onRequest: () => void;
   onOpen?: () => void;
+  onEdit?: () => void;
   role?: "mentor" | "peer";
 }) {
+  const { t } = useLanguage();
   const { person, reasons } = match;
   const isMentor = role ? role === "mentor" : person.role !== "learner";
   return (
@@ -118,13 +130,16 @@ export function PersonCard({
       <div className="person-card-head">
         <Avatar name={person.display_name} domain={person.domain} />
         <Badge className={isMentor ? "badge-violet" : "badge-orange"}>
-          {isMentor ? "Mentor" : "Peer"}
-          {person.is_demo ? " · sample" : ""}
+          {t(onEdit ? "Your profile" : isMentor ? "Mentor" : "Peer")}
+          {person.is_demo ? t(" · sample") : ""}
         </Badge>
       </div>
       <div>
         <h3>
-          <button className="catalog-title" onClick={onOpen ?? onRequest}>
+          <button
+            className="catalog-title"
+            onClick={onEdit ?? onOpen ?? onRequest}
+          >
             {person.display_name}
           </button>
         </h3>
@@ -133,10 +148,13 @@ export function PersonCard({
       <div className="match-reason">
         <Sparkles size={12} />
         <span>
-          {reasons[0]
-            ?.replace(", which your profile does not yet list.", ".")
-            .replace("You both list ", "Shared skills: ") ||
-            `Interested in ${domainLabel(person.domain)}.`}
+          {translateAuthoredText(
+            reasons[0]
+              ?.replace(", which your profile does not yet list.", ".")
+              .replace("You both list ", "Shared skills: ") ||
+              `Interested in ${domainLabel(person.domain)}.`,
+            t,
+          )}
         </span>
       </div>
       <div className="person-card-footer">
@@ -146,10 +164,18 @@ export function PersonCard({
           ) : (
             <MapPin size={12} />
           )}
-          {person.support_modes.includes("online") ? "Online" : "In person"}
+          {t(person.support_modes.includes("online") ? "Online" : "In person")}
         </span>
-        <button className="text-button" onClick={onOpen ?? onRequest}>
-          {onOpen ? "View profile" : isMentor ? "Ask for help" : "Connect"}
+        <button className="text-button" onClick={onEdit ?? onOpen ?? onRequest}>
+          {t(
+            onEdit
+              ? "Edit profile"
+              : onOpen
+                ? "View profile"
+                : isMentor
+                  ? "Ask for help"
+                  : "Connect",
+          )}
           <ArrowUpRight size={14} />
         </button>
       </div>
@@ -175,6 +201,7 @@ export function CommunityCard({
   onOpen: () => void;
   onJoin: () => void;
 }) {
+  const { t } = useLanguage();
   return (
     <article className={cn("community-card card", selected && "selected")}>
       <div className="community-card-top">
@@ -188,11 +215,11 @@ export function CommunityCard({
         </span>
         <div className="grow">
           <button className="catalog-title" onClick={onOpen}>
-            <h3>{community.name}</h3>
+            <h3>{t(community.name)}</h3>
           </button>
         </div>
       </div>
-      <p>{community.description}</p>
+      <p>{t(community.description)}</p>
       <div className="community-card-bottom">
         <div className="community-members">
           <span className="avatar-stack">
@@ -207,20 +234,25 @@ export function CommunityCard({
           </span>
           <span>
             {preview
-              ? "Demo members"
-              : `${count} visible ${count === 1 ? "member" : "members"}`}
+              ? t("Demo members")
+              : t(
+                  count === 1
+                    ? "{count} visible member"
+                    : "{count} visible members",
+                  { count },
+                )}
           </span>
         </div>
         <Button variant={joined ? "secondary" : "primary"} onClick={onJoin}>
           {joined ? (
             <>
               <Check size={13} />
-              Leave community
+              {t("Leave community")}
             </>
           ) : (
             <>
               <Users size={13} />
-              Join community
+              {t("Join community")}
             </>
           )}
         </Button>

@@ -11,10 +11,11 @@ import {
 } from "lucide-react";
 import { useWorkspace } from "./workspace-provider";
 import { useOffline } from "./offline-provider";
+import { useLanguage } from "./language-provider";
 import { Badge, Button } from "./ui";
 import { catalog, domainLabel } from "@/lib/data";
 import { offlineLessons } from "@/lib/offline-lessons";
-import { offlineMarathi, offlineUiMarathi } from "@/lib/offline-marathi";
+import { offlineMarathi } from "@/lib/offline-marathi";
 import {
   clearOfflineNotebook,
   emptyNotebook,
@@ -25,9 +26,6 @@ import {
 } from "@/lib/offline-notebook";
 import type { CatalogItem, DomainId } from "@/lib/types";
 import styles from "./offline-learning.module.css";
-
-const LANGUAGE_KEY = "stembridge.learning-language.v1";
-type ReadingLanguage = "en" | "mr";
 
 export function OfflineLearning({
   goal,
@@ -83,14 +81,7 @@ function Notebook({
   const [confirmClear, setConfirmClear] = useState(false);
   const [clearError, setClearError] = useState("");
   const [showCheck, setShowCheck] = useState(false);
-  const [language, setLanguage] = useState<ReadingLanguage>("en");
-  useEffect(() => {
-    try {
-      if (localStorage.getItem(LANGUAGE_KEY) === "mr") setLanguage("mr");
-    } catch {
-      /* The language control still works when storage is disabled. */
-    }
-  }, []);
+  const { language, setLanguage: chooseLanguage, t } = useLanguage();
   useEffect(() => {
     if (!ws.ready) return;
     setBook(readOfflineNotebook(ownerId));
@@ -107,24 +98,6 @@ function Notebook({
   const completed = Object.values(book.entries).filter(
     (value) => value.completed,
   ).length;
-
-  function t(text: string, values: Record<string, string | number> = {}) {
-    let translated =
-      language === "mr" ? (offlineUiMarathi[text] ?? text) : text;
-    for (const [key, value] of Object.entries(values)) {
-      translated = translated.replaceAll(`{${key}}`, String(value));
-    }
-    return translated;
-  }
-
-  function chooseLanguage(next: ReadingLanguage) {
-    setLanguage(next);
-    try {
-      localStorage.setItem(LANGUAGE_KEY, next);
-    } catch {
-      /* Reading preferences are optional; notebook content is untouched. */
-    }
-  }
 
   function update(patch: Partial<NotebookEntry>) {
     try {
@@ -182,7 +155,7 @@ function Notebook({
           <strong>{t("Reading language")}</strong>
           <p>
             {t(
-              "These exercises are available in English and Marathi. The rest of the website is in English.",
+              "English and Marathi work across the main website and these exercises. Your language choice is saved on this device.",
             )}
           </p>
           <p>{t("Your notes stay exactly as you write them.")}</p>

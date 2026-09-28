@@ -24,6 +24,7 @@ vi.mock("./offline-provider", () => ({
   }),
 }));
 import { OfflineLearning } from "./offline-learning";
+import { LanguageProvider } from "./language-provider";
 
 const goal = catalog.find((item) => item.id === "first-ml-project")!;
 let host: HTMLDivElement;
@@ -38,10 +39,14 @@ function button(text: string) {
 function render() {
   return act(async () =>
     root.render(
-      createElement(OfflineLearning, {
-        goal,
-        initialLesson: "pandas-introduction",
-      }),
+      createElement(
+        LanguageProvider,
+        null,
+        createElement(OfflineLearning, {
+          goal,
+          initialLesson: "pandas-introduction",
+        }),
+      ),
     ),
   );
 }
@@ -147,7 +152,7 @@ describe("bilingual offline learning", () => {
     await act(async () => button("English").click());
     expect(host.firstElementChild?.getAttribute("lang")).toBe("en");
     expect(host.textContent).toContain(
-      "The rest of the website is in English.",
+      "English and Marathi work across the main website",
     );
   });
 

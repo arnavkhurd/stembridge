@@ -40,6 +40,8 @@ vi.mock("@/components/ui", async (importOriginal) => {
 });
 
 import { StemBridge } from "./stembridge";
+import { LanguageProvider } from "./language-provider";
+import { translate } from "@/lib/i18n";
 
 type Workspace = ReturnType<typeof useWorkspace>;
 let host: HTMLDivElement;
@@ -87,6 +89,7 @@ function buttonStartingWith(text: string): HTMLButtonElement {
 }
 
 beforeEach(() => {
+  localStorage.clear();
   Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
   window.history.replaceState({}, "", "/?view=connections");
   host = document.createElement("div");
@@ -98,6 +101,7 @@ afterEach(async () => {
   await act(async () => root.unmount());
   host.remove();
   vi.restoreAllMocks();
+  localStorage.clear();
 });
 
 describe("account identity boundary", () => {
@@ -183,6 +187,41 @@ describe("account identity boundary", () => {
 });
 
 describe("first-step request handoff", () => {
+  it("switches the plan and account interface without changing the learner's saved skills or goal", async () => {
+    window.history.replaceState({}, "", "/?view=hub");
+    const workspace = workspaceFor("account-a", 0);
+    session.workspace = workspace;
+    const before = JSON.stringify(workspace.learner);
+    await act(async () =>
+      root.render(
+        createElement(LanguageProvider, null, createElement(StemBridge)),
+      ),
+    );
+    await act(async () => buttonStartingWith("मराठी").click());
+    expect(document.documentElement.lang).toBe("mr");
+    expect(host.textContent).toContain(translate("mr", "My Hub"));
+    expect(host.textContent).toContain(
+      translate("mr", "Build your first ML project"),
+    );
+    await act(async () =>
+      buttonStartingWith(translate("mr", "See my plan")).click(),
+    );
+    expect(host.querySelector('[role="dialog"]')?.textContent).toContain(
+      translate(
+        "mr",
+        "Based on the skills you selected. This is not a skills test.",
+      ),
+    );
+    expect(JSON.stringify(workspace.learner)).toBe(before);
+    expect(workspace.updateLearner).not.toHaveBeenCalled();
+    expect(workspace.saveProfile).not.toHaveBeenCalled();
+    expect(workspace.sendRequest).not.toHaveBeenCalled();
+    await act(async () => buttonStartingWith("English").click());
+    expect(host.querySelector('[role="dialog"]')?.textContent).toContain(
+      "Based on the skills you selected. This is not a skills test.",
+    );
+    expect(JSON.stringify(workspace.learner)).toBe(before);
+  });
   it("keeps the edited introduction through review and sends only after explicit submit", async () => {
     window.history.replaceState({}, "", "/?view=hub");
     const workspace = workspaceFor("account-a", 0);

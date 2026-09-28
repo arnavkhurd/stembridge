@@ -27,6 +27,7 @@ import {
   X,
 } from "lucide-react";
 import { useWorkspace } from "@/components/workspace-provider";
+import { useLanguage } from "@/components/language-provider";
 import {
   Avatar,
   Badge,
@@ -57,7 +58,7 @@ import {
   sampleLearners,
 } from "@/lib/data";
 import { getCoverage, getRecommendedItems, matchPeople } from "@/lib/matching";
-import { cn, dateLabel, errorMessage } from "@/lib/utils";
+import { cn, errorMessage } from "@/lib/utils";
 import type {
   CatalogItem,
   CatalogKind,
@@ -100,6 +101,7 @@ export function StemBridge() {
 
 function WorkspaceScreen() {
   const ws = useWorkspace();
+  const { language, setLanguage, t } = useLanguage();
   const offlineSupport = useOffline();
   const [view, setView] = useState<View>("hub");
   const [communityId, setCommunityId] = useState<DomainId>("data-ai");
@@ -236,7 +238,7 @@ function WorkspaceScreen() {
   const recommended = getRecommendedItems(ws.learner)
     .filter((item) => item.kind !== "resource")
     .slice(0, 2);
-  const firstName = ws.profile?.display_name.split(" ")[0] || "there";
+  const firstName = ws.profile?.display_name.split(" ")[0] || t("there");
   const incomingPending = ws.requests.filter(
     (r) => r.recipient_id === ws.user?.id && r.status === "pending",
   ).length;
@@ -332,6 +334,22 @@ function WorkspaceScreen() {
       />
     ));
 
+  const localizedSearch = (query: string, fields: string[]) => {
+    if (language !== "mr") return false;
+    const terms = query
+      .normalize("NFKC")
+      .toLocaleLowerCase()
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    const text = fields
+      .map((field) => t(field))
+      .join(" ")
+      .normalize("NFKC")
+      .toLocaleLowerCase();
+    return terms.every((term) => text.includes(term));
+  };
+
   function hubView() {
     return (
       <>
@@ -339,34 +357,37 @@ function WorkspaceScreen() {
           <div>
             <p className="eyebrow">
               {ws.preview
-                ? `${firstName}’s demo profile`
-                : `Hello, ${firstName}`}
+                ? t("{name}’s demo profile", { name: firstName })
+                : t("Hello, {name}", { name: firstName })}
             </p>
-            <h1>Your next step in STEM.</h1>
+            <h1>{t("Your next step in STEM.")}</h1>
             <p className="subtitle">
-              Meet a mentor. Find a study partner. Build something together.
+              {t(
+                "Meet a mentor. Find a study partner. Build something together.",
+              )}
             </p>
           </div>
           <div className="page-header-actions">
             <Button variant="secondary" onClick={() => navigate("offline")}>
-              <Download size={16} /> Offline learning
+              <Download size={16} />
+              {t("Offline learning")}
             </Button>
             <Button variant="secondary" onClick={() => setProfileOpen(true)}>
               <Settings2 size={15} />
-              My profile
+              {t("My profile")}
             </Button>
           </div>
         </div>
         <div className="hub-feature-grid">
-          <section className="next-step-card" aria-label="Your next step">
+          <section className="next-step-card" aria-label={t("Your next step")}>
             <div>
               <div className="row between">
-                <p className="eyebrow">Your goal</p>
-                <Badge>{domainLabel(selectedGoal.domain)}</Badge>
+                <p className="eyebrow">{t("Your goal")}</p>
+                <Badge>{t(domainLabel(selectedGoal.domain))}</Badge>
               </div>
-              <h2>{selectedGoal.title}</h2>
+              <h2>{t(selectedGoal.title)}</h2>
               <p className="description">
-                See what to learn next and find someone who can help.
+                {t("See what to learn next and find someone who can help.")}
               </p>
             </div>
             <div className="next-step-bottom">
@@ -374,27 +395,33 @@ function WorkspaceScreen() {
                 variant="lime"
                 onClick={() => setOpportunity(selectedGoal)}
               >
-                See my plan
+                {t("See my plan")}
                 <ArrowUpRight size={16} />
               </Button>
               <button
                 className="text-button"
                 onClick={() => setSupportOpen(true)}
               >
-                Find my first step <ArrowRight size={16} />
+                {t("Find my first step")}
+                <ArrowRight size={16} />
               </button>
               <div className="coverage-preview">
-                <strong>{coverage.met.length}</strong> of {coverage.total}{" "}
-                skills in your profile
+                {t("{met} of {total} skills in your profile", {
+                  met: coverage.met.length,
+                  total: coverage.total,
+                })}
               </div>
             </div>
           </section>
-          <section className="profile-summary card" aria-label="Your profile">
+          <section
+            className="profile-summary card"
+            aria-label={t("Your profile")}
+          >
             <div className="profile-summary-header">
-              <p className="eyebrow">Your profile</p>
+              <p className="eyebrow">{t("Your profile")}</p>
               <button
                 className="icon-button"
-                aria-label="Edit your profile"
+                aria-label={t("Edit your profile")}
                 onClick={() => setProfileOpen(true)}
               >
                 <Pencil size={14} />
@@ -406,30 +433,32 @@ function WorkspaceScreen() {
                 domain={ws.profile?.domain}
               />
               <div>
-                <h3>{ws.profile?.display_name || "Your profile"}</h3>
-                <p>{ws.profile?.headline || "Add what you're curious about"}</p>
+                <h3>{ws.profile?.display_name || t("Your profile")}</h3>
+                <p>
+                  {ws.profile?.headline || t("Add what you're curious about")}
+                </p>
               </div>
             </div>
             <div className="skill-chips">
               {ws.learner.confirmed_skills.length ? (
                 ws.learner.confirmed_skills
                   .slice(0, 4)
-                  .map((id) => <Badge key={id}>{getSkillLabel(id)}</Badge>)
+                  .map((id) => <Badge key={id}>{t(getSkillLabel(id))}</Badge>)
               ) : (
                 <span className="small muted">
-                  Add skills you&apos;ve already tried.
+                  {t("Add skills you've already tried.")}
                 </span>
               )}
             </div>
             <div className="preference-row">
               <span className="row">
                 <Globe2 size={13} />
-                Online only
+                {t("Online only")}
               </span>
               <label className="switch">
                 <input
                   type="checkbox"
-                  aria-label="Online only"
+                  aria-label={t("Online only")}
                   checked={ws.learner.online_only}
                   disabled={ws.busy}
                   onChange={(e) => {
@@ -445,8 +474,8 @@ function WorkspaceScreen() {
         </div>
         <section className="section">
           <SectionHeading
-            title="Find your community"
-            action="All communities"
+            title={t("Find your community")}
+            action={t("All communities")}
             onAction={() => navigate("communities")}
           />
           <div className="community-grid">
@@ -455,8 +484,8 @@ function WorkspaceScreen() {
         </section>
         <section className="section hub-mentors">
           <SectionHeading
-            title="People who can help"
-            action="See all people"
+            title={t("People who can help")}
+            action={t("See all people")}
             onAction={() => {
               setCommunityId(selectedGoal.domain);
               setPeopleRole("all");
@@ -476,15 +505,16 @@ function WorkspaceScreen() {
           ) : (
             <EmptyState
               icon={<Users size={24} />}
-              title="Meet your first mentor"
+              title={t("Meet your first mentor")}
             >
-              No members match your goal yet. Try another community or change
-              your online preference.
+              {t(
+                "No members match your goal yet. Try another community or change your online preference.",
+              )}
               <Button
                 variant="secondary"
                 onClick={() => navigate("communities")}
               >
-                Explore communities
+                {t("Explore communities")}
                 <ArrowRight size={15} />
               </Button>
             </EmptyState>
@@ -492,8 +522,8 @@ function WorkspaceScreen() {
         </section>
         <section className="section">
           <SectionHeading
-            title="Explore opportunities"
-            action="View all"
+            title={t("Explore opportunities")}
+            action={t("View all")}
             onAction={() => navigate("explore")}
           />
           <div className="catalog-grid two">
@@ -523,12 +553,42 @@ function WorkspaceScreen() {
             (i) => i.kind === "project" && i.domain === communityId,
           )!;
     const candidates = membersFor(communityId);
-    const matches = matchPeople(
-      candidates,
-      { ...ws.learner, interests: [communityId], goal_id: goal.id },
-      goal,
-      peopleRole === "all" ? undefined : peopleRole,
-    ).filter((match) => personMatchesSearch(match.person, peopleQuery));
+    const ownProfile = ws.user ? ws.profile : null;
+    // Recommendations exclude self; the community listing also shows your
+    // public membership, independently of whether you accept new requests.
+    const ownMatches: PersonMatch[] =
+      ownProfile?.discoverable &&
+      ws.memberships.some(
+        (m) => m.user_id === ownProfile.id && m.community_id === communityId,
+      ) &&
+      (!ws.learner.online_only ||
+        ownProfile.support_modes.includes("online")) &&
+      (peopleRole === "all" ||
+        ownProfile.role === "both" ||
+        ownProfile.role === (peopleRole === "peer" ? "learner" : "mentor"))
+        ? [{ person: ownProfile, reasons: [], sharedSkills: [] }]
+        : [];
+    const matches = [
+      ...ownMatches,
+      ...matchPeople(
+        candidates,
+        { ...ws.learner, interests: [communityId], goal_id: goal.id },
+        goal,
+        peopleRole === "all" ? undefined : peopleRole,
+      ),
+    ].filter(
+      (match) =>
+        personMatchesSearch(match.person, peopleQuery) ||
+        localizedSearch(peopleQuery, [
+          domainLabel(match.person.domain),
+          ...match.person.skills.map(getSkillLabel),
+          ...(match.person.role === "both"
+            ? ["Mentors", "Peers"]
+            : match.person.role === "mentor"
+              ? ["Mentors"]
+              : ["Peers"]),
+        ]),
+    );
     const relevantItems = catalog
       .filter(
         (i) =>
@@ -541,10 +601,12 @@ function WorkspaceScreen() {
       <>
         <div className="page-header">
           <div>
-            <p className="eyebrow">Learn together</p>
-            <h1>Find your community.</h1>
+            <p className="eyebrow">{t("Learn together")}</p>
+            <h1>{t("Find your community.")}</h1>
             <p className="subtitle">
-              Meet women who share your interests in AI, data, and robotics.
+              {t(
+                "Meet women who share your interests in AI, data, and robotics.",
+              )}
             </p>
           </div>
         </div>
@@ -562,24 +624,28 @@ function WorkspaceScreen() {
               <DomainIcon domain={communityId} />
             </span>
             <div>
-              <h2>{community.name}</h2>
-              <p>{community.description}</p>
+              <h2>{t(community.name)}</h2>
+              <p>{t(community.description)}</p>
             </div>
           </div>
           <Badge className="badge-outline">
             {ws.preview
-              ? "Demo community"
-              : `${ws.memberships.filter((m) => m.community_id === communityId).length} visible members`}
+              ? t("Demo community")
+              : t("{count} visible members", {
+                  count: ws.memberships.filter(
+                    (m) => m.community_id === communityId,
+                  ).length,
+                })}
           </Badge>
         </div>
         <div className="people-toolbar">
           <div>
-            <h2>Community members</h2>
+            <h2>{t("Community members")}</h2>
             <p className="small muted" style={{ marginTop: 6 }}>
-              Find support for: {goal.title}
+              {t("Find support for: {goal}", { goal: t(goal.title) })}
             </p>
           </div>
-          <div className="segmented" aria-label="Filter community people">
+          <div className="segmented" aria-label={t("Filter community people")}>
             {(["all", "mentor", "peer"] as const).map((role) => (
               <button
                 key={role}
@@ -588,25 +654,29 @@ function WorkspaceScreen() {
                 onClick={() => setPeopleRole(role)}
               >
                 {role === "all"
-                  ? "Everyone"
+                  ? t("Everyone")
                   : role === "mentor"
-                    ? "Mentors"
-                    : "Peers"}
+                    ? t("Mentors")
+                    : t("Peers")}
               </button>
             ))}
           </div>
         </div>
         <SearchField
           id="people-search"
-          label="Search members"
-          placeholder="Search by name, skill, or topic"
+          label={t("Search members")}
+          placeholder={t("Search by name, skill, or topic")}
           value={peopleQuery}
           onChange={setPeopleQuery}
         />
         <div className="filter-bar">
           <span className="filter-count" aria-live="polite">
-            {matches.length} {matches.length === 1 ? "person" : "people"}{" "}
-            available
+            {t(
+              matches.length === 1
+                ? "{count} person available"
+                : "{count} people available",
+              { count: matches.length },
+            )}
           </span>
           <label className="check-label">
             <input
@@ -619,7 +689,7 @@ function WorkspaceScreen() {
                 );
               }}
             />
-            Online only
+            {t("Online only")}
           </label>
         </div>
         {matches.length ? (
@@ -629,6 +699,11 @@ function WorkspaceScreen() {
                 key={match.person.id}
                 match={match}
                 role={peopleRole === "all" ? undefined : peopleRole}
+                onEdit={
+                  match.person.id === ws.user?.id
+                    ? () => setProfileOpen(true)
+                    : undefined
+                }
                 onOpen={() => setMemberTarget({ person: match.person, goal })}
                 onRequest={() =>
                   request(
@@ -647,13 +722,13 @@ function WorkspaceScreen() {
             icon={<Users size={24} />}
             title={
               peopleQuery
-                ? "No people match that search"
-                : "No members found yet"
+                ? t("No people match that search")
+                : t("No members found yet")
             }
           >
             {peopleQuery
-              ? "Try another name, skill, or topic."
-              : "Join this community or try another filter to find people."}
+              ? t("Try another name, skill, or topic.")
+              : t("Join this community or try another filter to find people.")}
             <Button
               variant="secondary"
               onClick={() =>
@@ -664,15 +739,15 @@ function WorkspaceScreen() {
                     : setAuthOpen(true)
               }
             >
-              {peopleQuery ? "Clear search" : "Set up your profile"}
+              {peopleQuery ? t("Clear search") : t("Set up your profile")}
               <ArrowUpRight size={15} />
             </Button>
           </EmptyState>
         )}
         <section className="section">
           <SectionHeading
-            title="Things to learn and build"
-            action="View all"
+            title={t("Things to learn and build")}
+            action={t("View all")}
             onAction={() => {
               setFilterDomain(communityId);
               navigate("explore");
@@ -693,8 +768,9 @@ function WorkspaceScreen() {
           </div>
         </section>
         <p className="small muted" style={{ marginTop: 22 }}>
-          Members choose whether their profiles and circle memberships appear
-          here. Mentor expertise is self-described.
+          {t(
+            "Members choose whether their profiles and circle memberships appear here. Mentor expertise is self-described.",
+          )}
         </p>
       </>
     );
@@ -707,7 +783,16 @@ function WorkspaceScreen() {
         (filterDomain === "all" || item.domain === filterDomain) &&
         (!savedOnly || ws.learner.saved_ids.includes(item.id)) &&
         (!ws.learner.online_only || item.format === "online") &&
-        catalogMatchesSearch(item, catalogQuery),
+        (catalogMatchesSearch(item, catalogQuery) ||
+          localizedSearch(catalogQuery, [
+            item.title,
+            item.description,
+            item.provider,
+            domainLabel(item.domain),
+            ...item.tags,
+            ...item.skills.map(getSkillLabel),
+            ...item.requirements.map(getSkillLabel),
+          ])),
     );
     const tabs: { id: CatalogKind | "all"; label: string }[] = [
       { id: "all", label: "All" },
@@ -720,22 +805,23 @@ function WorkspaceScreen() {
       <>
         <div className="page-header">
           <div>
-            <p className="eyebrow">Find your next opportunity</p>
-            <h1>Learn. Build. Take part.</h1>
+            <p className="eyebrow">{t("Find your next opportunity")}</p>
+            <h1>{t("Learn. Build. Take part.")}</h1>
             <p className="subtitle">
-              Resources, competitions, internships, and projects—all in one
-              place.
+              {t(
+                "Resources, competitions, internships, and projects—all in one place.",
+              )}
             </p>
           </div>
         </div>
         <SearchField
           id="catalog-search"
-          label="Search opportunities"
-          placeholder="Search topics, skills, or opportunities"
+          label={t("Search opportunities")}
+          placeholder={t("Search topics, skills, or opportunities")}
           value={catalogQuery}
           onChange={setCatalogQuery}
         />
-        <div className="tabbar" aria-label="Filter catalogue by type">
+        <div className="tabbar" aria-label={t("Filter catalogue by type")}>
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -743,14 +829,14 @@ function WorkspaceScreen() {
               aria-pressed={category === tab.id}
               onClick={() => setCategory(tab.id)}
             >
-              {tab.label}
+              {t(tab.label)}
             </button>
           ))}
         </div>
         <div className="filter-bar">
           <div className="filter-left">
             <label className="sr-only" htmlFor="domain-filter">
-              Filter by STEM field
+              {t("Filter by STEM field")}
             </label>
             <select
               id="domain-filter"
@@ -759,9 +845,9 @@ function WorkspaceScreen() {
                 setFilterDomain(e.target.value as DomainId | "all")
               }
             >
-              <option value="all">All STEM fields</option>
-              <option value="data-ai">Data & AI</option>
-              <option value="robotics">Robotics & Makers</option>
+              <option value="all">{t("All STEM fields")}</option>
+              <option value="data-ai">{t("Data & AI")}</option>
+              <option value="robotics">{t("Robotics & Makers")}</option>
             </select>
             <label className="check-label">
               <input
@@ -769,7 +855,7 @@ function WorkspaceScreen() {
                 checked={savedOnly}
                 onChange={(e) => setSavedOnly(e.target.checked)}
               />
-              Saved only
+              {t("Saved only")}
             </label>
             <label className="check-label">
               <input
@@ -782,11 +868,13 @@ function WorkspaceScreen() {
                   );
                 }}
               />
-              Online only
+              {t("Online only")}
             </label>
           </div>
           <span className="filter-count" aria-live="polite">
-            {items.length} {items.length === 1 ? "result" : "results"}
+            {t(items.length === 1 ? "{count} result" : "{count} results", {
+              count: items.length,
+            })}
           </span>
         </div>
         {items.length ? (
@@ -808,13 +896,15 @@ function WorkspaceScreen() {
             icon={<Compass size={25} />}
             title={
               savedOnly && !ws.learner.saved_ids.length
-                ? "Nothing saved yet"
-                : "No matches for these filters"
+                ? t("Nothing saved yet")
+                : t("No matches for these filters")
             }
           >
             {savedOnly && !ws.learner.saved_ids.length
-              ? "Save a resource or opportunity to find it here later."
-              : "Try another search, choose a different field, or turn off online only."}
+              ? t("Save a resource or opportunity to find it here later.")
+              : t(
+                  "Try another search, choose a different field, or turn off online only.",
+                )}
             <Button
               variant="secondary"
               onClick={() => {
@@ -824,15 +914,15 @@ function WorkspaceScreen() {
                 setCatalogQuery("");
               }}
             >
-              Browse all
+              {t("Browse all")}
               <ArrowRight size={15} />
             </Button>
           </EmptyState>
         )}
         <p className="small muted" style={{ marginTop: 23 }}>
-          Competitions and internships are sample listings. Official learning
-          resources link to their original publishers. Hardware requirements are
-          shown separately.
+          {t(
+            "Competitions and internships are sample listings. Official learning resources link to their original publishers. Hardware requirements are shown separately.",
+          )}
         </p>
       </>
     );
@@ -844,37 +934,40 @@ function WorkspaceScreen() {
         <>
           <div className="page-header">
             <div>
-              <p className="eyebrow">Your connections</p>
-              <h1>Start a conversation.</h1>
+              <p className="eyebrow">{t("Your connections")}</p>
+              <h1>{t("Start a conversation.")}</h1>
               <p className="subtitle">
-                Ask for help, find a teammate, and agree on a next step.
+                {t("Ask for help, find a teammate, and agree on a next step.")}
               </p>
             </div>
           </div>
           <div className="welcome-panel">
             <div>
-              <h2>A simple hello is a good start.</h2>
+              <h2>{t("A simple hello is a good start.")}</h2>
               <p>
-                Create an account to send requests and hear back from mentors
-                and peers.
+                {t(
+                  "Create an account to send requests and hear back from mentors and peers.",
+                )}
               </p>
             </div>
             <Button variant="lime" onClick={() => setAuthOpen(true)}>
-              Sign in to connect
+              {t("Sign in to connect")}
               <ArrowUpRight size={16} />
             </Button>
           </div>
           <section className="section">
             <EmptyState
               icon={<Handshake size={25} />}
-              title="Your requests will appear here"
+              title={t("Your requests will appear here")}
             >
-              Sign in to see sent requests, replies, and agreed next steps.
+              {t(
+                "Sign in to see sent requests, replies, and agreed next steps.",
+              )}
               <Button
                 variant="secondary"
                 onClick={() => navigate("communities")}
               >
-                Meet the community
+                {t("Meet the community")}
                 <ArrowRight size={15} />
               </Button>
             </EmptyState>
@@ -890,10 +983,10 @@ function WorkspaceScreen() {
       <>
         <div className="page-header">
           <div>
-            <p className="eyebrow">Stay in touch</p>
-            <h1>Your connections.</h1>
+            <p className="eyebrow">{t("Stay in touch")}</p>
+            <h1>{t("Your connections.")}</h1>
             <p className="subtitle">
-              Keep track of the people you’re learning and building with.
+              {t("Keep track of the people you’re learning and building with.")}
             </p>
           </div>
           <div className="page-header-actions">
@@ -905,7 +998,7 @@ function WorkspaceScreen() {
               }}
             >
               <RefreshCw size={15} className={ws.busy ? "spin" : ""} />
-              Refresh inbox
+              {t("Refresh inbox")}
             </Button>
           </div>
         </div>
@@ -914,16 +1007,17 @@ function WorkspaceScreen() {
             <strong>
               {ws.requests.filter((r) => r.status === "pending").length}
             </strong>
-            Pending
+            {t("Pending")}
           </div>
           <div className="summary-pill">
             <strong>
               {ws.requests.filter((r) => r.status === "accepted").length}
             </strong>
-            Accepted
+            {t("Accepted")}
           </div>
           <div className="summary-pill">
-            <strong>{ws.requests.length}</strong>Total requests
+            <strong>{ws.requests.length}</strong>
+            {t("Total requests")}
           </div>
         </div>
         <div className="tabbar">
@@ -932,14 +1026,15 @@ function WorkspaceScreen() {
             aria-pressed={inbox === "outgoing"}
             onClick={() => setInbox("outgoing")}
           >
-            Sent requests
+            {t("Sent requests")}
           </button>
           <button
             className={cn("tab", inbox === "incoming" && "active")}
             aria-pressed={inbox === "incoming"}
             onClick={() => setInbox("incoming")}
           >
-            Received requests {incomingPending > 0 && `(${incomingPending})`}
+            {t("Received requests")}{" "}
+            {incomingPending > 0 && `(${incomingPending})`}
           </button>
         </div>
         {filtered.length ? (
@@ -959,13 +1054,13 @@ function WorkspaceScreen() {
                         <h3>{incoming ? r.sender_name : r.recipient_name}</h3>
                         <p className="request-goal">
                           {r.help_type === "mentorship"
-                            ? "Mentorship"
-                            : "Peer collaboration"}
+                            ? t("Mentorship")
+                            : t("Peer collaboration")}
                         </p>
                       </div>
                     </div>
                     <Badge className={`status-${r.status}`}>
-                      {r.status[0].toUpperCase() + r.status.slice(1)}
+                      {t(r.status[0].toUpperCase() + r.status.slice(1))}
                     </Badge>
                   </div>
                   {item && (
@@ -973,22 +1068,28 @@ function WorkspaceScreen() {
                       className="text-button"
                       onClick={() => setOpportunity(item)}
                     >
-                      {item.title}
+                      {t(item.title)}
                       <ArrowUpRight size={14} />
                     </button>
                   )}
-                  <p className="request-message">{r.message}</p>
+                  <p className="request-message" translate="no">
+                    {r.message}
+                  </p>
                   {r.status === "accepted" && r.next_step && (
                     <div className="next-action">
-                      <strong>Next step</strong>
-                      <p>{r.next_step}</p>
+                      <strong>{t("Next step")}</strong>
+                      <p translate="no">{r.next_step}</p>
                     </div>
                   )}
                   <div className="request-meta">
                     <span>
-                      {incoming ? "Received" : "Sent"} {dateLabel(r.created_at)}
+                      {incoming ? t("Received") : t("Sent")}{" "}
+                      {new Date(r.created_at).toLocaleDateString(
+                        language === "mr" ? "mr-IN" : "en-IN",
+                        { day: "numeric", month: "short" },
+                      )}
                     </span>
-                    <span>Only visible to you two</span>
+                    <span>{t("Only visible to you two")}</span>
                   </div>
                   {r.status === "pending" && (
                     <div className="request-actions">
@@ -1002,7 +1103,7 @@ function WorkspaceScreen() {
                               setResponseError("");
                             }}
                           >
-                            Accept request
+                            {t("Accept request")}
                             <Check size={14} />
                           </Button>
                           <Button
@@ -1015,7 +1116,7 @@ function WorkspaceScreen() {
                               );
                             }}
                           >
-                            Decline
+                            {t("Decline")}
                           </Button>
                         </>
                       ) : (
@@ -1029,7 +1130,7 @@ function WorkspaceScreen() {
                             );
                           }}
                         >
-                          Cancel request
+                          {t("Cancel request")}
                         </Button>
                       )}
                     </div>
@@ -1043,13 +1144,17 @@ function WorkspaceScreen() {
             icon={<Mail size={24} />}
             title={
               inbox === "incoming"
-                ? "A little quiet, for now"
-                : "Start with a thoughtful hello"
+                ? t("A little quiet, for now")
+                : t("Start with a thoughtful hello")
             }
           >
             {inbox === "incoming"
-              ? "Make your profile discoverable and join a circle so people can find you. Refresh to check for new requests."
-              : "Choose a mentor or peer and tell them what you'd like to work on."}
+              ? t(
+                  "Make your profile discoverable and join a circle so people can find you. Refresh to check for new requests.",
+                )
+              : t(
+                  "Choose a mentor or peer and tell them what you'd like to work on.",
+                )}
             <Button
               variant="secondary"
               onClick={() =>
@@ -1058,7 +1163,9 @@ function WorkspaceScreen() {
                   : navigate("communities")
               }
             >
-              {inbox === "incoming" ? "Edit your profile" : "Find your people"}
+              {inbox === "incoming"
+                ? t("Edit your profile")
+                : t("Find your people")}
               <ArrowUpRight size={15} />
             </Button>
           </EmptyState>
@@ -1070,27 +1177,27 @@ function WorkspaceScreen() {
   return (
     <>
       <a href="#main-content" className="skip-link">
-        Skip to content
+        {t("Skip to content")}
       </a>
       <div className="app-shell">
         <aside className="sidebar">
           <Brand />
-          <p className="sidebar-intro">A community for women in STEM</p>
-          <nav className="main-nav" aria-label="Main navigation">
+          <p className="sidebar-intro">{t("A community for women in STEM")}</p>
+          <nav className="main-nav" aria-label={t("Main navigation")}>
             {navigation.map(({ id, label, mobileLabel, icon: Icon }) => (
               <button
                 key={id}
                 className={cn("nav-item", view === id && "active")}
                 aria-current={view === id ? "page" : undefined}
-                aria-label={label}
+                aria-label={t(label)}
                 onClick={() => navigate(id)}
               >
                 <Icon />
                 <span className="nav-label-full" aria-hidden="true">
-                  {label}
+                  {t(label)}
                 </span>
                 <span className="nav-label-short" aria-hidden="true">
-                  {mobileLabel}
+                  {t(mobileLabel)}
                 </span>
                 {id === "connections" && incomingPending > 0 && (
                   <span className="nav-count">{incomingPending}</span>
@@ -1108,16 +1215,18 @@ function WorkspaceScreen() {
               <div className="user-info">
                 <strong>
                   {ws.preview
-                    ? "Demo profile"
-                    : ws.profile?.display_name || "Your account"}
+                    ? t("Demo profile")
+                    : ws.profile?.display_name || t("Your account")}
                 </strong>
                 <small>
-                  {ws.preview ? "Try the website" : "Your STEMBridge account"}
+                  {ws.preview
+                    ? t("Try the website")
+                    : t("Your STEMBridge account")}
                 </small>
               </div>
               <button
                 className="icon-button"
-                aria-label={ws.user ? "Sign out" : "Sign in"}
+                aria-label={ws.user ? t("Sign out") : t("Sign in")}
                 onClick={() =>
                   ws.user
                     ? void act(ws.signOut, "Signed out.")
@@ -1135,11 +1244,35 @@ function WorkspaceScreen() {
               <Brand />
             </div>
             <div className="breadcrumb">
-              <span>STEMBridge</span>
+              <span>{t("STEMBridge")}</span>
               <ChevronRight size={12} />
-              <span>{navigation.find((n) => n.id === view)?.label}</span>
+              <span>
+                {t(navigation.find((n) => n.id === view)?.label ?? "My Hub")}
+              </span>
             </div>
             <div className="topbar-right">
+              <div
+                className="language-switch"
+                role="group"
+                aria-label={t("Website language")}
+              >
+                <button
+                  type="button"
+                  lang="en"
+                  aria-pressed={language === "en"}
+                  onClick={() => setLanguage("en")}
+                >
+                  English
+                </button>
+                <button
+                  type="button"
+                  lang="mr"
+                  aria-pressed={language === "mr"}
+                  onClick={() => setLanguage("mr")}
+                >
+                  मराठी
+                </button>
+              </div>
               <span className="live-label">
                 {offlineSupport.ready ? (
                   <Download size={15} />
@@ -1147,16 +1280,16 @@ function WorkspaceScreen() {
                   <ShieldCheck size={15} />
                 )}
                 {offlineSupport.ready
-                  ? "Offline ready"
+                  ? t("Offline ready")
                   : ws.preview
-                    ? "Explore the demo"
-                    : "Signed in"}
+                    ? t("Explore the demo")
+                    : t("Signed in")}
               </span>
               {ws.user ? (
                 <>
                   <button
                     className="icon-button"
-                    aria-label="Edit profile"
+                    aria-label={t("Edit profile")}
                     onClick={() => setProfileOpen(true)}
                   >
                     <Avatar
@@ -1167,7 +1300,7 @@ function WorkspaceScreen() {
                   </button>
                   <button
                     className="icon-button"
-                    aria-label="Sign out"
+                    aria-label={t("Sign out")}
                     onClick={() => {
                       void act(ws.signOut, "Signed out.");
                     }}
@@ -1177,7 +1310,7 @@ function WorkspaceScreen() {
                 </>
               ) : (
                 <Button onClick={() => setAuthOpen(true)}>
-                  Join STEMBridge
+                  {t("Join STEMBridge")}
                   <ArrowUpRight size={14} />
                 </Button>
               )}
@@ -1189,14 +1322,15 @@ function WorkspaceScreen() {
                 size={13}
                 style={{ display: "inline", marginRight: 7 }}
               />
-              You&apos;re offline. Keep learning and saving device notes.
-              Reconnect for accounts, members and requests.
+              {t(
+                "You're offline. Keep learning and saving device notes. Reconnect for accounts, members and requests.",
+              )}
               <button
                 className="text-button"
                 style={{ marginLeft: 16 }}
                 onClick={() => navigate("offline")}
               >
-                Open offline learning
+                {t("Open offline learning")}
               </button>
             </div>
           )}
@@ -1205,7 +1339,7 @@ function WorkspaceScreen() {
               <div className="preview-banner">
                 <span className="row">
                   <Info size={14} />
-                  <span>Demo · Sample data</span>
+                  <span>{t("Demo · Sample data")}</span>
                 </span>
                 <button
                   className="text-button"
@@ -1214,22 +1348,24 @@ function WorkspaceScreen() {
                     ws.loadSample(index);
                     setCommunityId(sampleLearners[index].profile.domain);
                     notify(
-                      `Now exploring ${sampleLearners[index].profile.display_name}'s sample profile.`,
+                      t("Now exploring {name}’s sample profile.", {
+                        name: sampleLearners[index].profile.display_name,
+                      }),
                     );
                   }}
                 >
-                  Switch profile
+                  {t("Switch profile")}
                   <RefreshCw size={12} />
                 </button>
               </div>
             )}
             {ws.error && (
               <div className="error-banner" role="alert">
-                <span>{ws.error}</span>
+                <span>{t(ws.error)}</span>
                 <button
                   className="icon-button"
                   onClick={ws.clearError}
-                  aria-label="Dismiss error"
+                  aria-label={t("Dismiss error")}
                 >
                   <X size={16} />
                 </button>
@@ -1238,18 +1374,18 @@ function WorkspaceScreen() {
             {ws.offlineSnapshot && (
               <div className="preview-banner" role="status">
                 <span>
-                  Saved copy of your plan
+                  {t("Saved copy of your plan")}
                   {ws.snapshotSavedAt
-                    ? ` · ${new Date(ws.snapshotSavedAt).toLocaleString()}`
+                    ? ` · ${new Date(ws.snapshotSavedAt).toLocaleString(language === "mr" ? "mr-IN" : "en-IN")}`
                     : ""}
-                  . Other members and your inbox need internet.
+                  {t(". Other members and your inbox need internet.")}
                 </span>
                 {!offline && (
                   <button
                     className="text-button"
                     onClick={() => void act(ws.refresh)}
                   >
-                    Refresh from account
+                    {t("Refresh from account")}
                   </button>
                 )}
               </div>
@@ -1260,7 +1396,7 @@ function WorkspaceScreen() {
                   className="spin"
                   style={{ margin: "0 auto 12px" }}
                 />
-                Opening your workspace…
+                {t("Opening your workspace…")}
               </div>
             ) : view === "offline" ? (
               <OfflineLearning
@@ -1277,8 +1413,8 @@ function WorkspaceScreen() {
               connectionsView()
             )}
             <footer className="page-footer">
-              <span>STEMBridge · Women in STEM, together.</span>
-              <span>Made for curiosity. Built for connection.</span>
+              <span>{t("STEMBridge · Women in STEM, together.")}</span>
+              <span>{t("Made for curiosity. Built for connection.")}</span>
             </footer>
           </main>
         </div>
@@ -1336,8 +1472,11 @@ function WorkspaceScreen() {
       <Modal
         open={!!responseTarget}
         onClose={() => setResponseTarget(null)}
-        title="A next step, together"
-        description={`Accept ${responseTarget?.sender_name || "this member"}'s request with one practical action to start with.`}
+        title={t("A next step, together")}
+        description={t(
+          "Accept {name}’s request with one practical action to start with.",
+          { name: responseTarget?.sender_name || t("this member") },
+        )}
       >
         <form
           onSubmit={async (e) => {
@@ -1360,23 +1499,28 @@ function WorkspaceScreen() {
           }}
         >
           <div className="field">
-            <label htmlFor="next-step">What should you work on next?</label>
+            <label htmlFor="next-step">
+              {t("What should you work on next?")}
+            </label>
             <textarea
               id="next-step"
               required
               minLength={5}
               maxLength={500}
               value={responseNote}
+              translate="no"
               onChange={(e) => setResponseNote(e.target.value)}
-              placeholder="For example: write a short project outline and choose one dataset. We can review the scope together."
+              placeholder={t(
+                "For example: write a short project outline and choose one dataset. We can review the scope together.",
+              )}
             />
             <small>
-              This is shared with the sender as your agreed next step.
+              {t("This is shared with the sender as your agreed next step.")}
             </small>
           </div>
           {responseError && (
             <p className="field-error" role="alert" style={{ marginTop: 12 }}>
-              {responseError}
+              {t(responseError)}
             </p>
           )}
           <div className="form-actions">
@@ -1385,7 +1529,7 @@ function WorkspaceScreen() {
               variant="secondary"
               onClick={() => setResponseTarget(null)}
             >
-              Go back
+              {t("Go back")}
             </Button>
             <Button
               type="submit"
@@ -1396,7 +1540,7 @@ function WorkspaceScreen() {
               ) : (
                 <Check size={15} />
               )}
-              Accept request
+              {t("Accept request")}
             </Button>
           </div>
         </form>
@@ -1404,10 +1548,10 @@ function WorkspaceScreen() {
       {notice && (
         <div className="notice" role="status">
           <Check size={17} />
-          <span>{notice}</span>
+          <span>{t(notice)}</span>
           <button
             className="icon-button"
-            aria-label="Dismiss notification"
+            aria-label={t("Dismiss notification")}
             onClick={() => setNotice("")}
           >
             <X size={15} />

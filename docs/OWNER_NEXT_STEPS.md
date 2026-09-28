@@ -1,27 +1,27 @@
 # Your remaining steps before submission
 
-Updated for the completed **3:01 PM IST build on 28 September 2026**, including the required offline twist and English/Marathi learning. The deadline is **4:10 PM IST**. This guide replaces the earlier owner guide; the required offline steps are included here.
+Updated for the completed **3:30 PM IST build on 28 September 2026**, including the main-site English/Marathi multilingual twist and retained offline support. The deadline is **4:10 PM IST**. This guide replaces the earlier owner guide; the required language and offline preparation steps are included here.
 
-**Your priority now:** publish the latest version, prove the offline reload on the exact judging URL, and complete one real learner-to-mentor request. Give a teammate the offline checks while you handle accounts and deployment. Freeze feature additions; only fix a demonstrated blocker.
+**Your priority now:** publish the latest version, verify the global English/Marathi journey on the exact judging URL, and complete one real learner-to-mentor request. Keep the offline reload as a prepared extra. Give a teammate the language and offline checks while you handle accounts and deployment. Freeze feature additions; only fix a demonstrated blocker.
 
 ## What is already done
 
 - The website, two STEM circles, goal plans, **Find my first step**, search, member profiles, saved opportunities and request flow are implemented.
 - **Offline learning is implemented:** the prepared website can reopen from its cache; eight original exercises, device notes, completion tracking and text-file export work without the website server. A previously loaded account's own plan can be read offline while its local session is valid.
-- **English and Marathi are implemented throughout the offline learning area.** Language switching preserves notes and completion. Other pages and other people's messages are not translated.
+- **English and Marathi now cover the main website:** navigation, hub, communities, authored catalog content, account/profile forms, plans, request screens and exercises. One shared switch persists the choice. English and Marathi catalog/skill searches work. Names, bios, messages, notes and user-written next steps stay unchanged. External resources and unknown provider errors retain their source language.
 - Supabase is connected. The schema is already installed, and the two community records are readable. **Do not recreate the project or rerun the schema as a routine setup step.**
-- At **3:01 PM**, all **115 tests across 12 files**, TypeScript and the production build passed. Browser checks covered cached reloads with the server stopped, saved notes, catalog browsing, Marathi, an actual exported UTF-8 notes file and a readable 390px layout. Full details are in [BUILD_STATUS](../BUILD_STATUS.md).
+- At **3:30 PM**, all **124 tests across 14 files**, TypeScript and the production build passed, including the profile-checkbox CSS fix. Production browser checks passed for Marathi navigation, hub, plan, catalog search, signup/profile forms and a 390px layout without horizontal overflow; profile checkboxes were readable at 19 by 19 pixels. Earlier offline browser checks covered cached reloads with the server stopped, saved notes, catalog browsing, Marathi, an actual exported UTF-8 notes file and a readable 390px layout. Full details are in [BUILD_STATUS](../BUILD_STATUS.md).
 - The browser's complete **Network → Offline** test and the **hosted real-account journey** remain owner/teammate checks. A server-stopped test, automated tests and a deployed real-account test prove different things.
-- Last inspected: **Confirm email was ON**, the **Gemini key was empty**, and the **real-account walkthrough and deployment were unverified**. Check your current settings if you have since changed them. No new SQL, translation API or Gemini key is needed for the twist.
+- Last inspected: **Confirm email was ON**, the **Gemini key was confirmed empty at 3:25 PM**, and the **real-account walkthrough and deployment were unverified**. Check your current settings if you have since changed them. No new SQL, translation API or Gemini key is needed for the twist.
 
 ## Who does what
 
-| Person | Their job |
-| --- | --- |
-| You, as account owner | Choose the email-confirmation setting, access your own email, sign into Supabase/GitHub/Vercel, add credentials privately, approve the final presentation claims and submit. |
-| A teammate | Operate the supporter account in another browser, check the learner's request, rehearse the handoff and time the presentation. Use an address they control. |
-| Another teammate, if available | Run the offline and Marathi checks on the same final URL. Record failures without changing account settings or asking for private keys. |
-| The coding agent | Diagnose the exact failure, fix code, run checks, help inspect database permissions and prepare the release. It does not need your account passwords in chat. |
+| Person                         | Their job                                                                                                                                                                    |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| You, as account owner          | Choose the email-confirmation setting, access your own email, sign into Supabase/GitHub/Vercel, add credentials privately, approve the final presentation claims and submit. |
+| A teammate                     | Operate the supporter account in another browser, check the learner's request, rehearse the handoff and time the presentation. Use an address they control.                  |
+| Another teammate, if available | Run the offline and Marathi checks on the same final URL. Record failures without changing account settings or asking for private keys.                                      |
+| The coding agent               | Diagnose the exact failure, fix code, run checks, help inspect database permissions and prepare the release. It does not need your account passwords in chat.                |
 
 If working alone, Chrome can be the learner and Edge the supporter. Two ordinary tabs in one browser share the same login.
 
@@ -50,10 +50,10 @@ Wait for the successful build before starting the server, and leave the server t
 - [ ] Open **Authentication → Sign In / Providers → Email**. Some dashboard layouts shorten this to **Providers → Email**.
 - [ ] Make your email-confirmation choice below, then use email addresses you or your teammate actually control. Earlier placeholder `.invalid` and `example.com` addresses were rejected.
 
-| Choice | What you personally do | What you can honestly say |
-| --- | --- | --- |
-| Immediate signup for this controlled prototype | Turn **Confirm email OFF** and save, then create the demonstration accounts. Keep email/password enabled. | Accounts sign in without email verification. They are unverified test accounts. |
-| Keep email verification | Leave it ON, check **Authentication → URL Configuration → Site URL** points to the app you are using, and ensure email delivery is available. Follow the received confirmation link, then return to the app and sign in. | Say confirmation works only after receiving and completing a real confirmation email. |
+| Choice                                         | What you personally do                                                                                                                                                                                                   | What you can honestly say                                                             |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Immediate signup for this controlled prototype | Turn **Confirm email OFF** and save, then create the demonstration accounts. Keep email/password enabled.                                                                                                                | Accounts sign in without email verification. They are unverified test accounts.       |
+| Keep email verification                        | Leave it ON, check **Authentication → URL Configuration → Site URL** points to the app you are using, and ensure email delivery is available. Follow the received confirmation link, then return to the app and sign in. | Say confirmation works only after receiving and completing a real confirmation email. |
 
 The default Supabase sender only delivers to addresses on the project's team and has a small sending limit; ordinary users need configured custom SMTP. Do not spend the whole buffer repeatedly requesting emails. The owner decides the prototype setting; the agent has not changed it. [Supabase's email-delivery documentation](https://supabase.com/docs/guides/auth/auth-smtp).
 
@@ -114,7 +114,19 @@ Record the result and exact visible error if anything fails. Share the error tex
 
 The fallback links to [Women in Machine Learning](https://www.wiml.org/) and [Women in Robotics chapters](https://www.womeninrobotics.org/chapters/) point to independent communities. They do not establish a partnership, register you there or guarantee a mentor. Show only one first-step choice in the short pitch; the same real request/acceptance test remains the priority.
 
-## 4. Prove the offline twist and Marathi bonus
+## 4. Prove multilingual support, then the offline extra
+
+### Check the main website in both languages
+
+- [ ] Use the header's **English / Marathi** switch. Marathi is displayed in its own script. Open My Hub, Communities, Explore, Connections and Offline learning; headings, navigation and authored controls should change together.
+- [ ] Open **See my plan**, **Find my first step**, a catalog item and **My profile**. Check the titles, requirements, instructions, field labels and buttons in both languages.
+- [ ] Choose each language before opening the sign-in/create-account dialog and request form. Check labels and validation messages. Compare a saved profile bio or existing request: its personal wording must remain unchanged. The global switch is outside dialogs, so do not close an unsaved form merely to change language.
+- [ ] In Marathi, copy a visible Marathi word from an opportunity title into Explore search. Confirm a relevant result. Also search an English skill such as NumPy. Search members by a translated skill or their unchanged name.
+- [ ] Reload the website. The selected language should return without changing the account, selected goal, saved items, notes or completion.
+- [ ] Confirm that user-written messages and notes remain exactly as entered. External tutorial pages and unknown service-provider errors may remain in their source language; do not claim they are translated.
+- [ ] Check the phone layout, checkbox visibility and keyboard focus in both languages. The latest code includes the checkbox CSS correction; report an actual final-device failure if one remains.
+
+The labels in this written guide are English so they are easy to locate. Switch to English whenever following a setup instruction, then switch back for the language demonstration.
 
 Use the exact presentation URL and browser. On a narrow phone, the bottom labels **Circles**, **Connect** and **Offline** mean Communities, Connections and Offline learning.
 
@@ -141,16 +153,16 @@ For localhost, switching off Wi-Fi alone is not enough: the browser can still re
 8. Try an account update while disconnected. It must not claim cloud success or queue a request for later.
 9. Set the Network dropdown back to **No throttling**. Confirm the live account reloads, or use **Refresh from account** if offered. Notes remain device-only; reconnecting must not send a request by itself.
 
-Repeat this check on the deployed URL after publication. A failure is a blocker for claiming the twist is demonstrated. Record the exact step and error for a fix; do not mark it passed just because the automated suite passed.
+Repeat this check on the deployed URL after publication. A failure blocks a claim that the offline extra was demonstrated; keep the primary language claim separate. Record the exact step and error for a fix; do not mark it passed just because the automated suite passed.
 
 ### Know the limits before judging
 
-| What works after preparation | What still needs internet |
-| --- | --- |
-| Reopen the cached website; browse its catalog and eight original exercises | First preparation, sign-in and account creation |
-| Save practice notes and completion in this browser; download notes | Profile/bookmark/membership changes for live accounts |
-| Switch the learning area between English and Marathi | Current member information, inboxes, requests and replies |
-| Read a saved own-account plan while its session remains valid | External tutorial sites and optional Gemini suggestions |
+| What works after preparation                                               | What still needs internet                                 |
+| -------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Reopen the cached website; browse its catalog and eight original exercises | First preparation, sign-in and account creation           |
+| Save practice notes and completion in this browser; download notes         | Profile/bookmark/membership changes for live accounts     |
+| Switch the prepared main website between English and Marathi               | Current member information, inboxes, requests and replies |
+| Read a saved own-account plan while its session remains valid              | External tutorial sites and optional Gemini suggestions   |
 
 Notes do not sync to another device. Automatic account-session expiry **locks and preserves** the notes; reconnect and sign into the same account to recover them. Deliberate sign-out, another account signing in, signing in from the demo, or confirmed **Clear this notebook** removes the previous local notebook. Download work before doing those actions. The preview cannot read or export a locked account notebook.
 
@@ -160,7 +172,7 @@ No new Supabase migration or API connection is required. The updated [teammate t
 
 The existing repository is [arnavkhurd/stembridge](https://github.com/arnavkhurd/stembridge). At this guide's inspection, branch `main` contained commit `40e2f37` and local changes. Reuse this repository.
 
-- [ ] The code checks passed at **3:01 PM: 115 tests, TypeScript and production build**. If code has changed afterward, rerun those checks. Documentation-only updates do not require rebuilding the application.
+- [ ] The code checks passed at **3:30 PM: 124 tests, TypeScript and production build**. If code has changed afterward, rerun those checks. Documentation-only updates do not require rebuilding the application.
 - [ ] In the project terminal, review and commit the finished source:
 
 ```powershell
@@ -179,12 +191,12 @@ git push -u origin main
 - [ ] Sign into Vercel. Choose **Add New → Project**, connect GitHub if prompted, and import **stembridge**. Keep **Next.js** and root directory **`./`**.
 - [ ] Before deploying, copy these from your local configuration into Vercel's environment variables. Never paste their values into the repository or these guides.
 
-| Variable | Needed? |
-| --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Yes, for the same existing project |
+| Variable                               | Needed?                                                       |
+| -------------------------------------- | ------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`             | Yes, for the same existing project                            |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes; use the publishable key, never a secret/service-role key |
-| `GEMINI_API_KEY` | Only if you have connected and checked Gemini |
-| `GEMINI_MODEL` | Optional; current default is `gemini-2.5-flash-lite` |
+| `GEMINI_API_KEY`                       | Only if you have connected and checked Gemini                 |
+| `GEMINI_MODEL`                         | Optional; current default is `gemini-2.5-flash-lite`          |
 
 - [ ] Click **Deploy**. After success, open the resulting production URL. Environment changes require another deployment.
 - [ ] In Supabase **Authentication → URL Configuration**, set **Site URL** to the deployed origin. If using email confirmation, check its allowed redirect configuration and test a real confirmation on that URL.
@@ -197,7 +209,7 @@ Vercel can deploy updates from the connected GitHub repository; verify the deplo
 
 ## 6. Treat Gemini as optional
 
-The required offline work and Marathi translations need no AI key. With the deadline approaching, skip new Gemini setup if accounts, deployment or offline verification still need work. If it is already configured, give a live check at most five minutes. Manual skill entry is already usable.
+The main-site language support and retained offline work need no AI key. The Gemini key was still empty at 3:25 PM. With the deadline approaching, skip new Gemini setup if accounts, deployment or offline verification still need work. If it is already configured, give a live check at most five minutes. Manual skill entry is already usable.
 
 - [ ] Open [Google AI Studio API Keys](https://aistudio.google.com/apikey), sign in, and create/select an API key for your project.
 - [ ] Add it privately as `GEMINI_API_KEY` in `.env.local`, restart the local server, and add the same server-only variable to Vercel before redeploying.
@@ -211,18 +223,18 @@ Account/model access and quota depend on Google. Keep the key server-side. [Goog
 
 Adjust these times to the actual clock, preserving the final buffer:
 
-| Time, IST | Finish this |
-| --- | --- |
-| **Now** | **Feature freeze.** Split jobs: owner handles accounts/deployment; teammate runs offline and language checks. |
-| Now–3:25 | Commit/push the finished version and deploy; prepare the two accounts and prove the request loop. Work in parallel where possible. |
-| 3:25–3:40 | Check the actual deployed URL: public access, live request, real Network → Offline reload, notes/export and Marathi. Fix blockers only. |
-| 3:40–3:50 | Rehearse the updated three-minute demonstration, including the required twist. Prepare a truthful fallback. |
-| 3:50–4:00 | Complete the submission form and verify repository/demo links. |
-| 4:00–4:10 | Buffer for upload, access or organizer issues |
+| Time, IST | Finish this                                                                                                                                                                   |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Now**   | **Feature freeze.** Split jobs: owner handles accounts/deployment; teammate runs offline and language checks.                                                                 |
+| Now–3:38  | Commit/push the finished version and deploy; prepare the two accounts and prove the request loop. Work in parallel where possible.                                            |
+| 3:38–3:45 | Check the deployed URL: shared language switch, forms, bilingual search and live request. In parallel, check the prepared offline reload and notes/export. Fix blockers only. |
+| 3:45–3:50 | Rehearse the updated three-minute demonstration, leading with multilingual access and showing offline continuity as an extra. Prepare a truthful fallback.                    |
+| 3:50–4:00 | Complete the submission form and verify repository/demo links.                                                                                                                |
+| 4:00–4:10 | Buffer for upload, access or organizer issues                                                                                                                                 |
 
 - [ ] Read [LIVE_JUDGING_GUIDE](LIVE_JUDGING_GUIDE.md) with your teammate and run it once with a timer.
 - [ ] Prepare the actual deployment URL and repository URL, and any pitch/video required by the organizer. Check the organizer's instructions; this guide does not assume a submission portal or file format.
 - [ ] Open the repository while signed out to confirm it is public and contains the final code. Open the demo without your Vercel login. URL validation checks link format; it does not prove access or functionality. Never submit localhost as a public demo link.
-- [ ] In the twist answer, describe offline caching, eight original exercises, local notes/export and English/Marathi learning. Do not claim a fully multilingual social network or offline messaging.
+- [ ] In the twist answer, describe English/Marathi across the main interface and authored content, persistent language choice and bilingual search. Personal writing stays unchanged. Present the offline exercises, notes/export and cached reload as an extra; do not claim translation of external courses or offline messaging.
 - [ ] Submit before the deadline and keep the confirmation. A deployed site is not automatically a submitted entry.
 - [ ] Make sure your final claims match what actually passed: test accounts, sample catalog, self-reported skills, and live AI only if you observed it work.

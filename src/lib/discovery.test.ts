@@ -3,6 +3,19 @@ import { catalog, sampleProfiles } from "./data";
 import { catalogMatchesSearch, personMatchesSearch } from "./discovery";
 
 describe("discovery search", () => {
+  it("accepts Marathi and mixed-language queries without changing catalog identities", () => {
+    const project = catalog.find((item) => item.id === "first-ml-project")!;
+    expect(catalogMatchesSearch(project, "डेटा Python")).toBe(true);
+    expect(catalogMatchesSearch(project, "प्रकल्प")).toBe(true);
+    expect(catalogMatchesSearch(project, "रोबोटिक्स")).toBe(false);
+    expect(project.id).toBe("first-ml-project");
+  });
+
+  it("finds opted-in member data by Marathi domain and role vocabulary", () => {
+    const mentor = { ...sampleProfiles[0], role: "mentor" as const };
+    expect(personMatchesSearch(mentor, "मार्गदर्शक डेटा")).toBe(true);
+    expect(personMatchesSearch(mentor, "रोबोटिक्स")).toBe(false);
+  });
   it("finds an opportunity by a required skill, not just its title", () => {
     const project = catalog.find((item) => item.id === "first-ml-project")!;
     expect(catalogMatchesSearch(project, "pandas")).toBe(true);

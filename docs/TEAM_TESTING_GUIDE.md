@@ -1,6 +1,6 @@
 # STEMBridge — teammate testing guide
 
-**Updated at approximately 3:06 PM IST, 28 September 2026. Deadline: 4:10 PM IST.** This complete guide includes the announced offline twist, English/Marathi learning, and recovery of locked notes after a session expires. You do not need another guide to follow these tests.
+**Updated at approximately 3:27 PM IST, 28 September 2026. Deadline: 4:10 PM IST.** This complete guide includes the assigned multilingual twist across the website, the retained offline learning features, and recovery of locked notes after a session expires. You do not need another guide to follow these tests.
 
 **You do not need to know how to code.** Follow the steps, compare what happens with the expected result, and record any difference.
 
@@ -18,15 +18,15 @@
 
 Use the **actual deployed HTTPS address** or the local **production** website at `http://localhost:3001`. The builder must first run `npm run build`, then `npm run start -- -p 3001`. The normal development website at port 3000 is not the offline-reload test target. `localhost` works only on the computer running the server; teammates on other devices need the deployed address. Testers do not need Supabase admin access, API keys, passwords belonging to other people, or service keys.
 
-This guide covers sample preview, accounts, profiles, communities, search, saved items, plans, **Find my first step**, member details, requests, optional AI, and **Offline learning**. Offline learning includes eight original exercises, device notes, completion, text download, English/Marathi reading and a read-only saved account plan. It also checks privacy, expired sessions, phones, keyboards and the judge demonstration.
+This guide covers sample preview, accounts, profiles, communities, search, saved items, plans, **Find my first step**, member details, requests, optional AI, **English/Marathi across the website**, and **Offline learning**. Offline learning includes eight original exercises, device notes, completion, text download and a read-only saved account plan. It also checks privacy, expired sessions, phones, keyboards and the judge demonstration.
 
 There are now **five** main pages: My Hub, Communities, Explore, Connections and Offline learning. On a narrow phone the shorter labels are **Circles**, **Connect** and **Offline**. They mean Communities, Connections and Offline learning. The larger desktop labels and accessible control names remain descriptive.
 
-**Evidence from the builder, not a pass for your run:** at 3:01 PM, 115 tests across 12 files, TypeScript and the production build passed. A prepared production browser reopened and worked after its website server was stopped; notes, Marathi choice, completion and a downloaded text file were checked. That proves a server-unavailable case. Full browser **Network → Offline** testing and the hosted account journey still need the teammate checks below. Unit tests separately cover offline account guards, privacy and session expiry.
+**Evidence from the builder, not a pass for your run:** at 3:30 PM, 124 tests across 14 files, TypeScript and the production build passed. A prepared production browser reopened and worked after its website server was stopped; notes, Marathi choice, completion and a downloaded text file were checked. That proves a server-unavailable case. Full browser **Network → Offline** testing and the hosted account journey still need the teammate checks below. Unit tests separately cover offline account guards, privacy and session expiry.
 
 **This is a checklist, not a record of successful testing. Every result starts as Not tested.** A working preview does not prove that real accounts or requests work. A successful local test does not prove that the deployed website works.
 
-The participant's stated deadline is **4:10 PM IST on 28 September 2026**. Finish critical tests first, with a target of 3:35 PM for reporting blockers. Preserve the remaining time for fixes, the final working version, rehearsal and submission. If time runs short, complete the 30-minute route and report what remains untested.
+The participant's stated deadline is **4:10 PM IST on 28 September 2026**. Report blockers immediately. Run the critical route in parallel, stop optional checks by 3:45 PM, and preserve time for fixes, rehearsal and submission. If the full route cannot finish before the deadline, prioritize language, the real request loop and prepared offline reload; report the remaining items as NT.
 
 ## 1. First: a five-minute test without hints
 
@@ -60,18 +60,18 @@ Do not count a task as easy if the builder had to point out the answer. This tes
 
 ### Record the run
 
-| Item                                          | Fill in            |
-| --------------------------------------------- | ------------------ |
-| Website address                               |                    |
-| Local or deployed website?                    |                    |
-| Date and start time                           |                    |
-| Version/commit, if the builder provides it    |                    |
-| Tester names                                  |                    |
-| Browser and device for each tester            |                    |
-| Supabase accounts ready?                      | Yes / No / Unknown |
-| Email confirmation required? Ask the builder. | Yes / No / Unknown |
-| Live AI connected? Ask the builder.           | Yes / No / Unknown |
-| Offline twist + Marathi tests assigned to     |                    |
+| Item                                               | Fill in            |
+| -------------------------------------------------- | ------------------ |
+| Website address                                    |                    |
+| Local or deployed website?                         |                    |
+| Date and start time                                |                    |
+| Version/commit, if the builder provides it         |                    |
+| Tester names                                       |                    |
+| Browser and device for each tester                 |                    |
+| Supabase accounts ready?                           | Yes / No / Unknown |
+| Email confirmation required? Ask the builder.      | Yes / No / Unknown |
+| Live AI connected? Ask the builder.                | Yes / No / Unknown |
+| Multilingual checks and offline checks assigned to |                    |
 
 Use the same website address and backend project across the team. Each browser, browser profile and website origin has its own offline preparation and device notes. An origin includes the protocol, host and port: ports 3000 and 3001 are separate, and the deployed address is separate again. Wait for **Ready on this device** on the exact browser and URL you will test. Preparing Chrome does not prepare Edge or a teammate's phone.
 
@@ -103,7 +103,7 @@ Use screenshots of the website, but do not include passwords, email inboxes, API
 
 Requests appear in the **Connections** inbox. There is no email notification, live chat, or automatic agreement. **Refresh inbox** or reload the other account's page after a change; live push updates are not required.
 
-**Offline modes matter.** In a prepared sample preview, exercises, local notes and preview edits can work without internet. In a real account, its own saved plan is read-only while the matching Supabase session remains valid; other members and inbox records are not copied into that offline view. Account edits and requests require a connection and are never queued to send later. Completing an exercise does not add a skill. Language changes translate the learning area only and leave your written notes exactly as entered.
+**Offline modes matter.** In a prepared sample preview, exercises, local notes and preview edits can work without internet. In a real account, its own saved plan is read-only while the matching Supabase session remains valid; other members and inbox records are not copied into that offline view. Account edits and requests require a connection and are never queued to send later. Completing an exercise does not add a skill. The global language choice translates authored website screens, forms, plans, catalog text and exercises. Personal names, bios, messages, AI evidence and notebook writing remain as entered. Proper technical names and unrecognised external-service error text may remain in their original language.
 
 Explicit sign-out or signing into a different account clears device notes. Automatic session expiry is different: it keeps notes locked and hidden from preview. The same account can recover them after reconnecting and signing in again. Download important work before an intentional sign-out. Use harmless QA notes for destructive-clear tests.
 
@@ -135,29 +135,29 @@ If B is missing, check these in order: same website/project, correct account, sa
 
 ## 3. The 30-minute critical route
 
-Use three teammates if possible: tester 1 operates learner A, tester 2 operates mentor B, and tester 3 tests offline support in an independent browser before checking observer C. A and B should be ready before the timer starts. If signup or confirmation blocks setup, record it; do not use a sample request as a substitute for the real-account test.
+Use three teammates if possible: tester 1 checks the main language journey and operates learner A, tester 2 operates mentor B, and tester 3 tests offline support in an independent browser before checking observer C. A and B should be ready before the timer starts. If signup or confirmation blocks setup, record it; do not use a sample request as a substitute for the real-account test.
 
-| Time      | Learner and mentor track                                                                                                                    | Offline / independent track                                                                                                                                | Expected result                                                                                     |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| 0–5 min   | Tester 1 runs the blind task in section 1. Tester 2 confirms B's saved role, visibility and requests setting.                               | Tester 3 opens the exact production URL, chooses Offline learning, waits for Ready on this device, writes a harmless note and marks one exercise complete. | Purpose is understandable; B is genuinely available; offline preparation finishes.                  |
-| 5–10 min  | Tester 1 checks Priya's 3/7 plan, saves a resource and reloads, then signs in as A.                                                         | Tester 3 follows section 19's real Network → Offline procedure, reloads, edits the note and opens an exercise from the other topic.                        | Preview state persists; prepared content is interactive without browser networking.                 |
-| 10–16 min | A uses Find my first step, edits the introduction, confirms B is the recipient, then reviews and sends once. B refreshes Received requests. | Tester 3 reloads again, checks the edited note and completion, downloads the notes, switches to Marathi and back, then reconnects.                         | One real pending request; note/export/language work offline; no automatic contact or skill upgrade. |
-| 16–22 min | B accepts with a useful next step. A refreshes Sent requests and reloads.                                                                   | Tester 3 checks 390px phone layout and the five navigation destinations, then signs in as observer C in the separate session.                              | The accepted next step persists; navigation remains usable; Marathi is readable.                    |
-| 22–27 min | A and B keep the accepted request visible for comparison. A downloads any QA notes before an intentional sign-out/account-switch test.      | C checks both request tabs. In A's former session, sign out and sign in as C; confirm private drafts and A's notebook are absent.                          | C cannot read A/B's request. Explicit account changes do not expose earlier private work.           |
-| 27–30 min | Everyone shares failures and NT items, restores the intended demo accounts and goal, and records the release decision in section 17.        | Record the exact tested URL, browser and whether real Network → Offline was used.                                                                          | A factual release decision and one ready demo device.                                               |
+| Time      | Learner and mentor track                                                                                                                           | Offline / independent track                                                                                                                                | Expected result                                                                                     |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 0–5 min   | Tester 1 runs the blind task in section 1. Tester 2 confirms B's saved role, visibility and requests setting.                                      | Tester 3 opens the exact production URL, chooses Offline learning, waits for Ready on this device, writes a harmless note and marks one exercise complete. | Purpose is understandable; B is genuinely available; offline preparation finishes.                  |
+| 5–10 min  | Tester 1 switches the global language to Marathi, checks navigation/catalog and the unchanged 3/7 plan, then returns to English and signs in as A. | Tester 3 follows section 19's real Network → Offline procedure, reloads, edits the note and opens an exercise from the other topic.                        | Preview state persists; prepared content is interactive without browser networking.                 |
+| 10–16 min | A uses Find my first step, edits the introduction, confirms B is the recipient, then reviews and sends once. B refreshes Received requests.        | Tester 3 reloads again, checks the edited note and completion, downloads the notes, switches to Marathi and back, then reconnects.                         | One real pending request; note/export/language work offline; no automatic contact or skill upgrade. |
+| 16–22 min | B accepts with a useful next step. A refreshes Sent requests and reloads.                                                                          | Tester 3 checks 390px phone layout and the five navigation destinations, then signs in as observer C in the separate session.                              | The accepted next step persists; navigation remains usable; Marathi is readable.                    |
+| 22–27 min | A and B keep the accepted request visible for comparison. A downloads any QA notes before an intentional sign-out/account-switch test.             | C checks both request tabs. In A's former session, sign out and sign in as C; confirm private drafts and A's notebook are absent.                          | C cannot read A/B's request. Explicit account changes do not expose earlier private work.           |
+| 27–30 min | Everyone shares failures and NT items, restores the intended demo accounts and goal, and records the release decision in section 17.               | Record the exact tested URL, browser and whether real Network → Offline was used.                                                                          | A factual release decision and one ready demo device.                                               |
 
-With only two testers, prepare the browser and controlled accounts before timing the run. Then work together: five-minute blind task, seven-minute offline/Marathi/reload/export check, ten-minute request/acceptance loop, five-minute privacy/phone check and three-minute report. Split the longer tests afterward. Do not let an offline test interrupt the mentor's live browser.
+With only two testers, prepare the browser and controlled accounts before timing the run. Then work together: five-minute blind task, seven-minute global-language plus offline/reload/export check, ten-minute request/acceptance loop, five-minute privacy/phone check and three-minute report. Split the longer tests afterward. Do not let an offline test interrupt the mentor's live browser.
 
 Report: “Critical route: X passed, Y failed, Z not tested.” Record preparation, reload, edited notes, download, language and the real request as separate results. No item becomes a Pass merely because the code looks correct.
 
 ## 4. Split the full checklist between teammates
 
-| Tester                               | Main job                                                                                        | Sections                        |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------- |
-| 1 — learner                          | Preview, profile, plan, catalog, bookmarks and first-step panel; operate A for requests         | 5–8, 18, request half of 10     |
-| 2 — supporter                        | Community/member details; operate B for acceptance, decline and cancellation; help with privacy | 9–11                            |
-| 3 — offline and usability            | Full offline/Marathi checklist, observer C, phone, keyboard and every-button sweep              | 12–13, 19, observer half of 11  |
-| 4, if available — technical teammate | Optional AI, failures, expiry/storage checks, developer checks and final judge run              | 14–17, 20; optional cases in 19 |
+| Tester                               | Main job                                                                                                 | Sections                                              |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 1 — learner and language             | Preview, profile, plan, catalog, bookmarks, first-step panel and global language; operate A for requests | 5–8, 18, L01–L09/L11 in 19, request half of 10        |
+| 2 — supporter                        | Community/member details; operate B for acceptance, decline and cancellation; help with privacy          | 9–11                                                  |
+| 3 — offline and usability            | Offline checklist and language persistence, observer C, phone, keyboard and every-button sweep           | 12–13, O01–O44 and L12–L14 in 19, observer half of 11 |
+| 4, if available — technical teammate | Optional AI, failures, expiry/storage checks, developer checks and final judge run                       | 14–17, 20; optional cases in 19                       |
 
 With two teammates, complete the critical route together, then split the remaining checklist. Tell the other tester before changing B's role, visibility or online preference. Network tests affect only the selected browser/device. Keep one prepared demo browser intact; use a disposable browser profile for storage-clearing or first-visit tests. Restore the starting values after each test so the next result is meaningful.
 
@@ -355,23 +355,24 @@ If someone else's private draft or request is visible after an account change, s
 
 Use this short sweep after the main cases. An icon can be tested by hovering, focusing it with Tab, or reading its accessible name with a screen reader.
 
-| Area         | Controls to click at least once                                                                                                                                              | What to check                                                                            |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Navigation   | My Hub, Communities, Explore, Connections, Offline learning; phone Circles/Connect/Offline; browser Back/Forward; **Skip to content** with keyboard                          | Correct destination; visible focus; main content reachable.                              |
-| Account      | Join STEMBridge, Sign in, Create an account, Create my account, Sign out icon                                                                                                | Correct form/action; no unexplained dead control.                                        |
-| Preview      | Switch profile; Keep exploring when unconfigured                                                                                                                             | Correct sample; no live-action claim.                                                    |
-| Home         | My profile, edit pencil, profile icon, See my plan, All communities, See all people, View all                                                                                | Correct panel/page; See all people does not silently select mentors only.                |
-| First step   | Find my first step, three support choices, Online support only, Open the guide/Read the exercise, Your introduction, Review request, Sign in to connect, Visit their website | One relevant action; editable message; review before sending; honest sample/empty state. |
-| Community    | Circle title, Join community, Joined, Everyone, Mentors, Peers, Online only                                                                                                  | Selection, membership and filtering work. Joined is also the leave action.               |
-| Search       | Both search fields, their X controls, Clear search, Browse all                                                                                                               | Results/counts update; clear behavior is understandable.                                 |
-| Cards        | Person name, View profile, catalogue title, View plan, View resource, bookmark                                                                                               | The selected person/item opens; bookmark toggles only that item.                         |
-| Profile      | Skill/interest/mode checkboxes, role/domain selects, privacy and request checkboxes, optional summaries, Save profile/Save preview profile, Cancel                           | State changes as labelled; optional fields do not block normal saving.                   |
-| Member panel | Close/X/Escape; Ask for guidance, Ask to collaborate, Meet real members or Sign in to connect where shown                                                                    | Correct role and recipient; samples cannot be messaged.                                  |
-| Plan         | Choose this goal/Current goal, Open resource, Save for later/Saved, existing-skills summary, practice summaries, Online only, Ask for help/Connect                           | Correct goal/state/link; expanded content remains readable.                              |
-| Requests     | Your goal, connection-type select, Your message, Send request, Cancel                                                                                                        | Review before sending; correct recipient/type/context.                                   |
-| Inbox        | Refresh inbox, Sent requests, Received requests, goal title, Accept request, Decline, Cancel request                                                                         | Correct lifecycle and permissions.                                                       |
-| Acceptance   | Next-step field, Go back, Accept request                                                                                                                                     | Only intentional acceptance saves the note.                                              |
-| Feedback     | Dialog X/Escape, notification X, error-banner X                                                                                                                              | They dismiss the intended thing; errors do not vanish before they can be read.           |
+| Area         | Controls to click at least once                                                                                                                                              | What to check                                                                               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Navigation   | My Hub, Communities, Explore, Connections, Offline learning; phone Circles/Connect/Offline; browser Back/Forward; **Skip to content** with keyboard                          | Correct destination; visible focus; main content reachable.                                 |
+| Language     | Main-header Website language: English and Marathi; switch back and reload                                                                                                    | Authored pages/forms translate; choice persists; personal drafts and data remain unchanged. |
+| Account      | Join STEMBridge, Sign in, Create an account, Create my account, Sign out icon                                                                                                | Correct form/action; no unexplained dead control.                                           |
+| Preview      | Switch profile; Keep exploring when unconfigured                                                                                                                             | Correct sample; no live-action claim.                                                       |
+| Home         | My profile, edit pencil, profile icon, See my plan, All communities, See all people, View all                                                                                | Correct panel/page; See all people does not silently select mentors only.                   |
+| First step   | Find my first step, three support choices, Online support only, Open the guide/Read the exercise, Your introduction, Review request, Sign in to connect, Visit their website | One relevant action; editable message; review before sending; honest sample/empty state.    |
+| Community    | Circle title, Join community, Joined, Everyone, Mentors, Peers, Online only                                                                                                  | Selection, membership and filtering work. Joined is also the leave action.                  |
+| Search       | Both search fields, their X controls, Clear search, Browse all                                                                                                               | Results/counts update; clear behavior is understandable.                                    |
+| Cards        | Person name, View profile, catalogue title, View plan, View resource, bookmark                                                                                               | The selected person/item opens; bookmark toggles only that item.                            |
+| Profile      | Skill/interest/mode checkboxes, role/domain selects, privacy and request checkboxes, optional summaries, Save profile/Save preview profile, Cancel                           | State changes as labelled; optional fields do not block normal saving.                      |
+| Member panel | Close/X/Escape; Ask for guidance, Ask to collaborate, Meet real members or Sign in to connect where shown                                                                    | Correct role and recipient; samples cannot be messaged.                                     |
+| Plan         | Choose this goal/Current goal, Open resource, Save for later/Saved, existing-skills summary, practice summaries, Online only, Ask for help/Connect                           | Correct goal/state/link; expanded content remains readable.                                 |
+| Requests     | Your goal, connection-type select, Your message, Send request, Cancel                                                                                                        | Review before sending; correct recipient/type/context.                                      |
+| Inbox        | Refresh inbox, Sent requests, Received requests, goal title, Accept request, Decline, Cancel request                                                                         | Correct lifecycle and permissions.                                                          |
+| Acceptance   | Next-step field, Go back, Accept request                                                                                                                                     | Only intentional acceptance saves the note.                                                 |
+| Feedback     | Dialog X/Escape, notification X, error-banner X                                                                                                                              | They dismiss the intended thing; errors do not vanish before they can be read.              |
 
 Decorative initials, icons, badges, and static headings do not need to act like buttons. A control that looks clickable but does nothing should be reported with its exact label and screen.
 
@@ -463,41 +464,41 @@ Give a teammate three minutes to demonstrate the site. Then answer the questions
 12. Can the teammate prepare the website, disable browser networking, reload and keep learning? What still needs internet?
 
 13. Where are notes saved? What differs between an automatic session expiry and clicking Sign out?
-14. Does the Marathi option translate the whole website or the learning area? Does it rewrite the user's note?
+14. Can the teammate use Marathi across home, catalog, plans, account forms, connections and exercises? Which personal text correctly stays unchanged?
 15. Does finishing an exercise mean a skill was verified, or that a practice step was completed?
 
 Rate each item from **1 (poor) to 5 (clear/easy)**, with one example. These are teammate feedback scores, not official judging marks.
 
-| Item                                                   | Rating 1–5 | Example or suggested improvement |
-| ------------------------------------------------------ | ---------- | -------------------------------- |
-| Purpose is understandable                              |            |                                  |
-| First useful action is obvious                         |            |                                  |
-| Navigation and labels are simple                       |            |                                  |
-| Text is readable and screens feel uncluttered          |            |                                  |
-| Profile/consent/visibility choices make sense          |            |                                  |
-| Recommendations are explained                          |            |                                  |
-| Requests feel complete and trustworthy                 |            |                                  |
-| Sample and real information are distinguishable        |            |                                  |
-| Phone and keyboard experience                          |            |                                  |
-| Three-minute demonstration is convincing               |            |                                  |
-| Offline learning and note recovery are understandable  |            |                                  |
-| English/Marathi choice and its limited scope are clear |            |                                  |
+| Item                                                              | Rating 1–5 | Example or suggested improvement |
+| ----------------------------------------------------------------- | ---------- | -------------------------------- |
+| Purpose is understandable                                         |            |                                  |
+| First useful action is obvious                                    |            |                                  |
+| Navigation and labels are simple                                  |            |                                  |
+| Text is readable and screens feel uncluttered                     |            |                                  |
+| Profile/consent/visibility choices make sense                     |            |                                  |
+| Recommendations are explained                                     |            |                                  |
+| Requests feel complete and trustworthy                            |            |                                  |
+| Sample and real information are distinguishable                   |            |                                  |
+| Phone and keyboard experience                                     |            |                                  |
+| Three-minute demonstration is convincing                          |            |                                  |
+| Offline learning and note recovery are understandable             |            |                                  |
+| English/Marathi navigation and personal-text boundaries are clear |            |                                  |
 
 For the official rubric, collect evidence rather than guessing a score:
 
-| Judging area              | Evidence to look for                                                                                                                              |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Understanding the problem | A beginner can find support and a next action, not just a wall of cards.                                                                          |
-| Innovation and creativity | Goal, missing skills, resources and relevant people connect in a useful way.                                                                      |
-| Technical implementation  | Real input changes the output; account permissions and request transitions work.                                                                  |
-| Working prototype         | Separate accounts complete the request loop and saved state survives refresh.                                                                     |
-| Twist                     | The announced offline requirement is demonstrated by a prepared reload plus useful saved work; English/Marathi has an honest learning-only scope. |
-| Time strategy             | A known-working version, clear limits and a rehearsed submission exist before the deadline.                                                       |
-| Presentation              | A teammate can explain what is real, what is sample, and how the product works in plain language.                                                 |
+| Judging area              | Evidence to look for                                                                                                                                                          |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Understanding the problem | A beginner can find support and a next action, not just a wall of cards.                                                                                                      |
+| Innovation and creativity | Goal, missing skills, resources and relevant people connect in a useful way.                                                                                                  |
+| Technical implementation  | Real input changes the output; account permissions and request transitions work.                                                                                              |
+| Working prototype         | Separate accounts complete the request loop and saved state survives refresh.                                                                                                 |
+| Twist                     | The assigned multilingual requirement is demonstrated through the main journey in English and Marathi; retained offline learning also shows a prepared reload and saved work. |
+| Time strategy             | A known-working version, clear limits and a rehearsed submission exist before the deadline.                                                                                   |
+| Presentation              | A teammate can explain what is real, what is sample, and how the product works in plain language.                                                                             |
 
 Do not pitch verified mentors, guaranteed internships, an employability percentage, a live event feed, production security certification, or live AI unless the relevant claim has actual evidence.
 
-Also do not claim first-ever offline access, downloaded external courses, offline messaging, automatic note sync, permanent browser storage, or whole-site translation. A useful honest explanation is: “We prepare the learning area in this browser, keep practice notes local, and require an intentional online action to contact someone.”
+Also do not claim first-ever offline access, downloaded external courses, offline messaging, automatic note sync, permanent browser storage, or automatic translation of personal messages. A useful honest explanation is: “We prepare the learning area in this browser, keep practice notes local, and require an intentional online action to contact someone.”
 
 ## 17. Bug reports and the release decision
 
@@ -535,28 +536,31 @@ Tester and time:
 
 The test lead fills this in. A row is not Passed merely because an automated test passed earlier on a different version.
 
-| Gate                                                                                | Pass / Fail / NT | Evidence/owner |
-| ----------------------------------------------------------------------------------- | ---------------- | -------------- |
-| Site opens at the exact address to be submitted                                     | NT               |                |
-| Sample content is clearly labelled; no fake delivery/application claims             | NT               |                |
-| Priya's 3/7, changed skill, and online preference behave correctly                  | NT               |                |
-| A and B sign in and complete a real accepted request with a next step               | NT               |                |
-| Pending/accepted duplicate protection, decline, and cancellation work               | NT               |                |
-| C cannot view A/B's private request; account switching clears drafts                | NT               |                |
-| Profile, goal, saved items and membership survive refresh                           | NT               |                |
-| Essential phone and keyboard controls work                                          | NT               |                |
-| Manual entry works if AI is missing or fails                                        | NT               |                |
-| Find my first step preserves skills and goal, and never sends without review        | NT               |                |
-| Required developer checks pass on the final version                                 | NT               |                |
-| Required offline preparation, real Network Offline reload and note persistence pass | NT               |                |
-| Demo is rehearsed; final known limitations and submission owner are named           | NT               |                |
+| Gate                                                                                             | Pass / Fail / NT | Evidence/owner |
+| ------------------------------------------------------------------------------------------------ | ---------------- | -------------- |
+| Site opens at the exact address to be submitted                                                  | NT               |                |
+| Assigned multilingual twist works through navigation, catalog, plans, account forms and requests | NT               |                |
+| Sample content is clearly labelled; no fake delivery/application claims                          | NT               |                |
+| Priya's 3/7, changed skill, and online preference behave correctly                               | NT               |                |
+| A and B sign in and complete a real accepted request with a next step                            | NT               |                |
+| Pending/accepted duplicate protection, decline, and cancellation work                            | NT               |                |
+| C cannot view A/B's private request; account switching clears drafts                             | NT               |                |
+| Profile, goal, saved items and membership survive refresh                                        | NT               |                |
+| Essential phone and keyboard controls work                                                       | NT               |                |
+| Manual entry works if AI is missing or fails                                                     | NT               |                |
+| Find my first step preserves skills and goal, and never sends without review                     | NT               |                |
+| Required developer checks pass on the final version                                              | NT               |                |
+| Required offline preparation, real Network Offline reload and note persistence pass              | NT               |                |
+| Demo is rehearsed; final known limitations and submission owner are named                        | NT               |                |
 
 Before handing back to the builder:
 
-Check these additional release gates for the implemented twist:
+Check these additional release gates for multilingual support and the retained offline features:
 
 | Gate                                                                                                     | Pass / Fail / NT | Evidence/owner |
 | -------------------------------------------------------------------------------------------------------- | ---------------- | -------------- |
+| Global language and reload preference work; a fluent speaker has checked important Marathi instructions  | NT               |                |
+| Language switching preserves the 3/7 plan, account identity, input drafts and original request messages  | NT               |                |
 | The exact demo browser and URL show Ready on this device                                                 | NT               |                |
 | Both exercise topics, explanations and note/completion changes work after offline reload                 | NT               |                |
 | A downloaded text file contains the actual latest note, including copied Marathi text                    | NT               |                |
@@ -564,7 +568,7 @@ Check these additional release gates for the implemented twist:
 | Read-only own-account snapshot and blocked live writes are honest; reconnect sends nothing automatically | NT               |                |
 | Explicit sign-out/different-account notes clearing works; no other account's notes are exposed           | NT               |                |
 | Session-expiry locking/recovery evidence is recorded; manual expiry is NT if not performed               | NT               |                |
-| Five-page phone navigation and both learning languages remain usable                                     | NT               |                |
+| Five-page phone navigation, account forms and both learning languages remain usable                      | NT               |                |
 
 Then hand back the run:
 
@@ -620,9 +624,34 @@ For S08, use a controlled account or preview only. Record the exact goal and ski
 
 Ask the tester afterward: “Did this make your first action clearer?” and “At what point did you think the message was sent?” A tester who assumes **Review request** sends immediately has identified a usability issue worth reporting even if the code behaves correctly.
 
-## 19. Offline learning and English/Marathi — required twist tests
+## 19. Website language and offline learning — twist checks
 
-The requirement is to support useful work without internet. We test a prepared website, actual learning work, and honest limits. No Gemini key, new SQL or external translation service is needed for this section.
+The assigned twist is multilingual support. Test the full core journey in English and Marathi first. Offline support remains implemented and should still be tested and demonstrated. Both use prepared authored content; no Gemini key, new SQL or external translation service is required.
+
+### First priority: the whole language journey
+
+Use the **Website language** control in the main header. The Marathi button uses its native name; **English** switches back. A fluent Marathi speaker should judge wording and meaning. Other teammates can still check behavior, readable letters and preserved data, but should mark language accuracy NT if they cannot assess it.
+
+For an open form's draft test, use two ordinary tabs in the **same browser profile and account**. Keep the draft open in tab 1, change Website language in tab 2, then return to tab 1. Do not refresh, sign out or close the form. This avoids clicking through a modal's blocked background and tests the shared reading preference without changing identity.
+
+| ID  | Steps                                                                                                                                                                               | Expected result                                                                                                                                                                                          | Result |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| L01 | On My Hub in English, note the goal, skill count and account/sample name. Choose Marathi in Website language.                                                                       | Authored headings, navigation, cards and action labels change; account identity, selected goal and confirmed skills do not. Personal names stay unchanged.                                               | NT     |
+| L02 | Visit Communities, Explore, Connections and Offline learning in Marathi; return to My Hub.                                                                                          | Main authored screens follow the same language. No English-only dead end in the core journey. Technical names such as Python, Git and Supabase may remain.                                               | NT     |
+| L03 | In Priya's preview, open the ML goal plan in English and Marathi.                                                                                                                   | The count stays 3/7, the same skills are met/missing, and the explanation says the count is based on self-reported skills rather than a test. Titles, resource explanations and action labels translate. | NT     |
+| L04 | In Explore, copy a distinctive Marathi word from a displayed catalog title and search for it. Compare with its English title search; clear and combine a category/domain filter.    | Marathi and English searches can find the same curated item. Language switching does not change the item's ID, saved status, filter meaning or sample designation.                                       | NT     |
+| L05 | Open a sample opportunity and a member profile in Marathi. Inspect labels, matching explanations and contact actions.                                                               | Authored text translates. User-written member names, bios and messages remain as written; no invented translation changes their meaning. Sample and real accounts remain distinguishable.                | NT     |
+| L06 | Set Marathi, then open signup/sign-in. Switch between the two forms, inspect labels, guidance and password rules; cancel.                                                           | Account forms are usable in Marathi. Email/password inputs and existing account behavior remain unchanged. Browser-native validation can follow the browser's own language.                              | NT     |
+| L07 | As A, open My profile in Marathi. Inspect role/domain choices, skills, visibility, request consent and optional AI consent. Save one harmless allowed change and reload.            | Labels translate while the same underlying choices and permissions save. AI remains optional and its recipient/consent meaning remains clear.                                                            | NT     |
+| L08 | In tab 1, type a unique harmless unsaved bio or introduction. Switch language using tab 2 as described above. Return to tab 1 and cancel afterward.                                 | Form labels update, but the typed text and selections remain exactly as entered. A language change does not save, erase or translate the personal draft.                                                 | NT     |
+| L09 | As A, open a request to controlled B. Type a unique message. Switch language through tab 2 without closing the request. Inspect and cancel once; then repeat and deliberately send. | The message and recipient stay unchanged while labels translate. The cancelled attempt sends nothing; only the deliberate Send action creates a request.                                                 | NT     |
+| L10 | B views and accepts A's request using Marathi UI; A refreshes in English, then Marathi.                                                                                             | Status/action labels translate. The original message and agreed next-step text remain exactly as entered; identity, permission and lifecycle rules do not change.                                        | NT     |
+| L11 | Choose Marathi, reload and reopen the same URL. Then choose English and reload.                                                                                                     | The selected language persists in this browser. The page remains usable during loading; no profile, bookmark, draft or notebook is relabelled as someone else's data.                                    | NT     |
+| L12 | In a prepared browser, use real Network → Offline and reload. Switch language on the main pages and in Offline learning.                                                            | Translations already included in the website remain available without a translation API. Offline account restrictions remain in force in both languages.                                                 | NT     |
+| L13 | Write a harmless note and complete an exercise. Switch the global language, reload and download the note.                                                                           | The authored interface changes, but note text and completion remain. The actual downloaded UTF-8 file preserves the written text.                                                                        | NT     |
+| L14 | At 390px width and 200% zoom, use main navigation, a plan, an account form and Offline learning in Marathi. Use Tab/Enter/Space; have a fluent speaker read key instructions.       | Letters and controls are readable without horizontal overflow. No clipped critical action. Record behavior, readability and translation accuracy as separate observations.                               | NT     |
+
+Run at least L01–L04, L06 and L09–L13 in the core language review. Keep the existing full account, privacy and offline cases below; switching language must not weaken those behaviors.
 
 ### A. Prepare the correct browser and understand the limits
 
@@ -681,7 +710,7 @@ For O09–O12, use English first so the titles match this table. You are checkin
 
 ### E. English and Marathi reading
 
-The language buttons are inside Offline learning, under Reading language. The Marathi button displays the language's native name; its paired English button lets you return. The rest of this guide uses the English control names. Translation covers the learning area, not the entire website or another user's messages.
+The global Website language buttons and the language buttons inside Offline learning control the same website preference. The Marathi button displays the language's native name; English lets you return. This guide uses English control names. Authored website screens and exercises translate; personal messages, bios, notes and AI evidence stay unchanged.
 
 | ID  | Steps                                                                                                                                                              | Expected result                                                                                                                                                                                                                                                               | Result |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
@@ -744,7 +773,7 @@ npm run build
 git diff --check
 ```
 
-Record the actual output summary and date. Do not copy old test counts from a document and call them today's result. The latest supplied baseline is **115 tests across 12 files at 3:01 PM IST**, plus TypeScript and production build. Tests include matching, search, mocked AI responses, workspace/SQL permissions, account isolation, service-worker caching, offline snapshot guards, notebook storage and recovery, locked-note UI and Marathi coverage. Mocked and local SQL tests do not prove the hosted account journey, live AI integration or actual browser network behavior.
+Record the actual output summary and date. Do not copy old test counts from a document and call them today's result. The latest supplied baseline is **124 tests across 14 files at 3:30 PM IST**, plus TypeScript and production build. Tests include matching, search, mocked AI responses, workspace/SQL permissions, account isolation, service-worker caching, offline snapshot guards, notebook storage and recovery, locked-note UI and global Marathi coverage. Mocked and local SQL tests do not prove the hosted account journey, live AI integration, natural language quality or actual browser network behavior. Also run the L checks against the final built version, including an open draft across a cross-tab language change.
 
 To test the production build locally, use a free terminal/port and run:
 

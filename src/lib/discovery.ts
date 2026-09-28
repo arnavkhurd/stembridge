@@ -1,5 +1,6 @@
 import { domainLabel, getSkillLabel } from "./data";
 import type { CatalogItem, Profile } from "./types";
+import { translate } from "./i18n";
 
 function normalize(value: string) {
   return value
@@ -17,7 +18,7 @@ function includesTerms(query: string, fields: string[]) {
 }
 
 export function catalogMatchesSearch(item: CatalogItem, query: string) {
-  return includesTerms(query, [
+  const fields = [
     item.title,
     item.description,
     item.provider,
@@ -26,12 +27,26 @@ export function catalogMatchesSearch(item: CatalogItem, query: string) {
     ...item.tags,
     ...item.skills.map(getSkillLabel),
     ...item.requirements.map(getSkillLabel),
+  ];
+  return includesTerms(query, [
+    ...fields,
+    ...fields.map((text) => translate("mr", text)),
   ]);
 }
 
 // Search only the public fields displayed in the member profile.
 // The caller applies membership, visibility and availability filters first.
 export function personMatchesSearch(person: Profile, query: string) {
+  const authored = [
+    domainLabel(person.domain),
+    person.role === "both"
+      ? "mentor"
+      : person.role === "learner"
+        ? "peer"
+        : "mentor",
+    ...(person.role === "both" ? ["peer"] : []),
+    ...person.skills.map(getSkillLabel),
+  ];
   return includesTerms(query, [
     person.display_name,
     person.headline,
@@ -44,5 +59,6 @@ export function personMatchesSearch(person: Profile, query: string) {
         : "mentor",
     ...person.help_topics,
     ...person.skills.map(getSkillLabel),
+    ...authored.map((text) => translate("mr", text)),
   ]);
 }

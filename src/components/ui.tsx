@@ -4,6 +4,7 @@ import { X, ArrowUpRight, Cpu, Orbit, Search } from "lucide-react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn, initials } from "@/lib/utils";
 import type { DomainId } from "@/lib/types";
+import { useLanguage } from "./language-provider";
 
 export function Button({
   children,
@@ -74,6 +75,7 @@ export function Modal({
   children: ReactNode;
   wide?: boolean;
 }) {
+  const { t } = useLanguage();
   return (
     <Dialog.Root open={open} onOpenChange={(v) => !v && onClose()}>
       <Dialog.Portal>
@@ -86,7 +88,10 @@ export function Modal({
                 {description || title}
               </Dialog.Description>
             </div>
-            <Dialog.Close className="icon-button" aria-label="Close dialog">
+            <Dialog.Close
+              className="icon-button"
+              aria-label={t("Close dialog")}
+            >
               <X size={20} />
             </Dialog.Close>
           </div>
@@ -156,6 +161,7 @@ export function SearchField({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const { language, t } = useLanguage();
   return (
     <div className="search-field">
       <Search size={20} aria-hidden="true" />
@@ -175,7 +181,11 @@ export function SearchField({
         <button
           className="icon-button"
           type="button"
-          aria-label={`Clear ${label.toLowerCase()}`}
+          aria-label={
+            language === "mr"
+              ? t("Clear search")
+              : `Clear ${label.toLowerCase()}`
+          }
           onClick={() => onChange("")}
         >
           <X size={18} aria-hidden="true" />

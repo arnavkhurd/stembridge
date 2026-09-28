@@ -33,6 +33,8 @@ import type {
 } from "@/lib/types";
 import { Avatar, Badge, Button, Modal } from "./ui";
 import { useWorkspace } from "./workspace-provider";
+import { useLanguage } from "./language-provider";
+import { translateAuthoredText } from "@/lib/i18n-content";
 
 type DialogProps = {
   open: boolean;
@@ -51,13 +53,14 @@ const isSamplePerson = (person: Profile) =>
   );
 
 export function AuthDialog({ open, onClose, onNotice }: DialogProps) {
+  const { t } = useLanguage();
   const { configured } = useWorkspace();
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="Your STEMBridge account"
-      description="Meet mentors, find peers, and save your next steps."
+      title={t("Your STEMBridge account")}
+      description={t("Meet mentors, find peers, and save your next steps.")}
     >
       {open &&
         (configured ? (
@@ -65,14 +68,18 @@ export function AuthDialog({ open, onClose, onNotice }: DialogProps) {
         ) : (
           <div className="stack">
             <p className="form-note">
-              Accounts are not connected yet. You can try a sample profile and
-              save opportunities in this browser.
+              {t(
+                "Accounts are not connected yet. You can try a sample profile and save opportunities in this browser.",
+              )}
             </p>
             <p className="small muted">
-              Joining a community and sending requests need a connected account.
+              {t(
+                "Joining a community and sending requests need a connected account.",
+              )}
             </p>
             <Button onClick={onClose}>
-              Keep exploring <ArrowRight size={16} />
+              {t("Keep exploring")}
+              <ArrowRight size={16} />
             </Button>
           </div>
         ))}
@@ -81,6 +88,7 @@ export function AuthDialog({ open, onClose, onNotice }: DialogProps) {
 }
 
 function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
+  const { t } = useLanguage();
   const { signIn, signUp } = useWorkspace();
   const [creating, setCreating] = useState(true);
   const [name, setName] = useState("");
@@ -98,12 +106,16 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
         const result = await signUp(email, password, name);
         onNotice(
           result.needsConfirmation
-            ? "Check your email to confirm your account, then return to sign in."
-            : "Your account is ready. Add your skills and choose how you want to connect.",
+            ? t(
+                "Check your email to confirm your account, then return to sign in.",
+              )
+            : t(
+                "Your account is ready. Add your skills and choose how you want to connect.",
+              ),
         );
       } else {
         await signIn(email, password);
-        onNotice("Welcome back. Your workspace is loading.");
+        onNotice(t("Welcome back. Your workspace is loading."));
       }
       onClose();
     } catch (cause) {
@@ -118,7 +130,7 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
       <div className="stack">
         {creating && (
           <div className="field">
-            <label htmlFor="auth-name">Your name</label>
+            <label htmlFor="auth-name">{t("Your name")}</label>
             <input
               id="auth-name"
               autoComplete="name"
@@ -126,13 +138,13 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
               onChange={(event) => setName(event.target.value)}
               required
               maxLength={80}
-              placeholder="Your preferred name"
+              placeholder={t("Your preferred name")}
               disabled={pending}
             />
           </div>
         )}
         <div className="field">
-          <label htmlFor="auth-email">Email address</label>
+          <label htmlFor="auth-email">{t("Email address")}</label>
           <input
             id="auth-email"
             type="email"
@@ -146,7 +158,7 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
           />
         </div>
         <div className="field">
-          <label htmlFor="auth-password">Password</label>
+          <label htmlFor="auth-password">{t("Password")}</label>
           <input
             id="auth-password"
             type="password"
@@ -160,14 +172,15 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
           />
           {creating && (
             <small>
-              At least 8 characters. You choose whether to make your profile
-              public.
+              {t(
+                "At least 8 characters. You choose whether to make your profile public.",
+              )}
             </small>
           )}
         </div>
         {error && (
           <p className="field-error" role="alert">
-            {error}
+            {t(error)}
           </p>
         )}
         <Button type="submit" className="full-width" disabled={pending}>
@@ -176,11 +189,17 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
           ) : (
             <Mail size={16} />
           )}
-          {pending ? "One moment…" : creating ? "Create my account" : "Sign in"}
+          {pending
+            ? t("One moment…")
+            : creating
+              ? t("Create my account")
+              : t("Sign in")}
         </Button>
       </div>
       <p className="auth-switch">
-        {creating ? "Already part of the community? " : "New to STEMBridge? "}
+        {creating
+          ? t("Already part of the community?")
+          : t("New to STEMBridge?")}{" "}
         <button
           type="button"
           disabled={pending}
@@ -189,7 +208,7 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
             setError(null);
           }}
         >
-          {creating ? "Sign in" : "Create an account"}
+          {creating ? t("Sign in") : t("Create an account")}
         </button>
       </p>
     </form>
@@ -197,14 +216,15 @@ function AuthForm({ onClose, onNotice }: Omit<DialogProps, "open">) {
 }
 
 export function ProfileDialog({ open, onClose, onNotice }: DialogProps) {
+  const { t } = useLanguage();
   const { profile, learner, preview } = useWorkspace();
   return (
     <Modal
       open={open}
       onClose={onClose}
       wide
-      title={preview ? "Try a sample profile" : "Your profile"}
-      description="Choose your skills and how you want to connect."
+      title={preview ? t("Try a sample profile") : t("Your profile")}
+      description={t("Choose your skills and how you want to connect.")}
     >
       {open &&
         (profile ? (
@@ -217,8 +237,9 @@ export function ProfileDialog({ open, onClose, onNotice }: DialogProps) {
           />
         ) : (
           <p className="loading-surface">
-            Loading your profile… If it does not appear, close this panel and
-            refresh.
+            {t(
+              "Loading your profile… If it does not appear, close this panel and refresh.",
+            )}
           </p>
         ))}
     </Modal>
@@ -231,6 +252,7 @@ function ProfileForm({
   onClose,
   onNotice,
 }: { profile: Profile; learner: LearnerState } & Omit<DialogProps, "open">) {
+  const { t } = useLanguage();
   const workspace = useWorkspace();
   const [name, setName] = useState(profile.display_name);
   const [headline, setHeadline] = useState(profile.headline);
@@ -363,8 +385,8 @@ function ProfileForm({
       );
       onNotice(
         workspace.preview
-          ? "Your preview profile is saved in this browser."
-          : "Profile saved. Your recommendations are updated.",
+          ? t("Your preview profile is saved in this browser.")
+          : t("Profile saved. Your recommendations are updated."),
       );
       onClose();
     } catch (cause) {
@@ -384,10 +406,10 @@ function ProfileForm({
         }
       }}
     >
-      <h3>About you</h3>
+      <h3>{t("About you")}</h3>
       <div className="form-grid">
         <div className="field">
-          <label htmlFor="profile-name">Your name</label>
+          <label htmlFor="profile-name">{t("Your name")}</label>
           <input
             id="profile-name"
             value={name}
@@ -398,7 +420,7 @@ function ProfileForm({
           />
         </div>
         <div className="field">
-          <label htmlFor="profile-domain">Main interest</label>
+          <label htmlFor="profile-domain">{t("Main interest")}</label>
           <select
             id="profile-domain"
             value={domain}
@@ -412,35 +434,36 @@ function ProfileForm({
           >
             {communities.map((community) => (
               <option key={community.id} value={community.id}>
-                {community.name}
+                {t(community.name)}
               </option>
             ))}
           </select>
         </div>
         <div className="field">
-          <label htmlFor="profile-role">I want to…</label>
+          <label htmlFor="profile-role">{t("I want to…")}</label>
           <select
             id="profile-role"
             value={role}
             onChange={(event) => setRole(event.target.value as MemberRole)}
           >
-            <option value="learner">Learn with others</option>
-            <option value="mentor">Be a mentor</option>
-            <option value="both">Learn and mentor</option>
+            <option value="learner">{t("Learn with others")}</option>
+            <option value="mentor">{t("Be a mentor")}</option>
+            <option value="both">{t("Learn and mentor")}</option>
           </select>
         </div>
       </div>
       <div className="profile-form-section">
-        <h3>Your skills</h3>
+        <h3>{t("Your skills")}</h3>
         <details className="ai-panel">
-          <summary>Suggest skills with AI (optional)</summary>
+          <summary>{t("Suggest skills with AI (optional)")}</summary>
           <p>
-            Describe what you can do and what you want to learn. Review the
-            suggestions before adding them.
+            {t(
+              "Describe what you can do and what you want to learn. Review the suggestions before adding them.",
+            )}
           </p>
           <div className="field" style={{ marginTop: 12 }}>
             <label className="sr-only" htmlFor="profile-intro">
-              Your experience and interests
+              {t("Your experience and interests")}
             </label>
             <textarea
               id="profile-intro"
@@ -451,10 +474,14 @@ function ProfileForm({
                 setSuggestionApplied(false);
               }}
               maxLength={2500}
-              placeholder="I can write beginner Python and use Git. I want to build my first ML project…"
+              placeholder={t(
+                "I can write beginner Python and use Git. I want to build my first ML project…",
+              )}
               disabled={aiBusy}
             />
-            <small>{intro.length}/2,500 characters</small>
+            <small>
+              {t("{count}/2,500 characters", { count: intro.length })}
+            </small>
           </div>
           <label className="check-label" style={{ marginTop: 12 }}>
             <input
@@ -463,11 +490,14 @@ function ProfileForm({
               onChange={(event) => setConsent(event.target.checked)}
               disabled={aiBusy}
             />
-            Send this introduction to Google Gemini for skill suggestions.
+            {t(
+              "Send this introduction to Google Gemini for skill suggestions.",
+            )}
           </label>
           <p style={{ marginTop: 7 }}>
-            Leave out sensitive details. You can also choose skills yourself
-            below.
+            {t(
+              "Leave out sensitive details. You can also choose skills yourself below.",
+            )}
           </p>
           <Button
             type="button"
@@ -480,26 +510,26 @@ function ProfileForm({
             ) : (
               <Sparkles size={15} />
             )}
-            {aiBusy ? "Finding suggestions…" : "Suggest skills"}
+            {aiBusy ? t("Finding suggestions…") : t("Suggest skills")}
           </Button>
           {aiError && (
             <p className="field-error" role="alert" style={{ marginTop: 12 }}>
-              {aiError}
+              {t(aiError)}
             </p>
           )}
           {suggestion && (
             <div className="ai-suggestion" aria-live="polite">
-              <h4>Check the suggestions</h4>
+              <h4>{t("Check the suggestions")}</h4>
               <p>
                 {suggestion.skills.length
-                  ? "Keep only skills you can use or explain."
-                  : "No skills found. Choose your skills below instead."}
+                  ? t("Keep only skills you can use or explain.")
+                  : t("No skills found. Choose your skills below instead.")}
               </p>
               {suggestion.evidence.length > 0 && (
                 <ul>
                   {suggestion.evidence.map((entry) => (
                     <li key={entry.skill}>
-                      <strong>{getSkillLabel(entry.skill)}:</strong> “
+                      <strong>{t(getSkillLabel(entry.skill))}:</strong> “
                       {entry.quote}”
                     </li>
                   ))}
@@ -507,10 +537,17 @@ function ProfileForm({
               )}
               {suggestion.interests.length > 0 && (
                 <p>
-                  Interests: {suggestion.interests.map(domainLabel).join(", ")}
+                  {t("Interests:")}{" "}
+                  {suggestion.interests
+                    .map((id) => t(domainLabel(id)))
+                    .join(", ")}
                 </p>
               )}
-              {suggestion.goal && <p>Your goal: {suggestion.goal}</p>}
+              {suggestion.goal && (
+                <p>
+                  {t("Your goal:")} {suggestion.goal}
+                </p>
+              )}
               <Button
                 type="button"
                 variant="secondary"
@@ -523,21 +560,22 @@ function ProfileForm({
                   <ArrowRight size={15} />
                 )}
                 {suggestionApplied
-                  ? "Added to your draft"
-                  : "Use these suggestions"}
+                  ? t("Added to your draft")
+                  : t("Use these suggestions")}
               </Button>
               {suggestionApplied && (
                 <p style={{ marginTop: 8 }}>
-                  Check your skills below, then save. These changes are still a
-                  draft.
+                  {t(
+                    "Check your skills below, then save. These changes are still a draft.",
+                  )}
                 </p>
               )}
             </div>
           )}
         </details>
         <div className="field" style={{ marginTop: 18 }}>
-          <span className="label">What can you already do?</span>
-          <small>Select skills you can use or explain today.</small>
+          <span className="label">{t("What can you already do?")}</span>
+          <small>{t("Select skills you can use or explain today.")}</small>
           <div className="checkbox-grid">
             {skills.map((skill) => (
               <label className="skill-option" key={skill.id}>
@@ -556,7 +594,7 @@ function ProfileForm({
                   {confirmed.includes(skill.id) && (
                     <Check size={16} aria-hidden="true" />
                   )}
-                  {skill.label}
+                  {t(skill.label)}
                 </span>
               </label>
             ))}
@@ -564,9 +602,9 @@ function ProfileForm({
         </div>
       </div>
       <div className="profile-form-section">
-        <h3>How you want to connect</h3>
+        <h3>{t("How you want to connect")}</h3>
         <div className="stack">
-          <span className="label">Topics you want to explore</span>
+          <span className="label">{t("Topics you want to explore")}</span>
           <div className="row wrap">
             {communities.map((community) => (
               <label className="check-label" key={community.id}>
@@ -581,7 +619,7 @@ function ProfileForm({
                     )
                   }
                 />
-                {community.shortName}
+                {t(community.shortName)}
               </label>
             ))}
           </div>
@@ -591,50 +629,62 @@ function ProfileForm({
               checked={onlineOnly}
               onChange={(event) => setOnlineOnly(event.target.checked)}
             />
-            Show only online opportunities and online support
+            {t("Show only online opportunities and online support")}
           </label>
           <details ref={optionalDetails}>
-            <summary>More about you (optional)</summary>
+            <summary>{t("More about you (optional)")}</summary>
             <div className="stack" style={{ marginTop: 16 }}>
               <div className="field">
-                <label htmlFor="profile-headline">A short introduction</label>
+                <label htmlFor="profile-headline">
+                  {t("A short introduction")}
+                </label>
                 <input
                   id="profile-headline"
                   value={headline}
                   onChange={(event) => setHeadline(event.target.value)}
                   maxLength={160}
-                  placeholder="Engineering student, curious about AI"
+                  placeholder={t("Engineering student, curious about AI")}
                 />
               </div>
               <div className="field">
-                <label htmlFor="profile-bio">A little more about you</label>
+                <label htmlFor="profile-bio">
+                  {t("A little more about you")}
+                </label>
                 <textarea
                   id="profile-bio"
                   value={bio}
                   onChange={(event) => setBio(event.target.value)}
                   maxLength={1500}
-                  placeholder="Your interests and the people you would like to meet"
+                  placeholder={t(
+                    "Your interests and the people you would like to meet",
+                  )}
                 />
-                <small>Visible with your profile if you make it public.</small>
+                <small>
+                  {t("Visible with your profile if you make it public.")}
+                </small>
               </div>
               <div className="field">
-                <label htmlFor="profile-topics">Topics you can help with</label>
+                <label htmlFor="profile-topics">
+                  {t("Topics you can help with")}
+                </label>
                 <input
                   id="profile-topics"
                   ref={topicInput}
                   value={topics}
                   onChange={(event) => setTopics(event.target.value)}
                   maxLength={600}
-                  placeholder="Project feedback, Study buddy, Python practice"
+                  placeholder={t(
+                    "Project feedback, Study buddy, Python practice",
+                  )}
                 />
                 <small>
-                  Separate topics with commas. Skills are self-reported.
+                  {t("Separate topics with commas. Skills are self-reported.")}
                 </small>
               </div>
             </div>
           </details>
           <div className="field">
-            <span className="label">I can connect…</span>
+            <span className="label">{t("I can connect…")}</span>
             <div className="row wrap">
               {(["online", "in-person"] as SupportMode[]).map((mode) => (
                 <label className="check-label" key={mode}>
@@ -649,7 +699,7 @@ function ProfileForm({
                       )
                     }
                   />
-                  {mode === "online" ? "Online" : "In person"}
+                  {mode === "online" ? t("Online") : t("In person")}
                 </label>
               ))}
             </div>
@@ -657,14 +707,14 @@ function ProfileForm({
         </div>
       </div>
       <div className="profile-form-section stack">
-        <h3>Who can find you</h3>
+        <h3>{t("Who can find you")}</h3>
         <label className="check-label">
           <input
             type="checkbox"
             checked={discoverable}
             onChange={(event) => setDiscoverable(event.target.checked)}
           />
-          Show my profile in the public directory
+          {t("Show my profile in the public directory")}
         </label>
         <label className="check-label">
           <input
@@ -673,19 +723,24 @@ function ProfileForm({
             disabled={!discoverable}
             onChange={(event) => setOpenToRequests(event.target.checked)}
           />
-          Let members send me connection requests
+          {t("Let members send me connection requests")}
         </label>
         <p className="form-note">
-          Your email stays private. A public profile shows your name, bio,
-          skills, interests, joined circles and connection preferences.{" "}
+          {t(
+            "Your email stays private. A public profile shows your name, bio, skills, interests, joined circles and connection preferences.",
+          )}{" "}
           {workspace.preview
-            ? "This sample is saved only in this browser. It is not published."
-            : "You can hide it at any time. Past requests remain visible to you and the other person."}
+            ? t(
+                "This sample is saved only in this browser. It is not published.",
+              )
+            : t(
+                "You can hide it at any time. Past requests remain visible to you and the other person.",
+              )}
         </p>
       </div>
       {error && (
         <p className="field-error" role="alert" style={{ marginTop: 16 }}>
-          {error}
+          {t(error)}
         </p>
       )}
       <div className="form-actions">
@@ -695,7 +750,7 @@ function ProfileForm({
           onClick={onClose}
           disabled={saving}
         >
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button type="submit" disabled={saving || aiBusy}>
           {saving ? (
@@ -704,10 +759,10 @@ function ProfileForm({
             <Check size={16} />
           )}
           {saving
-            ? "Saving…"
+            ? t("Saving…")
             : workspace.preview
-              ? "Save preview profile"
-              : "Save profile"}
+              ? t("Save preview profile")
+              : t("Save profile")}
         </Button>
       </div>
     </form>
@@ -730,12 +785,13 @@ export function RequestDialog({
   onClose,
   onNotice,
 }: RequestDialogProps) {
+  const { t } = useLanguage();
   return (
     <Modal
       open={!!person}
       onClose={onClose}
-      title="Ask to connect"
-      description="Share your goal and one thing you would like help with."
+      title={t("Ask to connect")}
+      description={t("Share your goal and one thing you would like help with.")}
     >
       {person && (
         <RequestForm
@@ -757,9 +813,27 @@ function requestMessage(
   item: CatalogItem | undefined,
   helpType: HelpType,
   learner: LearnerState,
+  t: ReturnType<typeof useLanguage>["t"],
 ) {
-  const known = learner.confirmed_skills.slice(0, 3).map(getSkillLabel);
-  return `Hi ${person.display_name.split(" ")[0]}, I’m working toward ${item ? `“${item.title}”` : "my next STEM project"}.${known.length ? ` My starting skills include ${known.join(", ")}.` : " I’m starting as a beginner."} ${helpType === "mentorship" ? "Could you help me review the scope and suggest one useful next step?" : "Would you like to work through a first exercise together and agree on a small shared task?"}`;
+  const known = learner.confirmed_skills
+    .slice(0, 3)
+    .map((id) => t(getSkillLabel(id)));
+  return [
+    t("Hi {name}, I’m working toward {goal}.", {
+      name: person.display_name.split(" ")[0],
+      goal: item ? `“${t(item.title)}”` : t("my next STEM project"),
+    }),
+    known.length
+      ? t("My starting skills include {skills}.", { skills: known.join(", ") })
+      : t("I’m starting as a beginner."),
+    helpType === "mentorship"
+      ? t(
+          "Could you help me review the scope and suggest one useful next step?",
+        )
+      : t(
+          "Would you like to work through a first exercise together and agree on a small shared task?",
+        ),
+  ].join(" ");
 }
 
 function RequestForm({
@@ -770,6 +844,7 @@ function RequestForm({
   onClose,
   onNotice,
 }: RequestDialogProps & { person: Profile }) {
+  const { t } = useLanguage();
   const workspace = useWorkspace();
   const goals = catalog.filter((entry) => entry.kind !== "resource");
   const initialGoal =
@@ -787,7 +862,7 @@ function RequestForm({
   const [message, setMessage] = useState(
     () =>
       initialMessage ??
-      requestMessage(person, initialGoal, initialType, workspace.learner),
+      requestMessage(person, initialGoal, initialType, workspace.learner, t),
   );
   const [editedMessage, setEditedMessage] = useState(
     initialMessage !== undefined,
@@ -823,7 +898,10 @@ function RequestForm({
     try {
       await workspace.sendRequest(person.id, goalId, helpType, message);
       onNotice(
-        `Your request was sent to ${person.display_name.split(" ")[0]}. Track the response in Connections.`,
+        t(
+          "Your request was sent to {name}. Track the response in Connections.",
+          { name: person.display_name.split(" ")[0] },
+        ),
       );
       onClose();
     } catch (cause) {
@@ -841,18 +919,21 @@ function RequestForm({
             <Avatar name={person.display_name} domain={person.domain} />
             <div>
               <strong>{person.display_name}</strong>
-              <p>{person.headline}</p>
+              <p>
+                {isSamplePerson(person) ? t(person.headline) : person.headline}
+              </p>
             </div>
           </div>
         </div>
         {sample && (
           <p className="form-note">
-            This is a fictional sample. Only registered members can receive
-            requests.
+            {t(
+              "This is a fictional sample. Only registered members can receive requests.",
+            )}
           </p>
         )}
         <div className="field">
-          <label htmlFor="request-goal">Your goal</label>
+          <label htmlFor="request-goal">{t("Your goal")}</label>
           <select
             id="request-goal"
             value={goalId}
@@ -867,19 +948,22 @@ function RequestForm({
                     goals.find((goal) => goal.id === next),
                     helpType,
                     workspace.learner,
+                    t,
                   ),
                 );
             }}
           >
             {goals.map((goal) => (
               <option key={goal.id} value={goal.id}>
-                {goal.title}
+                {t(goal.title)}
               </option>
             ))}
           </select>
         </div>
         <div className="field">
-          <label htmlFor="request-type">How would you like to connect?</label>
+          <label htmlFor="request-type">
+            {t("How would you like to connect?")}
+          </label>
           <select
             id="request-type"
             value={helpType}
@@ -894,18 +978,19 @@ function RequestForm({
                     goals.find((goal) => goal.id === goalId),
                     next,
                     workspace.learner,
+                    t,
                   ),
                 );
             }}
           >
             {person.role !== "learner" && (
-              <option value="mentorship">Ask a mentor</option>
+              <option value="mentorship">{t("Ask a mentor")}</option>
             )}
-            <option value="collaboration">Work with a peer</option>
+            <option value="collaboration">{t("Work with a peer")}</option>
           </select>
         </div>
         <div className="field">
-          <label htmlFor="request-message">Your message</label>
+          <label htmlFor="request-message">{t("Your message")}</label>
           <textarea
             id="request-message"
             value={message}
@@ -920,20 +1005,29 @@ function RequestForm({
             style={{ minHeight: 150 }}
           />
           <small>
-            {message.length}/1,200 characters. Ask for one clear next step.
-            {initialMessage !== undefined &&
-              " If you change the goal or request type, update your message too."}
+            {t("{count}/1,200 characters. Ask for one clear next step.", {
+              count: message.length,
+            })}
+            {initialMessage !== undefined && (
+              <>
+                {" "}
+                {t(
+                  "If you change the goal or request type, update your message too.",
+                )}
+              </>
+            )}
           </small>
         </div>
         {!workspace.user && (
           <p className="form-note">
-            Sign in to send a real request. Preview interactions do not contact
-            anyone.
+            {t(
+              "Sign in to send a real request. Preview interactions do not contact anyone.",
+            )}
           </p>
         )}
         {error && (
           <p className="field-error" role="alert">
-            {error}
+            {t(error)}
           </p>
         )}
       </div>
@@ -944,7 +1038,7 @@ function RequestForm({
           onClick={onClose}
           disabled={pending}
         >
-          Cancel
+          {t("Cancel")}
         </Button>
         <Button type="submit" disabled={pending || !canSend}>
           {pending ? (
@@ -952,7 +1046,7 @@ function RequestForm({
           ) : (
             <ArrowUpRight size={16} />
           )}
-          {pending ? "Sending…" : "Send request"}
+          {pending ? t("Sending…") : t("Send request")}
         </Button>
       </div>
     </form>
@@ -973,14 +1067,17 @@ export function OpportunityDialog({
   onNotice,
   onOfflineLesson,
 }: OpportunityDialogProps) {
+  const { t } = useLanguage();
   return (
     <Modal
       open={!!item}
       onClose={onClose}
       wide
-      title={item?.title ?? "Your plan"}
+      title={t(item?.title ?? "Your plan")}
       description={
-        item ? `${domainLabel(item.domain)} · ${item.provider}` : undefined
+        item
+          ? `${t(domainLabel(item.domain))} · ${t(item.provider)}`
+          : undefined
       }
     >
       {item && (
@@ -1004,6 +1101,7 @@ function OpportunityDetails({
   onNotice,
   onOfflineLesson,
 }: OpportunityDialogProps & { item: CatalogItem }) {
+  const { t } = useLanguage();
   const workspace = useWorkspace();
   const [error, setError] = useState<string | null>(null);
   const coverage = getCoverage(
@@ -1032,10 +1130,10 @@ function OpportunityDetails({
       await workspace.toggleSaved(item.id);
       onNotice(
         saved
-          ? "Removed from your saved opportunities."
+          ? t("Removed from your saved opportunities.")
           : workspace.preview
-            ? "Saved in this browser preview."
-            : "Saved to your workspace.",
+            ? t("Saved in this browser preview.")
+            : t("Saved to your workspace."),
       );
     } catch (cause) {
       setError(errorMessage(cause));
@@ -1049,7 +1147,11 @@ function OpportunityDetails({
         goal_id: item.id,
         interests: [...new Set([...workspace.learner.interests, item.domain])],
       });
-      onNotice(`Your next goal is “${item.title}”. Find it on My Hub.`);
+      onNotice(
+        t("Your next goal is “{goal}”. Find it on My Hub.", {
+          goal: t(item.title),
+        }),
+      );
     } catch (cause) {
       setError(errorMessage(cause));
     }
@@ -1062,22 +1164,22 @@ function OpportunityDetails({
           <Badge className={item.isSample ? "badge-sample" : "badge-lime"}>
             {item.isSample
               ? item.kind === "resource" || item.kind === "project"
-                ? "Practice exercise"
-                : "Sample listing"
-              : "Official resource"}
+                ? t("Practice exercise")
+                : t("Sample listing")
+              : t("Official resource")}
           </Badge>
           <Badge>
             {item.format === "in-person"
-              ? "In person"
+              ? t("In person")
               : item.format === "hybrid"
-                ? "Hybrid"
-                : "Online"}
+                ? t("Hybrid")
+                : t("Online")}
           </Badge>
           {item.cost === "hardware-required" && (
-            <Badge className="badge-orange">Hardware required</Badge>
+            <Badge className="badge-orange">{t("Hardware required")}</Badge>
           )}
         </div>
-        <p>{item.description}</p>
+        <p>{t(item.description)}</p>
         <div className="row wrap">
           {item.kind !== "resource" && (
             <Button
@@ -1085,7 +1187,7 @@ function OpportunityDetails({
               disabled={workspace.busy || currentGoal}
             >
               {currentGoal ? <Check size={15} /> : <ArrowRight size={15} />}
-              {currentGoal ? "Current goal" : "Choose this goal"}
+              {currentGoal ? t("Current goal") : t("Choose this goal")}
             </Button>
           )}
           {item.sourceUrl && (
@@ -1096,8 +1198,8 @@ function OpportunityDetails({
               rel="noopener noreferrer"
             >
               {workspace.offline
-                ? "Full resource · needs internet"
-                : "Open resource"}{" "}
+                ? t("Full resource · needs internet")
+                : t("Open resource")}{" "}
               <ArrowUpRight size={15} />
             </a>
           )}
@@ -1106,7 +1208,7 @@ function OpportunityDetails({
               variant="secondary"
               onClick={() => onOfflineLesson(item.id)}
             >
-              Try an offline exercise
+              {t("Try an offline exercise")}
             </Button>
           )}
           <Button
@@ -1116,25 +1218,27 @@ function OpportunityDetails({
             aria-pressed={saved}
           >
             <Bookmark size={15} fill={saved ? "currentColor" : "none"} />
-            {saved ? "Saved" : "Save for later"}
+            {saved ? t("Saved") : t("Save for later")}
           </Button>
         </div>
         {item.isSample && (
           <p style={{ marginBottom: 0 }}>
             {item.kind === "resource" || item.kind === "project"
-              ? "A practice brief created by STEMBridge."
-              : "This is a fictional example, not a live event or opening. There is no application or deadline."}
+              ? t("A practice brief created by STEMBridge.")
+              : t(
+                  "This is a fictional example, not a live event or opening. There is no application or deadline.",
+                )}
           </p>
         )}
       </div>
       {error && (
         <p className="field-error" role="alert" style={{ marginBottom: 16 }}>
-          {error}
+          {t(error)}
         </p>
       )}
       <div className="detail-layout">
         <div className="detail-section">
-          <h3>Your skills today</h3>
+          <h3>{t("Your skills today")}</h3>
           <div className="coverage-box">
             {coverage.total ? (
               <>
@@ -1143,10 +1247,12 @@ function OpportunityDetails({
                     {coverage.met.length}
                     <span className="muted">/{coverage.total}</span>
                   </span>{" "}
-                  <span>listed skills in your profile</span>
+                  <span>{t("listed skills in your profile")}</span>
                 </div>
                 <p>
-                  Based on the skills you selected. This is not a skills test.
+                  {t(
+                    "Based on the skills you selected. This is not a skills test.",
+                  )}
                 </p>
                 <div className="coverage-bars" aria-hidden="true">
                   {item.requirements.map((skill) => (
@@ -1161,49 +1267,65 @@ function OpportunityDetails({
               </>
             ) : (
               <p>
-                No starting skills are listed. Read the introduction to get
-                started.
+                {t(
+                  "No starting skills are listed. Read the introduction to get started.",
+                )}
               </p>
             )}
             {coverage.met.length > 0 && (
               <details>
                 <summary>
-                  Skills you already listed ({coverage.met.length})
+                  {t("Skills you already listed ({count})", {
+                    count: coverage.met.length,
+                  })}
                 </summary>
                 {coverage.met.map((skill) => (
                   <div className="skill-line met" key={skill}>
                     <CheckCircle2 size={16} />
-                    {getSkillLabel(skill)}
+                    {t(getSkillLabel(skill))}
                   </div>
                 ))}
               </details>
             )}
             {coverage.missing.length > 0 && (
               <div style={{ marginTop: 20 }}>
-                <h4>Skills to learn</h4>
+                <h4>{t("Skills to learn")}</h4>
                 {coverage.missing.map((skill) => (
                   <div className="skill-line" key={skill}>
                     <Circle size={16} />
-                    {getSkillLabel(skill)}
+                    {t(getSkillLabel(skill))}
                   </div>
                 ))}
               </div>
             )}
           </div>
-          <h3>Your plan</h3>
+          <h3>{t("Your plan")}</h3>
           <div className="timeline">
             {steps.map((step, index) => (
               <div className="timeline-step" key={step.id}>
                 <span className="step-number">{index + 1}</span>
-                <h4>{step.title}</h4>
+                <h4>{t(step.title)}</h4>
                 <p>
                   {step.id.endsWith("-foundations")
-                    ? "Try these resources in order. Check their starting requirements."
+                    ? t(
+                        "Try these resources in order. Check their starting requirements.",
+                      )
                     : step.id.endsWith("-practice")
-                      ? "Try a small exercise. Update your skills yourself when you are ready."
+                      ? t(
+                          "Try a small exercise. Update your skills yourself when you are ready.",
+                        )
                       : step.id.endsWith("-connect")
-                        ? "Ask a mentor or peer for help with one next step."
-                        : step.description}
+                        ? t("Ask a mentor or peer for help with one next step.")
+                        : step.id.endsWith("-unresolved")
+                          ? t(
+                              "No matching resource is listed here for {skills}. Ask a relevant person for guidance; these gaps remain unresolved.",
+                              {
+                                skills: step.gapIds
+                                  .map((id) => t(getSkillLabel(id)))
+                                  .join(", "),
+                              },
+                            )
+                          : t(step.description)}
                 </p>
                 {step.resources.map((resource) =>
                   resource.sourceUrl ? (
@@ -1215,12 +1337,12 @@ function OpportunityDetails({
                       key={resource.id}
                     >
                       <ArrowUpRight size={14} />
-                      <span>{resource.title}</span>
+                      <span>{t(resource.title)}</span>
                     </a>
                   ) : (
                     <details className="resource-link" key={resource.id}>
-                      <summary>{resource.title}</summary>
-                      <p style={{ marginTop: 12 }}>{resource.description}</p>
+                      <summary>{t(resource.title)}</summary>
+                      <p style={{ marginTop: 12 }}>{t(resource.description)}</p>
                     </details>
                   ),
                 )}
@@ -1229,7 +1351,7 @@ function OpportunityDetails({
           </div>
         </div>
         <aside className="detail-aside">
-          <h3>People who can help</h3>
+          <h3>{t("People who can help")}</h3>
           <label className="check-label" style={{ marginBottom: 17 }}>
             <input
               type="checkbox"
@@ -1242,22 +1364,22 @@ function OpportunityDetails({
                   .catch((cause) => setError(errorMessage(cause)));
               }}
             />
-            Online only
+            {t("Online only")}
           </label>
           {[
             {
               matches: mentors,
-              label: "A mentor",
+              label: t("A mentor"),
               type: "mentorship" as HelpType,
             },
             {
               matches: peers,
-              label: "A learning partner",
+              label: t("A learning partner"),
               type: "collaboration" as HelpType,
             },
           ].map(({ matches, label, type }) => (
             <div key={type} style={{ marginBottom: 18 }}>
-              <h4 style={{ marginBottom: 12 }}>{label}</h4>
+              <h4 style={{ marginBottom: 12 }}>{t(label)}</h4>
               {matches.length ? (
                 matches.map(({ person, reasons }) => (
                   <div className="support-person" key={person.id}>
@@ -1271,21 +1393,14 @@ function OpportunityDetails({
                         <h4>{person.display_name}</h4>
                         <small>
                           {isSamplePerson(person)
-                            ? "Fictional sample"
+                            ? t("Fictional sample")
                             : person.is_demo
-                              ? "Demo account"
-                              : domainLabel(person.domain)}
+                              ? t("Demo account")
+                              : t(domainLabel(person.domain))}
                         </small>
                       </div>
                     </div>
-                    <p>
-                      {reasons[0]
-                        ?.replace(
-                          ", which your profile does not yet list.",
-                          ".",
-                        )
-                        .replace("You both list ", "Shared skills: ")}
-                    </p>
+                    <p>{translateAuthoredText(reasons[0] ?? "", t)}</p>
                     <Button
                       variant="secondary"
                       onClick={() => {
@@ -1294,10 +1409,10 @@ function OpportunityDetails({
                       }}
                     >
                       {workspace.preview
-                        ? "Sign in to connect"
+                        ? t("Sign in to connect")
                         : type === "mentorship"
-                          ? "Ask for help"
-                          : "Connect"}
+                          ? t("Ask for help")
+                          : t("Connect")}
                       <ArrowUpRight size={14} />
                     </Button>
                   </div>
@@ -1305,8 +1420,12 @@ function OpportunityDetails({
               ) : (
                 <p className="form-note">
                   {workspace.preview
-                    ? "No sample matches yet. Try changing your online preference."
-                    : "No available member matches yet. Try changing your preference or check back later."}
+                    ? t(
+                        "No sample matches yet. Try changing your online preference.",
+                      )
+                    : t(
+                        "No available member matches yet. Try changing your preference or check back later.",
+                      )}
                 </p>
               )}
             </div>
@@ -1314,8 +1433,9 @@ function OpportunityDetails({
           <p className="muted row" style={{ alignItems: "flex-start" }}>
             <Users size={15} style={{ flexShrink: 0, marginTop: 3 }} />
             <span>
-              Suggestions use shared interests, relevant skills and your
-              preferences. Members describe their own skills.
+              {t(
+                "Suggestions use shared interests, relevant skills and your preferences. Members describe their own skills.",
+              )}
             </span>
           </p>
         </aside>

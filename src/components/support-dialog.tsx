@@ -16,6 +16,8 @@ import {
 } from "@/lib/support-plan";
 import type { CatalogItem, ConnectionRequest, Profile } from "@/lib/types";
 import { Avatar, Badge, Button, Modal } from "./ui";
+import { useLanguage } from "./language-provider";
+import { translateAuthoredText } from "@/lib/i18n-content";
 import { useWorkspace } from "./workspace-provider";
 import styles from "./support-dialog.module.css";
 
@@ -34,13 +36,16 @@ type SupportDialogProps = {
 };
 
 export function SupportDialog(props: SupportDialogProps) {
+  const { t } = useLanguage();
   return (
     <Modal
       open={props.open}
       onClose={props.onClose}
       wide
-      title="Find my first step"
-      description="One useful action. Someone to help. A message you can make your own."
+      title={t("Find my first step")}
+      description={t(
+        "One useful action. Someone to help. A message you can make your own.",
+      )}
     >
       {props.open && <SupportPanel key={props.goal.id} {...props} />}
     </Modal>
@@ -54,6 +59,7 @@ function SupportPanel({
   onRequest,
   onAuth,
 }: SupportDialogProps) {
+  const { t } = useLanguage();
   const workspace = useWorkspace();
   const [intent, setIntent] = useState<SupportIntent>("start");
   const [onlineOnly, setOnlineOnly] = useState(workspace.learner.online_only);
@@ -95,13 +101,15 @@ function SupportPanel({
   return (
     <div className={styles.panel}>
       <div className={styles.goal}>
-        <span>Your goal</span>
-        <strong>{goal.title}</strong>
-        {goal.isSample && <Badge className="badge-sample">Practice goal</Badge>}
+        <span>{t("Your goal")}</span>
+        <strong>{t(goal.title)}</strong>
+        {goal.isSample && (
+          <Badge className="badge-sample">{t("Practice goal")}</Badge>
+        )}
       </div>
 
       <fieldset className={styles.intentField}>
-        <legend>What would help you today?</legend>
+        <legend>{t("What would help you today?")}</legend>
         <div className={styles.choices}>
           {supportIntents.map((option) => (
             <label
@@ -115,7 +123,7 @@ function SupportPanel({
                 checked={intent === option.id}
                 onChange={() => setIntent(option.id)}
               />
-              <span>{option.label}</span>
+              <span>{t(option.label)}</span>
             </label>
           ))}
         </div>
@@ -127,7 +135,8 @@ function SupportPanel({
           checked={onlineOnly}
           onChange={(event) => setOnlineOnly(event.target.checked)}
         />
-        Online support only<span>For this plan</span>
+        {t("Online support only")}
+        <span>{t("For this plan")}</span>
       </label>
 
       <div className={styles.layout}>
@@ -138,36 +147,42 @@ function SupportPanel({
           >
             <div className={styles.heading}>
               <Compass size={20} aria-hidden="true" />
-              <h3>Your next action</h3>
+              <h3>{t("Your next action")}</h3>
             </div>
-            <h4>{plan.action.title}</h4>
-            <p>{plan.action.description}</p>
+            <h4>{translateAuthoredText(plan.action.title, t)}</h4>
+            <p>{translateAuthoredText(plan.action.description, t)}</p>
           </section>
 
           <section
             className={styles.card}
-            aria-label="A resource for this step"
+            aria-label={t("A resource for this step")}
           >
             <div className={styles.heading}>
               <BookOpen size={20} aria-hidden="true" />
               <h3>
-                {plan.resource
-                  ? "Start with this resource"
-                  : "Your learning starting point"}
+                {t(
+                  plan.resource
+                    ? "Start with this resource"
+                    : "Your learning starting point",
+                )}
               </h3>
             </div>
-            {plan.resource && <h4>{plan.resource.title}</h4>}
-            <p>{plan.resourceNote}</p>
+            {plan.resource && <h4>{t(plan.resource.title)}</h4>}
+            <p>{translateAuthoredText(plan.resourceNote, t)}</p>
             {plan.resource && (
               <>
                 <div className={styles.resourceMeta}>
                   <Badge>
-                    {plan.resource.isSample
-                      ? "Practice exercise"
-                      : "Official guide"}
+                    {t(
+                      plan.resource.isSample
+                        ? "Practice exercise"
+                        : "Official guide",
+                    )}
                   </Badge>
                   {plan.resource.cost === "hardware-required" && (
-                    <Badge className="badge-orange">Hardware required</Badge>
+                    <Badge className="badge-orange">
+                      {t("Hardware required")}
+                    </Badge>
                   )}
                 </div>
                 {plan.resource.sourceUrl ? (
@@ -177,7 +192,7 @@ function SupportPanel({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Open the guide <ArrowUpRight size={16} />
+                    {t("Open the guide")} <ArrowUpRight size={16} />
                   </a>
                 ) : (
                   <Button
@@ -188,20 +203,22 @@ function SupportPanel({
                       onViewItem(plan.resource!);
                     }}
                   >
-                    Read the exercise <ArrowRight size={16} />
+                    {t("Read the exercise")} <ArrowRight size={16} />
                   </Button>
                 )}
               </>
             )}
           </section>
 
-          <section className={styles.card} aria-label="Suggested person">
+          <section className={styles.card} aria-label={t("Suggested person")}>
             <div className={styles.heading}>
               <Users size={20} aria-hidden="true" />
               <h3>
-                {plan.helpType === "mentorship"
-                  ? "A mentor for this step"
-                  : "Someone to learn with"}
+                {t(
+                  plan.helpType === "mentorship"
+                    ? "A mentor for this step"
+                    : "Someone to learn with",
+                )}
               </h3>
             </div>
             {person ? (
@@ -211,27 +228,31 @@ function SupportPanel({
                   <div>
                     <h4>{person.display_name}</h4>
                     <span>
-                      {plan.sampleMatch
-                        ? "Sample profile"
-                        : plan.helpType === "mentorship"
-                          ? "Offers mentorship"
-                          : "Open to collaboration"}
+                      {t(
+                        plan.sampleMatch
+                          ? "Sample profile"
+                          : plan.helpType === "mentorship"
+                            ? "Offers mentorship"
+                            : "Open to collaboration",
+                      )}
                     </span>
                   </div>
                 </div>
-                <p>{plan.match?.reasons[0]}</p>
+                <p>{translateAuthoredText(plan.match?.reasons[0] ?? "", t)}</p>
                 {plan.sampleMatch && (
                   <p className={styles.note}>
-                    This fictional profile shows how a match works. It cannot
-                    receive a request.
+                    {t(
+                      "This fictional profile shows how a match works. It cannot receive a request.",
+                    )}
                   </p>
                 )}
               </>
             ) : (
               <p>
-                No {role} accepting requests matches this step and these
-                preferences yet. You can still try the action above or explore
-                the community below.
+                {t(
+                  "No {role} accepting requests matches this step and these preferences yet. You can still try the action above or explore the community below.",
+                  { role: t(role === "mentor" ? "Mentor" : "Peer") },
+                )}
               </p>
             )}
           </section>
@@ -241,12 +262,14 @@ function SupportPanel({
           <section className={`${styles.card} ${styles.messageCard}`}>
             <div className={styles.heading}>
               <MessageSquare size={20} aria-hidden="true" />
-              <h3>Make the first message easier</h3>
+              <h3>{t("Make the first message easier")}</h3>
             </div>
             <p>
-              Say what you want to try and ask for one specific kind of help.
+              {t(
+                "Say what you want to try and ask for one specific kind of help.",
+              )}
             </p>
-            <label htmlFor="support-message">Your introduction</label>
+            <label htmlFor="support-message">{t("Your introduction")}</label>
             <textarea
               id="support-message"
               value={draft}
@@ -260,8 +283,10 @@ function SupportPanel({
               aria-describedby="support-message-note"
             />
             <p id="support-message-note" className={styles.note}>
-              {draft.length}/1,200 characters. Change any part before
-              continuing.
+              {t(
+                "{count}/1,200 characters. Change any part before continuing.",
+                { count: draft.length },
+              )}
             </p>
             {canRequest ? (
               <Button
@@ -269,12 +294,14 @@ function SupportPanel({
                 onClick={request}
                 disabled={workspace.busy || draft.trim().length < 10}
               >
-                Review request <ArrowRight size={16} />
+                {t("Review request")} <ArrowRight size={16} />
               </Button>
             ) : !workspace.user ? (
               <>
                 <p className={styles.note}>
-                  Sign in to find registered members and send a real request.
+                  {t(
+                    "Sign in to find registered members and send a real request.",
+                  )}
                 </p>
                 <Button
                   className={styles.fullWidth}
@@ -283,40 +310,42 @@ function SupportPanel({
                     onAuth();
                   }}
                 >
-                  Sign in to connect <ArrowRight size={16} />
+                  {t("Sign in to connect")} <ArrowRight size={16} />
                 </Button>
               </>
             ) : (
               <p className={styles.note}>
-                There is no eligible recipient for this message yet. No request
-                has been sent.
+                {t(
+                  "There is no eligible recipient for this message yet. No request has been sent.",
+                )}
               </p>
             )}
           </section>
 
           <section className={`${styles.card} ${styles.community}`}>
-            <h3>Explore a wider community</h3>
+            <h3>{t("Explore a wider community")}</h3>
             <h4>{plan.community.name}</h4>
-            <p>{plan.community.description}</p>
+            <p>{t(plan.community.description)}</p>
             <a
               href={plan.community.url}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Visit their website <ArrowUpRight size={16} />
+              {t("Visit their website")} <ArrowUpRight size={16} />
             </a>
             <p className={styles.note}>
-              Independent external community. Check their website for membership
-              and event details.
+              {t(
+                "Independent external community. Check their website for membership and event details.",
+              )}
             </p>
           </section>
         </div>
       </div>
 
       <p className={styles.privacy}>
-        Your support choice stays in this panel. Only the message you review and
-        send is shared. Your confirmed skills are unchanged. Closing this panel
-        clears its choices and drafts.
+        {t(
+          "Your support choice stays in this panel. Only the message you review and send is shared. Your confirmed skills are unchanged. Closing this panel clears its choices and drafts.",
+        )}
       </p>
     </div>
   );
