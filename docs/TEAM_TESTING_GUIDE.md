@@ -71,7 +71,7 @@ Do not count a task as easy if the builder had to point out the answer. This tes
 | Supabase accounts ready?                      | Yes / No / Unknown |
 | Email confirmation required? Ask the builder. | Yes / No / Unknown |
 | Live AI connected? Ask the builder.           | Yes / No / Unknown |
-| Announced twist, if any                       |                    |
+| Offline twist + Marathi tests assigned to     |                    |
 
 Use the same website address and backend project across the team. Each browser, browser profile and website origin has its own offline preparation and device notes. An origin includes the protocol, host and port: ports 3000 and 3001 are separate, and the deployed address is separate again. Wait for **Ready on this device** on the exact browser and URL you will test. Preparing Chrome does not prepare Edge or a teammate's phone.
 
@@ -135,46 +135,48 @@ If B is missing, check these in order: same website/project, correct account, sa
 
 ## 3. The 30-minute critical route
 
-Use this when time is tight. Two teammates should operate A and B; a third can prepare C at the same time. Account setup delays are real blockers—record them instead of declaring a pass.
+Use three teammates if possible: tester 1 operates learner A, tester 2 operates mentor B, and tester 3 tests offline support in an independent browser before checking observer C. A and B should be ready before the timer starts. If signup or confirmation blocks setup, record it; do not use a sample request as a substitute for the real-account test.
 
-| Time      | Numbered task                                                                                                                                                                                                                                                                                            | Expected result                                                                                                                                     |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0–5 min   | 1. Run the blind test in section 1.                                                                                                                                                                                                                                                                      | The tester can describe the purpose and identify sample content without coaching.                                                                   |
-| 5–10 min  | 2. In preview, use Priya. Open **See my plan**. Confirm **3/7**. Save a resource, reload, and find it with **Saved only**.                                                                                                                                                                               | Correct count; bookmark survives; no claim of live networking.                                                                                      |
-| 10–16 min | 3. Sign in as A and B using the setup above. A chooses **Build your first ML project**. Open B's **View profile**.                                                                                                                                                                                       | A sees a real, available mentor with the correct public details.                                                                                    |
-| 16–23 min | 4. A opens **Find my first step**, edits **Your introduction**, then clicks **Review request** and **Send request**. Confirm B is the recipient first. B opens **Connections → Received requests → Refresh inbox** and accepts with “Write a short project outline and choose one dataset.” A refreshes. | A sees one useful action and reviews before sending. One request moves from Pending to Accepted. Both accounts see the same next step after reload. |
-| 23–27 min | 5. C checks both request tabs. A signs out. Reload A's old page and sign in as C in that session.                                                                                                                                                                                                        | C cannot see A/B's request. A's private request text and drafts do not remain after the account change.                                             |
-| 27–30 min | 6. Open the site on a phone or narrow window. Use the four navigation buttons, open and close a plan, and use Tab/Enter on one dialog.                                                                                                                                                                   | No clipped main button, sideways page scrolling, or keyboard trap. Record the release decision from section 17.                                     |
+| Time      | Learner and mentor track                                                                                                                    | Offline / independent track                                                                                                                                | Expected result                                                                                     |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 0–5 min   | Tester 1 runs the blind task in section 1. Tester 2 confirms B's saved role, visibility and requests setting.                               | Tester 3 opens the exact production URL, chooses Offline learning, waits for Ready on this device, writes a harmless note and marks one exercise complete. | Purpose is understandable; B is genuinely available; offline preparation finishes.                  |
+| 5–10 min  | Tester 1 checks Priya's 3/7 plan, saves a resource and reloads, then signs in as A.                                                         | Tester 3 follows section 19's real Network → Offline procedure, reloads, edits the note and opens an exercise from the other topic.                        | Preview state persists; prepared content is interactive without browser networking.                 |
+| 10–16 min | A uses Find my first step, edits the introduction, confirms B is the recipient, then reviews and sends once. B refreshes Received requests. | Tester 3 reloads again, checks the edited note and completion, downloads the notes, switches to Marathi and back, then reconnects.                         | One real pending request; note/export/language work offline; no automatic contact or skill upgrade. |
+| 16–22 min | B accepts with a useful next step. A refreshes Sent requests and reloads.                                                                   | Tester 3 checks 390px phone layout and the five navigation destinations, then signs in as observer C in the separate session.                              | The accepted next step persists; navigation remains usable; Marathi is readable.                    |
+| 22–27 min | A and B keep the accepted request visible for comparison. A downloads any QA notes before an intentional sign-out/account-switch test.      | C checks both request tabs. In A's former session, sign out and sign in as C; confirm private drafts and A's notebook are absent.                          | C cannot read A/B's request. Explicit account changes do not expose earlier private work.           |
+| 27–30 min | Everyone shares failures and NT items, restores the intended demo accounts and goal, and records the release decision in section 17.        | Record the exact tested URL, browser and whether real Network → Offline was used.                                                                          | A factual release decision and one ready demo device.                                               |
 
-After the route, report: “Critical route: X passed, Y failed, Z not tested.” List the actual blockers. Do not turn an NT into a Pass because the code looks correct.
+With only two testers, prepare the browser and controlled accounts before timing the run. Then work together: five-minute blind task, seven-minute offline/Marathi/reload/export check, ten-minute request/acceptance loop, five-minute privacy/phone check and three-minute report. Split the longer tests afterward. Do not let an offline test interrupt the mentor's live browser.
+
+Report: “Critical route: X passed, Y failed, Z not tested.” Record preparation, reload, edited notes, download, language and the real request as separate results. No item becomes a Pass merely because the code looks correct.
 
 ## 4. Split the full checklist between teammates
 
-| Tester                                       | Main job                                                       | Sections  |
-| -------------------------------------------- | -------------------------------------------------------------- | --------- |
-| 1 — learner                                  | Preview, profile, plan, catalogue, bookmarks, first-step guide | 5–8, 18   |
-| 2 — supporter                                | Community, profile details, and requests with tester 1         | 9–10      |
-| 3 — outsider/usability                       | Third-account privacy, account changes, phone, keyboard        | 11–13     |
-| 4, if available — builder/technical teammate | Optional AI, failures, developer checks, judge run             | 14–17, 19 |
+| Tester                               | Main job                                                                                        | Sections                        |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------------------- |
+| 1 — learner                          | Preview, profile, plan, catalog, bookmarks and first-step panel; operate A for requests         | 5–8, 18, request half of 10     |
+| 2 — supporter                        | Community/member details; operate B for acceptance, decline and cancellation; help with privacy | 9–11                            |
+| 3 — offline and usability            | Full offline/Marathi checklist, observer C, phone, keyboard and every-button sweep              | 12–13, 19, observer half of 11  |
+| 4, if available — technical teammate | Optional AI, failures, expiry/storage checks, developer checks and final judge run              | 14–17, 20; optional cases in 19 |
 
-With two teammates, do requests together first. Split the remaining work. Before changing B's role, visibility, or online mode, tell the teammate using A. Restore the starting values after each test so the next result is meaningful.
+With two teammates, complete the critical route together, then split the remaining checklist. Tell the other tester before changing B's role, visibility or online preference. Network tests affect only the selected browser/device. Keep one prepared demo browser intact; use a disposable browser profile for storage-clearing or first-visit tests. Restore the starting values after each test so the next result is meaningful.
 
 ## 5. Preview and navigation
 
 Use a signed-out browser for this section. If someone edited the preview earlier, click **Switch profile** until Priya appears again; loading a sample replaces the current preview with that sample's starting values. It is not a second authenticated account.
 
-| ID  | Steps                                                                                                                  | Expected result                                                                                                                                 | Result |
-| --- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| P01 | 1. Open the site while signed out. 2. Read the banner and top account area.                                            | Demo/sample wording is visible. You are not shown as a signed-in user.                                                                          | NT     |
-| P02 | 1. Click **My Hub**, **Communities**, **Explore**, and **Connections**. 2. Use browser Back and Forward.               | Each opens the right section. Back/Forward follows the visited sections without a broken page.                                                  | NT     |
-| P03 | 1. Open **Explore**. 2. Reload the page.                                                                               | Explore remains the selected page. Temporary search/filter choices need not survive reload; account data and saved items must.                  | NT     |
-| P04 | 1. From My Hub click **All communities**, **See all people**, and **View all** under opportunities.                    | They open Communities, the **Everyone** people filter, and Explore respectively.                                                                | NT     |
-| P05 | 1. Click a community's name. 2. Select the other community.                                                            | The community heading, people, and related opportunities change to the selected circle.                                                         | NT     |
-| P06 | 1. Click **Switch profile**. 2. Compare Priya and Aisha.                                                               | Name, skills, goal, people, and resources change meaningfully between ML and robotics. Aisha starts with C basics and Arduino basics.           | NT     |
-| P07 | 1. Edit a preview skill and save. 2. Save an opportunity. 3. Reload the same browser.                                  | Both changes remain in that browser. Saving says preview/browser rather than publishing a real profile.                                         | NT     |
-| P08 | 1. Open a sample person's **View profile**. 2. Read the sample note. 3. Try **Meet real members** or a sign-in prompt. | The person is labelled fictional and cannot receive a live request. The next action opens account access; it does not show “request delivered.” | NT     |
-| P09 | 1. While signed out, try **Join community** and **Sign in to connect** in Connections.                                 | Account access is requested. No real membership or request is created.                                                                          | NT     |
-| P10 | 1. If using a deliberately unconfigured build, open account access. 2. Click **Keep exploring**.                       | It explains that accounts are not connected and returns to a working preview. Do not remove working configuration just for this test.           | NT     |
+| ID  | Steps                                                                                                                          | Expected result                                                                                                                                 | Result |
+| --- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| P01 | 1. Open the site while signed out. 2. Read the banner and top account area.                                                    | Demo/sample wording is visible. You are not shown as a signed-in user.                                                                          | NT     |
+| P02 | 1. Click **My Hub**, **Communities**, **Explore**, **Connections**, and **Offline learning**. 2. Use browser Back and Forward. | Each opens the right section. Back/Forward follows the visited sections without a broken page.                                                  | NT     |
+| P03 | 1. Open **Explore**. 2. Reload the page.                                                                                       | Explore remains the selected page. Temporary search/filter choices need not survive reload; account data and saved items must.                  | NT     |
+| P04 | 1. From My Hub click **All communities**, **See all people**, and **View all** under opportunities.                            | They open Communities, the **Everyone** people filter, and Explore respectively.                                                                | NT     |
+| P05 | 1. Click a community's name. 2. Select the other community.                                                                    | The community heading, people, and related opportunities change to the selected circle.                                                         | NT     |
+| P06 | 1. Click **Switch profile**. 2. Compare Priya and Aisha.                                                                       | Name, skills, goal, people, and resources change meaningfully between ML and robotics. Aisha starts with C basics and Arduino basics.           | NT     |
+| P07 | 1. Edit a preview skill and save. 2. Save an opportunity. 3. Reload the same browser.                                          | Both changes remain in that browser. Saving says preview/browser rather than publishing a real profile.                                         | NT     |
+| P08 | 1. Open a sample person's **View profile**. 2. Read the sample note. 3. Try **Meet real members** or a sign-in prompt.         | The person is labelled fictional and cannot receive a live request. The next action opens account access; it does not show “request delivered.” | NT     |
+| P09 | 1. While signed out, try **Join community** and **Sign in to connect** in Connections.                                         | Account access is requested. No real membership or request is created.                                                                          | NT     |
+| P10 | 1. If using a deliberately unconfigured build, open account access. 2. Click **Keep exploring**.                               | It explains that accounts are not connected and returns to a working preview. Do not remove working configuration just for this test.           | NT     |
 
 There is no account-deletion button. **Clear this notebook** exists inside Offline learning and clears only that device notebook, after confirmation; it does not delete a registered account, profile, request or catalog bookmark. **Switch profile** reloads a sample, not another authenticated account.
 
@@ -182,17 +184,17 @@ There is no account-deletion button. **Clear this notebook** exists inside Offli
 
 Use only controlled accounts. Avoid repeated failed signup attempts that can trigger a provider limit.
 
-| ID  | Steps                                                                                                                    | Expected result                                                                                                                                   | Result |
-| --- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| A01 | Complete a valid signup following section 2.                                                                             | A usable account or a clear confirmation-required message appears. It does not falsely say you are signed in when confirmation is still required. | NT     |
-| A02 | 1. Open account access. 2. Switch between **Sign in** and **Create an account**.                                         | Signup includes Your name; sign-in does not. Button labels and password rules fit the selected form.                                              | NT     |
-| A03 | Try submitting blank required fields, an obviously malformed email, and a signup password shorter than eight characters. | Clear validation prevents submission. No page crash or false success. Do not record the password in the report.                                   | NT     |
-| A04 | Use A's real test email with a wrong test password once. Then correct it.                                                | Wrong credentials show an error and leave the form usable. Correct credentials sign in as A.                                                      | NT     |
-| A05 | If time permits, try creating an account with A's existing email once.                                                   | No second distinct account with the same email is created. Record the provider's actual response; it may avoid revealing whether an email exists. | NT     |
-| A06 | 1. Sign in. 2. Reload. 3. Close and reopen the same browser session.                                                     | The expected account is restored where the browser keeps sessions. No different user's profile appears.                                           | NT     |
-| A07 | Click the **Sign out** icon, then reload.                                                                                | The website returns to sample preview. Private requests and account-only controls are no longer shown.                                            | NT     |
-| A08 | Close account access using X and Escape before submitting. Reopen it.                                                    | It closes cleanly. Abandoned password fields are not left visible elsewhere on the page.                                                          | NT     |
-| A09 | Open account access on a phone/narrow window.                                                                            | Name/email/password and submit/switch controls fit and remain usable.                                                                             | NT     |
+| ID  | Steps                                                                                                                    | Expected result                                                                                                                                     | Result |
+| --- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| A01 | Complete a valid signup following section 2.                                                                             | A usable account or a clear confirmation-required message appears. It does not falsely say you are signed in when confirmation is still required.   | NT     |
+| A02 | 1. Open account access. 2. Switch between **Sign in** and **Create an account**.                                         | Signup includes Your name; sign-in does not. Button labels and password rules fit the selected form.                                                | NT     |
+| A03 | Try submitting blank required fields, an obviously malformed email, and a signup password shorter than eight characters. | Clear validation prevents submission. No page crash or false success. Do not record the password in the report.                                     | NT     |
+| A04 | Use A's real test email with a wrong test password once. Then correct it.                                                | Wrong credentials show an error and leave the form usable. Correct credentials sign in as A.                                                        | NT     |
+| A05 | If time permits, try creating an account with A's existing email once.                                                   | No second distinct account with the same email is created. Record the provider's actual response; it may avoid revealing whether an email exists.   | NT     |
+| A06 | 1. Sign in. 2. Reload. 3. Close and reopen the same browser session.                                                     | The expected account is restored where the browser keeps sessions. No different user's profile appears.                                             | NT     |
+| A07 | Download needed QA notes, click the Sign out icon, then reload.                                                          | The website returns to sample preview. Private requests and account controls disappear; the device notebook and saved account snapshot are cleared. | NT     |
+| A08 | Close account access using X and Escape before submitting. Reopen it.                                                    | It closes cleanly. Abandoned password fields are not left visible elsewhere on the page.                                                            | NT     |
+| A09 | Open account access on a phone/narrow window.                                                                            | Name/email/password and submit/switch controls fit and remain usable.                                                                               | NT     |
 
 Password reset, password change, and email notifications are not implemented as website features. A tester should not expect those buttons. Email confirmation, if enabled by the owner, must be tested separately rather than assumed to work.
 
@@ -345,7 +347,7 @@ These tests use A, B, and C. An “outsider” is anyone who is not a participan
 | I07 | In one account, make an unsaved draft, then trigger an ordinary same-account refresh/session update without signing out.                                                                               | A normal same-account update should not unexpectedly turn the draft into another user's data. Reloading the whole page can discard unsaved drafts; that is different from losing saved data. | NT     |
 | I08 | Keep C hidden and joined to a circle. A and B reload Communities. Then make C public and reload again.                                                                                                 | Hidden C and its membership are absent to others; public C can become visible. C can see its own membership in either state.                                                                 | NT     |
 | I09 | Search for A's email in B's people search and inspect A's member details.                                                                                                                              | No email field, password, private AI introduction or request history is exposed by member details/search. Public profile text remains visible if opted in.                                   | NT     |
-| I10 | Ask the developer to complete the read-only permission checks in section 19.                                                                                                                           | Database rules also block unrelated reads/actions. The absence of a UI button alone is not proof of server-side privacy.                                                                     | NT     |
+| I10 | Ask the developer to complete the read-only permission checks in section 20.                                                                                                                           | Database rules also block unrelated reads/actions. The absence of a UI button alone is not proof of server-side privacy.                                                                     | NT     |
 
 If someone else's private draft or request is visible after an account change, stop the release and report it as a blocker. Do not take a screenshot containing real private information; reproduce with the harmless QA text above.
 
@@ -355,7 +357,7 @@ Use this short sweep after the main cases. An icon can be tested by hovering, fo
 
 | Area         | Controls to click at least once                                                                                                                                              | What to check                                                                            |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Navigation   | My Hub, Communities, Explore, Connections; browser Back/Forward; **Skip to content** with keyboard                                                                           | Correct destination; visible focus; main content reachable.                              |
+| Navigation   | My Hub, Communities, Explore, Connections, Offline learning; phone Circles/Connect/Offline; browser Back/Forward; **Skip to content** with keyboard                          | Correct destination; visible focus; main content reachable.                              |
 | Account      | Join STEMBridge, Sign in, Create an account, Create my account, Sign out icon                                                                                                | Correct form/action; no unexplained dead control.                                        |
 | Preview      | Switch profile; Keep exploring when unconfigured                                                                                                                             | Correct sample; no live-action claim.                                                    |
 | Home         | My profile, edit pencil, profile icon, See my plan, All communities, See all people, View all                                                                                | Correct panel/page; See all people does not silently select mentors only.                |
@@ -373,13 +375,22 @@ Use this short sweep after the main cases. An icon can be tested by hovering, fo
 
 Decorative initials, icons, badges, and static headings do not need to act like buttons. A control that looks clickable but does nothing should be reported with its exact label and screen.
 
+Include this new learning-area sweep; use section 19 for the expected results in detail:
+
+| Area                        | Controls to click at least once                                                                                                 | What to check                                                                                                                                |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Offline entry and readiness | Offline learning/Offline; home learning entry; Try an offline exercise in a resource panel; Prepare offline/Update offline copy | Correct exercise/page, clear progress/readiness, no lost notes on update.                                                                    |
+| Reading                     | English, Marathi, both topic controls, all eight lesson buttons, Check your thinking/Hide explanation                           | Correct translated content, selection and focus; existing written notes remain unchanged.                                                    |
+| Notebook                    | Notes field, I finished this exercise, Download my notes                                                                        | Save on this device, truthful completion and an actual readable download.                                                                    |
+| Clear and locked recovery   | Clear this notebook, Keep notes, Yes, clear my notes; same-account sign-in after natural expiry if available                    | First click only asks; cancel preserves; confirmed clear is scoped. Locked private notes cannot be read, changed or downloaded from preview. |
+
 ## 13. Phone, keyboard, and readability
 
 Use a real phone if possible. Otherwise narrow the browser to about 390 pixels using its device preview. Also check a small laptop window and 200% browser zoom.
 
 | ID  | Steps                                                                                                                                 | Expected result                                                                                                       | Result |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------ |
-| U01 | Visit all four pages at narrow width. Scroll to the bottom.                                                                           | No sideways page scrolling; headings, navigation and primary actions stay usable.                                     | NT     |
+| U01 | Visit all five pages at narrow width; include both reading languages in Offline learning. Scroll to the bottom.                       | No sideways page scrolling; headings, navigation and primary actions stay usable.                                     | NT     |
 | U02 | Open profile, member, plan, request, and acceptance dialogs on the phone.                                                             | You can reach Save/Send/Accept/Cancel and the close button without content being trapped below the screen.            | NT     |
 | U03 | Type in search and request fields with the phone keyboard open.                                                                       | The active field and the way to finish/cancel remain reachable; text does not overlap buttons.                        | NT     |
 | U04 | At 200% zoom, repeat a form and a catalogue filter.                                                                                   | Content reflows; essential labels and actions remain visible.                                                         | NT     |
@@ -421,16 +432,16 @@ Do not expect identical wording from live AI every time. Judge whether existing 
 
 Coordinate network tests so you do not interrupt another teammate's live request. Use only your own device/browser. Reconnect promptly.
 
-| ID  | Steps                                                                                                                                       | Expected result                                                                                                                                                       | Result |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| E01 | Load the app, then temporarily disconnect that device from the internet.                                                                    | An offline notice appears. Already displayed content remains understandable; the app does not pretend disconnected live writes succeeded.                             | NT     |
-| E02 | While offline, try one account save or inbox refresh. Wait, then reconnect and reload.                                                      | A bounded failure/recovery message appears rather than an endless spinner. The server's last confirmed state is shown after reconnecting. Record what actually saved. | NT     |
-| E03 | After an error, dismiss the error banner and retry a valid action online.                                                                   | The error can be dismissed; the app is usable again and the successful result is visible.                                                                             | NT     |
-| E04 | Save several different bookmarks quickly; change a preference after them; reload.                                                           | Successful actions are retained without the last action erasing earlier ones.                                                                                         | NT     |
-| E05 | Click Join/Joined more than once in sequence, waiting for each action to finish.                                                            | The final membership matches the final action; no duplicate membership or stuck state.                                                                                | NT     |
-| E06 | Change a skill and an optional profile field in one save. If a network error is deliberately encountered, reconnect and reopen the profile. | The app does not claim the whole profile saved if only part did. It explains partial failure and allows review/retry. Mark NT if no partial failure was encountered.  | NT     |
-| E07 | Reload a direct page URL such as the address ending `?view=connections`; open it in a second session.                                       | The page loads without a route error. Private content still depends on that session's account.                                                                        | NT     |
-| E08 | If a developer provides a disposable preview with corrupt local storage, reload it.                                                         | It recovers to a usable sample instead of a blank/crashed page. Ordinary testers should not clear another teammate's account/browser data to force this.              | NT     |
+| ID  | Steps                                                                                                                                       | Expected result                                                                                                                                                      | Result |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| E01 | Complete O01–O04 in section 19: prepare the production URL, use the real browser Offline setting, and reload.                               | Record those O-test results; do not count merely keeping an already-open page visible as a successful offline reload.                                                | NT     |
+| E02 | Complete O35–O40 in section 19 for read-only account state, blocked live actions and reconnect.                                             | No fake cloud save or queued request. A valid offline snapshot refresh can succeed locally; reconnect restores confirmed live data.                                  | NT     |
+| E03 | After an error, dismiss the error banner and retry a valid action online.                                                                   | The error can be dismissed; the app is usable again and the successful result is visible.                                                                            | NT     |
+| E04 | Save several different bookmarks quickly; change a preference after them; reload.                                                           | Successful actions are retained without the last action erasing earlier ones.                                                                                        | NT     |
+| E05 | Click Join/Joined more than once in sequence, waiting for each action to finish.                                                            | The final membership matches the final action; no duplicate membership or stuck state.                                                                               | NT     |
+| E06 | Change a skill and an optional profile field in one save. If a network error is deliberately encountered, reconnect and reopen the profile. | The app does not claim the whole profile saved if only part did. It explains partial failure and allows review/retry. Mark NT if no partial failure was encountered. | NT     |
+| E07 | Reload a direct page URL such as the address ending `?view=connections`; open it in a second session.                                       | The page loads without a route error. Private content still depends on that session's account.                                                                       | NT     |
+| E08 | If a developer provides a disposable preview with corrupt local storage, reload it.                                                         | It recovers to a usable sample instead of a blank/crashed page. Ordinary testers should not clear another teammate's account/browser data to force this.             | NT     |
 
 Do not close the dev server, edit `.env.local`, delete accounts, disable database protection, or run random console code to simulate failures. Ask the builder to arrange a controlled setup when needed.
 
@@ -449,36 +460,44 @@ Give a teammate three minutes to demonstrate the site. Then answer the questions
 9. Where is AI used, and can the website work without it?
 10. How would the user know a request was accepted? Is an email promised?
 11. What information becomes public when a user opts in? What remains private?
-12. If a twist was announced, can the teammate show the actual adaptation and explain its limit?
+12. Can the teammate prepare the website, disable browser networking, reload and keep learning? What still needs internet?
+
+13. Where are notes saved? What differs between an automatic session expiry and clicking Sign out?
+14. Does the Marathi option translate the whole website or the learning area? Does it rewrite the user's note?
+15. Does finishing an exercise mean a skill was verified, or that a practice step was completed?
 
 Rate each item from **1 (poor) to 5 (clear/easy)**, with one example. These are teammate feedback scores, not official judging marks.
 
-| Item                                            | Rating 1–5 | Example or suggested improvement |
-| ----------------------------------------------- | ---------- | -------------------------------- |
-| Purpose is understandable                       |            |                                  |
-| First useful action is obvious                  |            |                                  |
-| Navigation and labels are simple                |            |                                  |
-| Text is readable and screens feel uncluttered   |            |                                  |
-| Profile/consent/visibility choices make sense   |            |                                  |
-| Recommendations are explained                   |            |                                  |
-| Requests feel complete and trustworthy          |            |                                  |
-| Sample and real information are distinguishable |            |                                  |
-| Phone and keyboard experience                   |            |                                  |
-| Three-minute demonstration is convincing        |            |                                  |
+| Item                                                   | Rating 1–5 | Example or suggested improvement |
+| ------------------------------------------------------ | ---------- | -------------------------------- |
+| Purpose is understandable                              |            |                                  |
+| First useful action is obvious                         |            |                                  |
+| Navigation and labels are simple                       |            |                                  |
+| Text is readable and screens feel uncluttered          |            |                                  |
+| Profile/consent/visibility choices make sense          |            |                                  |
+| Recommendations are explained                          |            |                                  |
+| Requests feel complete and trustworthy                 |            |                                  |
+| Sample and real information are distinguishable        |            |                                  |
+| Phone and keyboard experience                          |            |                                  |
+| Three-minute demonstration is convincing               |            |                                  |
+| Offline learning and note recovery are understandable  |            |                                  |
+| English/Marathi choice and its limited scope are clear |            |                                  |
 
 For the official rubric, collect evidence rather than guessing a score:
 
-| Judging area              | Evidence to look for                                                                                |
-| ------------------------- | --------------------------------------------------------------------------------------------------- |
-| Understanding the problem | A beginner can find support and a next action, not just a wall of cards.                            |
-| Innovation and creativity | Goal, missing skills, resources and relevant people connect in a useful way.                        |
-| Technical implementation  | Real input changes the output; account permissions and request transitions work.                    |
-| Working prototype         | Separate accounts complete the request loop and saved state survives refresh.                       |
-| Twist                     | The actual announced requirement has a demonstrated, tested response. If none was supplied, say so. |
-| Time strategy             | A known-working version, clear limits and a rehearsed submission exist before the deadline.         |
-| Presentation              | A teammate can explain what is real, what is sample, and how the product works in plain language.   |
+| Judging area              | Evidence to look for                                                                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Understanding the problem | A beginner can find support and a next action, not just a wall of cards.                                                                          |
+| Innovation and creativity | Goal, missing skills, resources and relevant people connect in a useful way.                                                                      |
+| Technical implementation  | Real input changes the output; account permissions and request transitions work.                                                                  |
+| Working prototype         | Separate accounts complete the request loop and saved state survives refresh.                                                                     |
+| Twist                     | The announced offline requirement is demonstrated by a prepared reload plus useful saved work; English/Marathi has an honest learning-only scope. |
+| Time strategy             | A known-working version, clear limits and a rehearsed submission exist before the deadline.                                                       |
+| Presentation              | A teammate can explain what is real, what is sample, and how the product works in plain language.                                                 |
 
 Do not pitch verified mentors, guaranteed internships, an employability percentage, a live event feed, production security certification, or live AI unless the relevant claim has actual evidence.
+
+Also do not claim first-ever offline access, downloaded external courses, offline messaging, automatic note sync, permanent browser storage, or whole-site translation. A useful honest explanation is: “We prepare the learning area in this browser, keep practice notes local, and require an intentional online action to contact someone.”
 
 ## 17. Bug reports and the release decision
 
@@ -509,30 +528,45 @@ Tester and time:
 ### Decide what must be fixed
 
 - **Blocker / P0:** another account's private data or draft is exposed; a user can change another user's record; a request is sent as the wrong account; the core app cannot open; normal real signup/sign-in or the main request journey is unusable on the intended demo setup; the UI falsely claims a failed action succeeded. Stop release until fixed or make the missing live capability explicit and get the team's decision.
-- **Major / P1:** a main filter, save, plan, membership, request transition, or mobile action is broken; saved changes disappear; an essential control is unreachable; the demo repeatedly gets stuck.
+- **Major / P1:** a main filter, save, plan, membership, request transition, or mobile action is broken; saved changes disappear; prepared offline reload fails; learning notes are lost on automatic expiry; an essential control is unreachable; the demo repeatedly gets stuck.
 - **Minor / P2:** a typo, spacing issue, awkward wording, or nonblocking visual inconsistency. Record it, but do not risk the working submission for cosmetic changes near the deadline.
 
 ### Final release gate
 
 The test lead fills this in. A row is not Passed merely because an automated test passed earlier on a different version.
 
-| Gate                                                                         | Pass / Fail / NT | Evidence/owner |
-| ---------------------------------------------------------------------------- | ---------------- | -------------- |
-| Site opens at the exact address to be submitted                              | NT               |                |
-| Sample content is clearly labelled; no fake delivery/application claims      | NT               |                |
-| Priya's 3/7, changed skill, and online preference behave correctly           | NT               |                |
-| A and B sign in and complete a real accepted request with a next step        | NT               |                |
-| Pending/accepted duplicate protection, decline, and cancellation work        | NT               |                |
-| C cannot view A/B's private request; account switching clears drafts         | NT               |                |
-| Profile, goal, saved items and membership survive refresh                    | NT               |                |
-| Essential phone and keyboard controls work                                   | NT               |                |
-| Manual entry works if AI is missing or fails                                 | NT               |                |
-| Find my first step preserves skills and goal, and never sends without review | NT               |                |
-| Required developer checks pass on the final version                          | NT               |                |
-| Actual twist is tested, or its absence/remaining gap is stated honestly      | NT               |                |
-| Demo is rehearsed; final known limitations and submission owner are named    | NT               |                |
+| Gate                                                                                | Pass / Fail / NT | Evidence/owner |
+| ----------------------------------------------------------------------------------- | ---------------- | -------------- |
+| Site opens at the exact address to be submitted                                     | NT               |                |
+| Sample content is clearly labelled; no fake delivery/application claims             | NT               |                |
+| Priya's 3/7, changed skill, and online preference behave correctly                  | NT               |                |
+| A and B sign in and complete a real accepted request with a next step               | NT               |                |
+| Pending/accepted duplicate protection, decline, and cancellation work               | NT               |                |
+| C cannot view A/B's private request; account switching clears drafts                | NT               |                |
+| Profile, goal, saved items and membership survive refresh                           | NT               |                |
+| Essential phone and keyboard controls work                                          | NT               |                |
+| Manual entry works if AI is missing or fails                                        | NT               |                |
+| Find my first step preserves skills and goal, and never sends without review        | NT               |                |
+| Required developer checks pass on the final version                                 | NT               |                |
+| Required offline preparation, real Network Offline reload and note persistence pass | NT               |                |
+| Demo is rehearsed; final known limitations and submission owner are named           | NT               |                |
 
 Before handing back to the builder:
+
+Check these additional release gates for the implemented twist:
+
+| Gate                                                                                                     | Pass / Fail / NT | Evidence/owner |
+| -------------------------------------------------------------------------------------------------------- | ---------------- | -------------- |
+| The exact demo browser and URL show Ready on this device                                                 | NT               |                |
+| Both exercise topics, explanations and note/completion changes work after offline reload                 | NT               |                |
+| A downloaded text file contains the actual latest note, including copied Marathi text                    | NT               |                |
+| English/Marathi switching preserves notes, selected lesson during switching and completion               | NT               |                |
+| Read-only own-account snapshot and blocked live writes are honest; reconnect sends nothing automatically | NT               |                |
+| Explicit sign-out/different-account notes clearing works; no other account's notes are exposed           | NT               |                |
+| Session-expiry locking/recovery evidence is recorded; manual expiry is NT if not performed               | NT               |                |
+| Five-page phone navigation and both learning languages remain usable                                     | NT               |                |
+
+Then hand back the run:
 
 1. List blockers first, with reproduction steps.
 2. List untested items separately from bugs.
@@ -540,6 +574,8 @@ Before handing back to the builder:
 4. Keep one clean accepted request for the demo. Leave historical declined/cancelled tests intact; do not delete database records to make screenshots look better.
 5. Restore Priya/A's intended skills and chosen goal. Clear temporary search filters.
 6. Record the exact final URL/version and who will submit it. This guide does not submit the project.
+7. Restore No throttling in every test browser. Prepare the final presentation browser on the exact judging URL and leave it online until the deliberate demo switch.
+8. Download important learning notes. Keep one clear QA example for judging only if the owner wants it; do not leave private or confusing test text in the live presentation.
 
 ## 18. Find my first step
 
@@ -549,16 +585,16 @@ Start on **My Hub** and click **Find my first step**. For a real request, use A 
 
 ### A. Understand and customise the next step
 
-| ID  | Steps                                                                                                                                                                                          | Expected result                                                                                                                                                                                                                                                | Result |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| S01 | In Priya's preview, note the current goal and **3/7**. Open **Find my first step**.                                                                                                            | The goal remains **Build your first ML project**. **I'm starting out** is selected. **Your next action** gives a small task, a relevant resource or an honest explanation of what is missing, and a suggested mentor when one qualifies.                       | NT     |
-| S02 | Choose **I'm returning to STEM**. Read the next action and introduction. Close the panel and reopen the plan.                                                                                  | The advice builds on existing experience. Priya still has the same confirmed skills and **3/7**; returning does not erase skills or change the goal.                                                                                                           | NT     |
-| S03 | Choose **I want a project partner**.                                                                                                                                                           | The action and message propose working with a peer. A suitable peer or dual-role member may appear; a mentor-only member must not be presented as a project partner. If nobody qualifies, the panel says so.                                                   | NT     |
-| S04 | In **Your introduction**, add “I can spend 30 minutes on this.” Switch to another support choice, then back without closing the panel.                                                         | Your edit returns for the original choice and recipient. Each choice has its own message draft. It is not sent or saved as a public profile field.                                                                                                             | NT     |
-| S05 | Close with X or Escape. Open **Find my first step** again.                                                                                                                                     | The panel starts fresh with **I'm starting out** and a generated introduction. The abandoned edit is gone. Closing never sends a request.                                                                                                                      | NT     |
-| S06 | Note the main website's **Online only** setting. In the panel, toggle **Online support only**, labelled **For this plan**. Close the panel and check the main setting.                         | Only this open panel's suggestions change. Online-only suggestions must support online contact. The main website preference is unchanged; a reopened panel starts from that main preference.                                                                   | NT     |
-| S07 | Open the selected resource using **Open the guide** or **Read the exercise**.                                                                                                                  | An official guide opens in another tab and keeps your planner draft available. An authored exercise opens the matching resource panel and closes the first-step panel. A hardware note remains clear when relevant. No skill becomes confirmed just because a link was opened.      | NT     |
-| S08 | With an agreed test profile, remove a prerequisite needed by a suggested learning resource, then reopen. Also try a goal whose listed skills are all confirmed. Restore the profile afterward. | The guide does not present an advanced resource as ready if its prerequisites are missing. If no resource is suitable, it explains that. If all skills are listed, it proposes a project outline/work sample or discussion; it does not invent missing skills. | NT     |
+| ID  | Steps                                                                                                                                                                                          | Expected result                                                                                                                                                                                                                                                                | Result |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| S01 | In Priya's preview, note the current goal and **3/7**. Open **Find my first step**.                                                                                                            | The goal remains **Build your first ML project**. **I'm starting out** is selected. **Your next action** gives a small task, a relevant resource or an honest explanation of what is missing, and a suggested mentor when one qualifies.                                       | NT     |
+| S02 | Choose **I'm returning to STEM**. Read the next action and introduction. Close the panel and reopen the plan.                                                                                  | The advice builds on existing experience. Priya still has the same confirmed skills and **3/7**; returning does not erase skills or change the goal.                                                                                                                           | NT     |
+| S03 | Choose **I want a project partner**.                                                                                                                                                           | The action and message propose working with a peer. A suitable peer or dual-role member may appear; a mentor-only member must not be presented as a project partner. If nobody qualifies, the panel says so.                                                                   | NT     |
+| S04 | In **Your introduction**, add “I can spend 30 minutes on this.” Switch to another support choice, then back without closing the panel.                                                         | Your edit returns for the original choice and recipient. Each choice has its own message draft. It is not sent or saved as a public profile field.                                                                                                                             | NT     |
+| S05 | Close with X or Escape. Open **Find my first step** again.                                                                                                                                     | The panel starts fresh with **I'm starting out** and a generated introduction. The abandoned edit is gone. Closing never sends a request.                                                                                                                                      | NT     |
+| S06 | Note the main website's **Online only** setting. In the panel, toggle **Online support only**, labelled **For this plan**. Close the panel and check the main setting.                         | Only this open panel's suggestions change. Online-only suggestions must support online contact. The main website preference is unchanged; a reopened panel starts from that main preference.                                                                                   | NT     |
+| S07 | Open the selected resource using **Open the guide** or **Read the exercise**.                                                                                                                  | An official guide opens in another tab and keeps your planner draft available. An authored exercise opens the matching resource panel and closes the first-step panel. A hardware note remains clear when relevant. No skill becomes confirmed just because a link was opened. | NT     |
+| S08 | With an agreed test profile, remove a prerequisite needed by a suggested learning resource, then reopen. Also try a goal whose listed skills are all confirmed. Restore the profile afterward. | The guide does not present an advanced resource as ready if its prerequisites are missing. If no resource is suitable, it explains that. If all skills are listed, it proposes a project outline/work sample or discussion; it does not invent missing skills.                 | NT     |
 
 For S08, use a controlled account or preview only. Record the exact goal and skills before changing them so you can restore them. Do not treat a different valid resource as a bug merely because its title changed after a profile edit.
 
@@ -584,6 +620,115 @@ For S08, use a controlled account or preview only. Record the exact goal and ski
 
 Ask the tester afterward: “Did this make your first action clearer?” and “At what point did you think the message was sent?” A tester who assumes **Review request** sends immediately has identified a usability issue worth reporting even if the code behaves correctly.
 
+## 19. Offline learning and English/Marathi — required twist tests
+
+The requirement is to support useful work without internet. We test a prepared website, actual learning work, and honest limits. No Gemini key, new SQL or external translation service is needed for this section.
+
+### A. Prepare the correct browser and understand the limits
+
+Use the exact **TEST_URL**. For a local run, the owner builds and starts the production website at `http://localhost:3001`. Do not use the normal development server at port 3000 for the cache/reload claim. For teammates on other devices, use the deployed HTTPS URL.
+
+Open **Offline learning**, called **Offline** on a narrow phone. While online, wait for **Ready on this device**. Use **Prepare offline** or **Update offline copy** if needed. Do not disconnect while it says it is preparing. The saved copy belongs to this browser profile and this exact website origin. Another browser, port or address must prepare separately.
+
+There are eight original exercises, four in each topic. They are local STEMBridge material, not downloaded copies of external courses. External documentation and community websites still need internet. Exercise completion records practice; it does not certify a skill or change the confirmed profile. Device notes do not sync between browsers, devices or accounts.
+
+Use harmless notes for these tests. Example: `QA note: I want a mentor to check my reasoning.` Download work before clearing a notebook or deliberately signing out. Keep the actual judging browser prepared; use a disposable browser profile for first-visit and cache-removal tests.
+
+### B. How to turn browser networking off and back on
+
+This procedure is part of the test. Merely switching off Wi-Fi is not enough proof on localhost: the browser may still reach the server running on the same computer.
+
+1. Finish online preparation and keep the website open.
+2. Open Chrome or Edge developer tools with **F12** or **Ctrl+Shift+I**.
+3. Choose the **Network** tab. Find the dropdown normally labelled **No throttling**.
+4. Change it to **Offline**. Do not run console code to fake the online flag.
+5. The website should show an offline notice. Reload normally with **Ctrl+R**. Do not clear site data, unregister the service worker or use a forced cache-clearing reload.
+6. Test the website while the dropdown remains Offline. The prepared public website should reopen and be interactive.
+7. When finished, change the dropdown back to **No throttling**. Wait for the online workspace to refresh, or use its refresh control.
+
+Record the method used. “Server stopped” and “browser Network set to Offline” are different results. The builder already demonstrated a server-stopped production browser run. This guide asks you to perform the stronger full browser-network check too. If your browser's controls differ, ask the technical teammate; do not mark Pass without doing it.
+
+### C. Preparation, reload and recovery
+
+| ID  | Steps                                                                                                                                                         | Expected result                                                                                                                                                                                                                             | Result |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| O01 | Open the production TEST_URL online. Choose Offline learning. Wait for preparation; use Prepare offline if needed.                                            | Ready on this device appears only after the website files are saved. An error must remain understandable; an unfinished preparation is not a Pass.                                                                                          | NT     |
+| O02 | Use Update offline copy while online, then wait.                                                                                                              | Preparing state ends and readiness returns. The update does not erase your notes or completion. No duplicate operation is needed.                                                                                                           | NT     |
+| O03 | Follow section 19B: real Network → Offline, then ordinary reload.                                                                                             | The prepared website reopens and controls work. A browser connection-error page or a connect-once fallback instead of the full website fails this prepared-copy test.                                                                       | NT     |
+| O04 | While still offline, navigate among all five main pages and use browser Back/Forward. Reload a direct Offline learning URL.                                   | The public shell and local learning/catalog screens remain usable. Sign-in and live-data limits are explained; no fake inbox or live directory appears.                                                                                     | NT     |
+| O05 | Optional, disposable profile only: try the URL offline before that profile has ever prepared it. Then reconnect, open and prepare it, and repeat O03.         | A first-ever offline visit cannot provide files it has never downloaded. It must not claim readiness. After successful online preparation, offline reload works. A normal browser error on the unprepared first visit is an expected limit. | NT     |
+| O06 | Optional, technical teammate using a disposable profile: remove only that site's offline website cache, then try offline reload. Reconnect and prepare again. | Missing files are detected or the connect-once fallback appears; the site does not falsely promise a complete saved website. Re-preparing repairs the cache. Do not clear the presentation browser or someone else's notes.                 | NT     |
+| O07 | Prepare Chrome, then open the same URL in an unprepared Edge/profile; also compare port 3001 with the deployed URL.                                           | Readiness and device notes are separate. A ready badge in one origin/profile does not promise offline readiness elsewhere. Prepare the actual demo combination.                                                                             | NT     |
+| O08 | Finish offline tests, restore No throttling and wait. If needed, use Refresh from account.                                                                    | The online state returns and confirmed live workspace data reloads. A failed refresh offers a truthful retry; notes remain device-only.                                                                                                     | NT     |
+
+### D. Every exercise, explanation and notebook control
+
+For O09–O12, use English first so the titles match this table. You are checking every lesson button and its content, not completing all eight exercises under the hackathon timer.
+
+| ID  | Steps                                                                                                                                             | Expected result                                                                                                                                                                                                            | Result |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| O09 | Choose Data & AI. Open Make sense of an array, Clean a tiny table, Keep your test data separate, and Plan a small, honest ML project.             | All four buttons open their own title, instructions and prompt. No lesson opens an unrelated exercise, external website or missing page.                                                                                   | NT     |
+| O10 | Choose Robotics. Open Trace a blinking light, Sketch before you connect, Question a sensor reading, and Explain your prototype clearly.           | All four buttons open the correct original exercise. These practice tasks can be reasoned through without connecting hardware. Safety and limitation wording remains visible where relevant.                               | NT     |
+| O11 | For each of the eight exercises, click Check your thinking, read the explanation, then Hide explanation. Change to another exercise.              | The explanation matches that exercise, opens and closes correctly, and is not confused with the previous lesson's answer.                                                                                                  | NT     |
+| O12 | While Network is Offline, open all eight exercises and their explanations again. Open a resource from Explore and click Try an offline exercise.  | Instructions and explanations remain available. The entry opens the matching exercise and closes the previous resource dialog. External tutorial availability is not implied.                                              | NT     |
+| O13 | On the array exercise, enter a harmless note under My notes & questions for a mentor. Change exercise, then return.                               | Notes stay with the correct exercise. Another exercise does not inherit the array note. The saved-on-this-device message is clear.                                                                                         | NT     |
+| O14 | With browser Network Offline, append “Written with browser networking disabled.” Reload normally twice.                                           | The latest text survives both reloads. It is not just an unsaved field held in an already-open tab.                                                                                                                        | NT     |
+| O15 | Tick I finished this exercise. Check the completed count and lesson mark. Untick, then tick again and reload.                                     | The count increases and decreases once per change, never exceeds eight, and the final state survives reload. Notes remain.                                                                                                 | NT     |
+| O16 | Note the confirmed skills/coverage in My Hub before and after O15.                                                                                | Practice completion does not silently add a skill, change 3/7 to 4/7, or certify competence. Deliberate profile skill editing remains separate.                                                                            | NT     |
+| O17 | Write distinct notes in two exercises, complete only one, and use Download my notes while offline. Open the downloaded text file.                 | The file contains both correct notes, the right lesson names and completion state. It contains no account ID, password, token, inbox message or other member data. Downloading sends no request.                           | NT     |
+| O18 | Copy a short Marathi lesson heading from the interface into your note; add “QA Unicode export”. Download and open the text file in a text editor. | The exact copied characters and English marker remain readable. Missing characters, question marks replacing text or a file without the newest note fail. This checks the actual downloaded file, not just a button click. | NT     |
+| O19 | In a disposable notebook, try typing or pasting more than 5,000 harmless characters. Then shorten the note.                                       | The field enforces its limit or provides a useful message. No crash, silent truncation of another lesson's note or false save. Ordinary testers need not force the browser's entire storage quota full.                    | NT     |
+
+### E. English and Marathi reading
+
+The language buttons are inside Offline learning, under Reading language. The Marathi button displays the language's native name; its paired English button lets you return. The rest of this guide uses the English control names. Translation covers the learning area, not the entire website or another user's messages.
+
+| ID  | Steps                                                                                                                                                              | Expected result                                                                                                                                                                                                                                                               | Result |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| O20 | Choose Marathi. Inspect the heading, readiness explanation, topic controls, eight lesson titles, selected lesson steps, explanation, prompt and notebook controls. | The intended learning text changes to Marathi. Words remain readable; no boxes or broken letters. English technical names may remain where appropriate. A fluent teammate should record meaning/wording issues separately; a non-speaker cannot certify translation accuracy. | NT     |
+| O21 | In a selected lesson, write a note and tick completion. Switch Marathi → English → Marathi without changing lesson.                                                | The selected lesson, written note and completion stay the same. Only reading text changes; notes are neither translated nor overwritten.                                                                                                                                      | NT     |
+| O22 | While browser Network is Offline, change language, open an explanation, and reload.                                                                                | The selected reading language persists without an AI or translation request. Notes and completion survive. Reload may start at the suggested exercise; return to the original lesson to check its note if needed.                                                             | NT     |
+| O23 | Visit another main page, then return to Offline learning. Switch to the other exercise topic.                                                                      | The reading choice remains available and the new topic shows its own translated exercises. Existing notes remain attached to their original lessons.                                                                                                                          | NT     |
+| O24 | At about 390px width and 200% zoom, try both languages, topics, notes, completion and download. Use Tab/Enter/Space too.                                           | No horizontal page overflow or clipped essential control. Focus and selected language are clear; Marathi has comfortable line spacing. Phone navigation labels are Circles, Connect and Offline where shortened.                                                              | NT     |
+
+### F. Clear, protect and recover work
+
+Do not use valuable notes for clearing tests. Explicit clearing is intentional data removal. Automatic session expiry must protect the note without erasing it.
+
+| ID  | Steps                                                                                                                                                      | Expected result                                                                                                                                                                                                                                                                                                              | Result |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| O25 | With a harmless saved note, click Clear this notebook, then Keep notes.                                                                                    | The confirmation appears; cancelling preserves every note and completion mark. No clearing occurs on the first click alone.                                                                                                                                                                                                  | NT     |
+| O26 | Repeat Clear this notebook, then Yes, clear my notes. Reload.                                                                                              | The current device notebook is empty and count resets. Profile, goal, catalog bookmarks and connection history are not deleted. Download is unavailable for an empty notebook.                                                                                                                                               | NT     |
+| O27 | Optional, developer-arranged restricted-storage test: attempt note saving, then attempt confirmed clearing when storage refuses the operation.             | Failed saving keeps typed text visible and explains that it is not saved; copy/download remains the recovery path when allowed. A failed clear keeps notes visible and reports failure instead of claiming deletion. Automated tests cover these paths; mark manual test NT unless it is actually arranged.                  | NT     |
+| O28 | As A, save a harmless note. Reload the direct Offline learning URL while still signed in.                                                                  | A's own notes survive initial session restoration. A temporary loading/preview state must not erase or expose them.                                                                                                                                                                                                          | NT     |
+| O29 | Open A and C in independent browser sessions on the same URL; write different harmless notes. Reload both.                                                 | Each browser's notebook is separate. Neither sees the other's notes. This feature is device storage, not cloud note sync.                                                                                                                                                                                                    | NT     |
+| O30 | Download A's QA notes, explicitly Sign out, reload and sign back into A.                                                                                   | Intentional sign-out clears the device notebook and own-account offline snapshot. The old notebook does not return after sign-in. This is different from automatic expiry.                                                                                                                                                   | NT     |
+| O31 | Download any needed work. In one browser, move from A to a different account C and inspect Offline learning. Also test signing in from a preview notebook. | The different owner does not inherit earlier notes. Signing into an account replaces any preview notebook rather than attaching sample notes to a private account.                                                                                                                                                           | NT     |
+| O32 | Optional: if a real session naturally expires while offline, observe the page. Do not edit JWTs, cookies, system time or keys to force this.               | The account plan closes and preview becomes available. A notice explains that account notes are kept but locked. No private note text is visible; note editing, completion and download are disabled. The stored work is not silently erased. Automated tests cover this; mark manual NT if expiry does not occur naturally. | NT     |
+| O33 | After O32, reconnect and sign into the same account.                                                                                                       | The original notes and completion return to that account. Returning as another account must not reveal them. Mark NT if O32 was not performed.                                                                                                                                                                               | NT     |
+| O34 | After O32, optionally choose Clear this notebook instead of signing back in. Cancel once, then confirm only with disposable QA work.                       | Cancel preserves the locked notebook. Explicit confirmation clears it and allows a new empty preview notebook. It never reveals the old private note while locked. Mark NT if the locked state was not available.                                                                                                            | NT     |
+
+Do not spend the deadline waiting for a token to expire. Record that automated expiry/isolation tests passed and the manual expiry check was NT. An ordinary teammate is not expected to handle credentials or alter authentication internals.
+
+### G. Real-account offline boundaries and reconnect
+
+Prepare A online first: load the profile, choose a goal and save a catalog item. Confirm the save before disconnecting. Have B ready in a separate **online** browser for inbox checks. A needs a matching, unexpired session to view the saved account plan.
+
+| ID  | Steps                                                                                                                                                       | Expected result                                                                                                                                                                                                                                | Result |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| O35 | As prepared A, set Network Offline and reload. Open My Hub and saved catalog results.                                                                       | A sees only A's saved profile, confirmed skills, goal and saved items, with a saved-copy notice/time. They are a read-only snapshot, not proof of current cloud data.                                                                          | NT     |
+| O36 | While A is offline, inspect Communities, member recommendations and Connections.                                                                            | The live directory, membership list and private inbox are not cached into the account snapshot or presented as current. No fictional person substitutes for a real contact. Public community descriptions/catalog content can remain readable. | NT     |
+| O37 | Try changing A's profile, account bookmark, goal or preference while offline, if the controls are available.                                                | A disabled control or prompt explains the reconnect requirement. The website must not claim a cloud save. A saved read-only account differs from an editable local sample preview.                                                             | NT     |
+| O38 | Try joining/leaving, sending a request, accepting/declining or cancelling while offline, where reachable. Test a preview sign-in/signup action offline too. | Each needs a connection and fails clearly before live delivery. No endless success spinner, fake acceptance or automatic send queue. Do not contact an unrelated member just to reach a button.                                                | NT     |
+| O39 | Refresh A's account view while offline.                                                                                                                     | A valid own snapshot can be redisplayed without internet. Refresh does not fetch a fabricated live inbox. With no saved copy, an honest reconnect/no-copy message is acceptable.                                                               | NT     |
+| O40 | Reconnect A and wait for a successful account refresh. If needed use Refresh from account. Have B refresh its inbox.                                        | Confirmed cloud data returns and the saved-copy notice goes away after success. No action attempted offline suddenly arrives at B. Local notes stay local; they do not automatically populate a request.                                       | NT     |
+| O41 | In signed-out preview offline, change a sample bookmark or profile, reload and inspect it.                                                                  | Local preview edits may work without internet. The website still calls them sample/local data and does not claim a live account save or contact.                                                                                               | NT     |
+| O42 | While offline, open an official external tutorial or women-in-STEM community link from a separate tab. Then return to a local exercise.                     | External websites may be unavailable; they are not promised as downloaded content. The original local exercise remains usable, and no external membership/application is implied.                                                              | NT     |
+| O43 | In a fresh browser with no saved account copy, test offline access after the public website alone was prepared.                                             | It cannot invent private account state or authenticate from the cache. Exercises and preview remain the supported fallback; real sign-in needs internet.                                                                                       | NT     |
+| O44 | Reconnect, review a harmless notebook question, then deliberately open a real request to B, edit/review and Send request. B refreshes.                      | A user can turn offline practice into an intentional online request. Only the reviewed message is sent; the whole notebook is not uploaded. Normal duplicate and recipient rules still apply.                                                  | NT     |
+
+At the end, restore **No throttling**, set the intended reading language, clear disposable test filters and prepare the exact judging URL again if needed. Keep one useful note and exercise ready in the intended demo notebook, with the owner's agreement. Do not sign out that account afterward without first downloading work.
+
 ## 20. Optional developer appendix
 
 Ordinary testers can skip this section. A technical teammate should handle it and report evidence in the same result log.
@@ -599,17 +744,26 @@ npm run build
 git diff --check
 ```
 
-Record the actual output summary and date. Do not copy old test counts from a document and call them today's result. The tests include matching, search, mocked AI responses, workspace behavior, SQL permissions and account-switch draft isolation. Mocked and local SQL tests do not prove the hosted account journey or live AI integration.
+Record the actual output summary and date. Do not copy old test counts from a document and call them today's result. The latest supplied baseline is **115 tests across 12 files at 3:01 PM IST**, plus TypeScript and production build. Tests include matching, search, mocked AI responses, workspace/SQL permissions, account isolation, service-worker caching, offline snapshot guards, notebook storage and recovery, locked-note UI and Marathi coverage. Mocked and local SQL tests do not prove the hosted account journey, live AI integration or actual browser network behavior.
 
 To test the production build locally, use a free terminal/port and run:
 
 ```powershell
-npm run start
+npm run start -- -p 3001
 ```
 
-Do not start a second process on the same port as the existing dev server. Ask the person managing the running server which address/port to use. The final deployed URL needs its own browser smoke test.
+Do not start a second process on an occupied port. Ask the person managing the server to use `http://localhost:3001` or tell the team its actual production port. Prepare that exact origin before testing. The deployed HTTPS URL needs its own preparation and browser tests. A new browser profile does not inherit a prepared copy from another profile.
 
-### B. Hosted privacy checks without destructive SQL
+### B. Offline developer boundaries
+
+1. Use section 19's real Network → Offline procedure. Record reload, changed note, second reload and downloaded-file evidence. A stopped local server proves cache fallback, but the browser may still consider itself online and contact Supabase; do not describe it as a complete network-off test.
+2. In a disposable browser profile, inspect only the names of the service-worker cache entries. They should represent the public website shell/static assets, not Supabase calls, inbox responses, `/api/profile` results or downloaded external courses. Do not copy private headers or tokens into the report.
+3. The own-account snapshot and notebook are separate device records. The snapshot stores only the matching owner's allowed profile/learner fields; it is not an authentication source. Normal Supabase session storage is separate. Do not claim there are no authentication cookies just because the offline snapshot excludes tokens.
+4. Read or run the automated offline provider/notebook tests for expiry, no-session/wrong-owner rejection, delayed online responses, no queued offline sends, same-owner note recovery and explicit sign-out clearing. Ordinary teammates do not need JWTs, keys, console injection or clock changes. Record manual expiry as NT if it did not happen naturally.
+5. For storage-failure and cache-removal tests, arrange a disposable profile with harmless notes. A failed save must keep typing recoverable; a failed clear must not claim success. Do not fill or clear another person's normal browser storage.
+6. After any changed code, rerun the relevant regression tests, TypeScript and build, then prepare the changed production website again. Check the exact judged URL. A green build cannot prove browser storage was prepared.
+
+### C. Hosted privacy checks without destructive SQL
 
 Use [RLS_CHECKS.sql](RLS_CHECKS.sql) and the permissions section of [SUPABASE_SETUP.md](SUPABASE_SETUP.md). RLS means the database checks which rows an account is allowed to read or change.
 
@@ -625,7 +779,7 @@ Use [RLS_CHECKS.sql](RLS_CHECKS.sql) and the permissions section of [SUPABASE_SE
 
 The existing automated SQL suite checks sender/recipient enforcement, self-requests, invalid transitions, protected fields, and duplicate active requests. For any additional hosted direct-call tests, use only A/B/C and the normal client session. Have the developer record the exact attempted operation and denial; do not invent a pass because the UI hides a button.
 
-### C. Browser errors and configuration
+### D. Browser errors and configuration
 
 1. Inspect the browser Console for errors during the core flow; record the action that caused each error.
 2. Inspect failed network requests only if needed. Do not share request headers, bearer tokens, cookies, passwords, full account records, or Gemini input text.
@@ -633,7 +787,7 @@ The existing automated SQL suite checks sender/recipient enforcement, self-reque
 4. On the deployed site, repeat signup/sign-in, reload persistence, sender/recipient flow, and C privacy. A local build and a successful deployment build are not enough.
 5. Record live AI as NT until an actual consented provider response has been observed and reviewed. Keep the manual path demonstrated either way.
 
-### D. Return a concise testing report
+### E. Return a concise testing report
 
 ```text
 Tested version/address:
@@ -647,6 +801,12 @@ Major bugs:
 Untested or setup-blocked items:
 Automated checks actually run:
 Hosted A → B request verified? Yes / No
+Exact offline-prepared origin/browser:
+Browser Network Offline + normal reload verified? Yes / No
+Notes changed offline + second reload + actual file checked? Yes / No
+English/Marathi scope and persistence checked? Yes / No
+Server-stopped test only, or full browser Offline test?:
+Expiry locking: Automated evidence / Manual observed / Not tested
 Third-account privacy verified? UI / Database / Both / Not tested
 Live AI verified? Yes / No / Not required for this demo
 Final demo state restored? Yes / No

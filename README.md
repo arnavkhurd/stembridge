@@ -23,7 +23,7 @@ npm run build
 npm run start -- -p 3001
 ```
 
-Open [http://localhost:3001](http://localhost:3001), choose **Offline learning**, and wait for **Ready on this device**. Prepare the exact deployed URL separately. The [offline twist guide](docs/OFFLINE_TWIST_GUIDE.md) contains preparation, real browser-network testing, judging steps and honest feature boundaries. The earlier three PDFs predate this twist; use the separate twist addendum with them.
+Open [http://localhost:3001](http://localhost:3001), choose **Offline learning**, and wait for **Ready on this device**. Prepare the exact deployed URL separately. The updated [owner guide](docs/OWNER_NEXT_STEPS.md), [teammate testing guide](docs/TEAM_TESTING_GUIDE.md) and [live judging guide](docs/LIVE_JUDGING_GUIDE.md) each include the offline twist, Marathi learning, current evidence and remaining checks. Their PDFs in `output/pdf/` replace the earlier versions. The separate [offline twist guide](docs/OFFLINE_TWIST_GUIDE.md) remains an optional focused reference.
 
 ## Run locally
 

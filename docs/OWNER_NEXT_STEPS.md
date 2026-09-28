@@ -1,15 +1,18 @@
 # Your remaining steps before submission
 
-> **Twist update, 3:01 PM IST:** offline support and English/Marathi learning are implemented. Read [OFFLINE_TWIST_GUIDE](OFFLINE_TWIST_GUIDE.md) first for production port 3001 setup, exact judging-URL preparation and the real browser Offline/reload test. At the 3:01 PM checkpoint, 115 tests, TypeScript and the production build passed; the cached website also worked after its server was stopped, including notes, Marathi and export. Hosted accounts and full browser networking-disabled checks remain separate. This base guide and its original PDF predate the twist; use the new addendum alongside them. No new SQL or Gemini key is needed.
+Updated for the completed **3:01 PM IST build on 28 September 2026**, including the required offline twist and English/Marathi learning. The deadline is **4:10 PM IST**. This guide replaces the earlier owner guide; the required offline steps are included here.
 
-Prepared at approximately **2:14 PM IST on 28 September 2026** for the **4:10 PM IST deadline**. Start with the two real accounts. The code is built; the remaining uncertainty is whether your hosted accounts, requests and deployment work together.
+**Your priority now:** publish the latest version, prove the offline reload on the exact judging URL, and complete one real learner-to-mentor request. Give a teammate the offline checks while you handle accounts and deployment. Freeze feature additions; only fix a demonstrated blocker.
 
 ## What is already done
 
-- The website, two STEM circles, goal plans, search, member profiles, saved opportunities and request flow are implemented.
+- The website, two STEM circles, goal plans, **Find my first step**, search, member profiles, saved opportunities and request flow are implemented.
+- **Offline learning is implemented:** the prepared website can reopen from its cache; eight original exercises, device notes, completion tracking and text-file export work without the website server. A previously loaded account's own plan can be read offline while its local session is valid.
+- **English and Marathi are implemented throughout the offline learning area.** Language switching preserves notes and completion. Other pages and other people's messages are not translated.
 - Supabase is connected. The schema is already installed, and the two community records are readable. **Do not recreate the project or rerun the schema as a routine setup step.**
-- At 2:28 PM, all **72 tests**, TypeScript and the production build passed. Desktop and 390px mobile checks passed. Full details are in [BUILD_STATUS](../BUILD_STATUS.md).
-- Last verified: **Confirm email is ON**, the **Gemini key is empty**, and the **real-account walkthrough and deployment are still unverified**. These are facts from the last check, not claims about changes you may make afterward.
+- At **3:01 PM**, all **115 tests across 12 files**, TypeScript and the production build passed. Browser checks covered cached reloads with the server stopped, saved notes, catalog browsing, Marathi, an actual exported UTF-8 notes file and a readable 390px layout. Full details are in [BUILD_STATUS](../BUILD_STATUS.md).
+- The browser's complete **Network → Offline** test and the **hosted real-account journey** remain owner/teammate checks. A server-stopped test, automated tests and a deployed real-account test prove different things.
+- Last inspected: **Confirm email was ON**, the **Gemini key was empty**, and the **real-account walkthrough and deployment were unverified**. Check your current settings if you have since changed them. No new SQL, translation API or Gemini key is needed for the twist.
 
 ## Who does what
 
@@ -17,9 +20,29 @@ Prepared at approximately **2:14 PM IST on 28 September 2026** for the **4:10 PM
 | --- | --- |
 | You, as account owner | Choose the email-confirmation setting, access your own email, sign into Supabase/GitHub/Vercel, add credentials privately, approve the final presentation claims and submit. |
 | A teammate | Operate the supporter account in another browser, check the learner's request, rehearse the handoff and time the presentation. Use an address they control. |
+| Another teammate, if available | Run the offline and Marathi checks on the same final URL. Record failures without changing account settings or asking for private keys. |
 | The coding agent | Diagnose the exact failure, fix code, run checks, help inspect database permissions and prepare the release. It does not need your account passwords in chat. |
 
 If working alone, Chrome can be the learner and Edge the supporter. Two ordinary tabs in one browser share the same login.
+
+## 0. Choose the correct website address
+
+The production demo was left running at [localhost:3001](http://localhost:3001/?view=offline). Use that address on this computer, or your actual deployed HTTPS URL. The normal development address at port 3000 is for coding; it does not prepare the production offline website by default.
+
+If port 3001 is already working, do not start another copy. If it is stopped, open a terminal in the project folder and run:
+
+```powershell
+npm run build
+npm run start -- -p 3001
+```
+
+Wait for the successful build before starting the server, and leave the server terminal running. If you change code after this, stop that production server with Ctrl+C, rebuild and start it again. Then update the offline copy in the browser while online.
+
+- [ ] Write the exact **TEST_URL** in the teammate guide. All testers should know which version they are checking.
+- [ ] Use one exact origin for the final checks. Port 3000, port 3001 and your deployed address have separate browser storage, sessions and offline copies.
+- [ ] Prepare every browser/device you will use. The in-app browser's saved copy does not prepare Chrome, Edge or a phone.
+- [ ] Give teammates on other computers the deployed HTTPS address. Their `localhost` does not point to your computer. No website installation is required.
+- [ ] Verify the submitted public URL in a signed-out browser, then return to the prepared demonstration browser. Do not use a new private window for the offline stage demonstration.
 
 ## 1. Get two accounts working first
 
@@ -34,7 +57,7 @@ If working alone, Chrome can be the learner and Edge the supporter. Two ordinary
 
 The default Supabase sender only delivers to addresses on the project's team and has a small sending limit; ordinary users need configured custom SMTP. Do not spend the whole buffer repeatedly requesting emails. The owner decides the prototype setting; the agent has not changed it. [Supabase's email-delivery documentation](https://supabase.com/docs/guides/auth/auth-smtp).
 
-- [ ] Open the running app at [localhost:3000](http://localhost:3000) in Chrome. If the development server is stopped, run `npm run dev` in the project folder and leave that terminal running.
+- [ ] Open the chosen TEST_URL in Chrome. For the local production demo, use [localhost:3001](http://localhost:3001). If you keep email confirmation, its site/redirect settings must match the address you are testing.
 - [ ] Click **Join STEMBridge**, enter a preferred name, your controlled email address and a unique password of at least eight characters, then **Create my account**.
 - [ ] If told to confirm your email, complete that step and return to **Sign in**. Do not assume an account is signed in because signup was submitted.
 - [ ] Repeat in Edge for the supporter. If using an existing account, use **Sign in** instead of signing up again.
@@ -80,9 +103,9 @@ Record the result and exact visible error if anything fails. Share the error tex
 
 **Prepare a fresh request for judging:** the app blocks duplicate active requests for the same people, goal and help type. After the guidance rehearsal, you can use **Ask to collaborate** with the same supporter who chose **Learn and mentor**, or choose a different relevant goal. Do not delete database rows to reset the demonstration. If you have already accepted the presentation request, show that accepted record and explain what happened.
 
-### Check the new first-step panel once it is ready
+### Check the implemented first-step panel
 
-The agreed addition is **My Hub → Find my first step**, with **I'm starting out**, **I'm returning to STEM** and **I want a project partner** choices. It passed the final local tests and desktop/mobile browser checks at 2:28 PM IST. Its real-account handoff still belongs in your hosted walkthrough.
+**My Hub → Find my first step** has **I'm starting out**, **I'm returning to STEM** and **I want a project partner** choices. It is implemented and included in the passing final checks. Its real-account handoff still belongs in your hosted walkthrough.
 
 - [ ] Try one choice. Check it offers a practical next action, suitable resource and relevant mentor or peer.
 - [ ] For **I'm returning to STEM**, check the profile's existing skills stay intact. This choice should not assume the learner is a beginner.
@@ -91,11 +114,53 @@ The agreed addition is **My Hub → Find my first step**, with **I'm starting ou
 
 The fallback links to [Women in Machine Learning](https://www.wiml.org/) and [Women in Robotics chapters](https://www.womeninrobotics.org/chapters/) point to independent communities. They do not establish a partnership, register you there or guarantee a mentor. Show only one first-step choice in the short pitch; the same real request/acceptance test remains the priority.
 
-## 4. Publish the tested version
+## 4. Prove the offline twist and Marathi bonus
+
+Use the exact presentation URL and browser. On a narrow phone, the bottom labels **Circles**, **Connect** and **Offline** mean Communities, Connections and Offline learning.
+
+### Prepare while online
+
+- [ ] Open **Offline learning**. Wait for **Ready on this device**. If necessary, click **Prepare offline** or **Update offline copy**. Do not disconnect while it says Preparing.
+- [ ] Open a Data & AI exercise and a Robotics & Makers exercise. Check **Check your thinking** reveals an explanation.
+- [ ] Write a short note, such as “Why does adding a column change the shape?” Tick **I finished this exercise**.
+- [ ] Switch to another exercise and back. The first note and completion should remain. Completing practice must not add a confirmed profile skill.
+- [ ] Switch the reading language to Marathi and back to English. The instructions and controls change; your own note does not.
+- [ ] If showing a real account's saved plan, sign in while online, wait for its workspace to load, choose a goal and save an item. Use this same browser for the offline test.
+
+### Disable networking and reload
+
+For localhost, switching off Wi-Fi alone is not enough: the browser can still reach a server on the same computer. Use the browser's actual network control.
+
+1. Open Chrome or Edge developer tools with **F12** or **Ctrl+Shift+I**.
+2. Open **Network** and choose **Offline** in its throttling dropdown, usually labelled **No throttling** beforehand.
+3. Return to the page. Look for the offline notice, then use an ordinary **Ctrl+R** reload. Do not clear site data or unregister the service worker.
+4. Open an exercise. Add `Written with the network disabled.` to your note, change its completion state, and reload again.
+5. Confirm the website returns and the latest note/completion remain. Click **Download my notes**, open the downloaded text file and check its contents. Marathi notes should remain readable too.
+6. Switch English/Marathi while still offline. Browse Explore and open a resource's **Try an offline exercise** button.
+7. If signed in with a valid session, check My Hub's saved-copy notice and time. Your own goal and saved items should be available; live member information and the private inbox are not cached.
+8. Try an account update while disconnected. It must not claim cloud success or queue a request for later.
+9. Set the Network dropdown back to **No throttling**. Confirm the live account reloads, or use **Refresh from account** if offered. Notes remain device-only; reconnecting must not send a request by itself.
+
+Repeat this check on the deployed URL after publication. A failure is a blocker for claiming the twist is demonstrated. Record the exact step and error for a fix; do not mark it passed just because the automated suite passed.
+
+### Know the limits before judging
+
+| What works after preparation | What still needs internet |
+| --- | --- |
+| Reopen the cached website; browse its catalog and eight original exercises | First preparation, sign-in and account creation |
+| Save practice notes and completion in this browser; download notes | Profile/bookmark/membership changes for live accounts |
+| Switch the learning area between English and Marathi | Current member information, inboxes, requests and replies |
+| Read a saved own-account plan while its session remains valid | External tutorial sites and optional Gemini suggestions |
+
+Notes do not sync to another device. Automatic account-session expiry **locks and preserves** the notes; reconnect and sign into the same account to recover them. Deliberate sign-out, another account signing in, signing in from the demo, or confirmed **Clear this notebook** removes the previous local notebook. Download work before doing those actions. The preview cannot read or export a locked account notebook.
+
+No new Supabase migration or API connection is required. The updated [teammate testing guide](TEAM_TESTING_GUIDE.md) includes the detailed offline and language checklist; the required owner steps are all included above.
+
+## 5. Publish the tested version
 
 The existing repository is [arnavkhurd/stembridge](https://github.com/arnavkhurd/stembridge). At this guide's inspection, branch `main` contained commit `40e2f37` and local changes. Reuse this repository.
 
-- [ ] Have the agent finish the agreed code changes and rerun `npm run test`, `npm run typecheck` and `npm run build`. The 2:28 PM result is a checkpoint; changed code needs its own final check.
+- [ ] The code checks passed at **3:01 PM: 115 tests, TypeScript and production build**. If code has changed afterward, rerun those checks. Documentation-only updates do not require rebuilding the application.
 - [ ] In the project terminal, review and commit the finished source:
 
 ```powershell
@@ -124,13 +189,15 @@ git push -u origin main
 - [ ] Click **Deploy**. After success, open the resulting production URL. Environment changes require another deployment.
 - [ ] In Supabase **Authentication → URL Configuration**, set **Site URL** to the deployed origin. If using email confirmation, check its allowed redirect configuration and test a real confirmation on that URL.
 - [ ] Repeat the two-browser sign-in/request/refresh check on the deployed URL. Local browser sessions do not transfer to the new website origin.
+- [ ] On that exact deployed URL, prepare Offline learning again and repeat section 4's network-disabled reload, notes and language checks. An old localhost cache does not cover the new URL.
+- [ ] After a later redeployment, reopen the site online and use **Update offline copy** before disconnecting. Wait for readiness; do not assume the earlier cached version contains your latest changes.
 - [ ] Open the URL in a signed-out browser and on a phone to confirm judges can reach it without your Vercel account. Resolve any deployment-access gate before submitting.
 
 Vercel can deploy updates from the connected GitHub repository; verify the deployment corresponds to the commit you intend to present. [Vercel's GitHub guide](https://vercel.com/docs/git/vercel-for-github).
 
-## 5. Add Gemini only if the core walkthrough is working
+## 6. Treat Gemini as optional
 
-Give this a short time box of about ten minutes. Manual skill entry is already usable.
+The required offline work and Marathi translations need no AI key. With the deadline approaching, skip new Gemini setup if accounts, deployment or offline verification still need work. If it is already configured, give a live check at most five minutes. Manual skill entry is already usable.
 
 - [ ] Open [Google AI Studio API Keys](https://aistudio.google.com/apikey), sign in, and create/select an API key for your project.
 - [ ] Add it privately as `GEMINI_API_KEY` in `.env.local`, restart the local server, and add the same server-only variable to Vercel before redeploying.
@@ -146,16 +213,16 @@ Adjust these times to the actual clock, preserving the final buffer:
 
 | Time, IST | Finish this |
 | --- | --- |
-| 2:14–2:35 | Email choice, learner/supporter accounts and saved profiles |
-| 2:35–2:50 | Hosted request acceptance, refresh and privacy checks |
-| 2:50–3:00 | Fix observed blockers; optional Gemini only if time remains |
-| **3:00** | **Feature freeze**; only fix bugs affecting the demonstration |
-| 3:00–3:25 | Final checks, commit/push, Vercel deployment |
-| 3:25–3:45 | Test the deployed URL and rehearse the three-minute presentation |
-| 3:45–4:00 | Complete the submission form and verify all links/files |
+| **Now** | **Feature freeze.** Split jobs: owner handles accounts/deployment; teammate runs offline and language checks. |
+| Now–3:25 | Commit/push the finished version and deploy; prepare the two accounts and prove the request loop. Work in parallel where possible. |
+| 3:25–3:40 | Check the actual deployed URL: public access, live request, real Network → Offline reload, notes/export and Marathi. Fix blockers only. |
+| 3:40–3:50 | Rehearse the updated three-minute demonstration, including the required twist. Prepare a truthful fallback. |
+| 3:50–4:00 | Complete the submission form and verify repository/demo links. |
 | 4:00–4:10 | Buffer for upload, access or organizer issues |
 
 - [ ] Read [LIVE_JUDGING_GUIDE](LIVE_JUDGING_GUIDE.md) with your teammate and run it once with a timer.
 - [ ] Prepare the actual deployment URL and repository URL, and any pitch/video required by the organizer. Check the organizer's instructions; this guide does not assume a submission portal or file format.
+- [ ] Open the repository while signed out to confirm it is public and contains the final code. Open the demo without your Vercel login. URL validation checks link format; it does not prove access or functionality. Never submit localhost as a public demo link.
+- [ ] In the twist answer, describe offline caching, eight original exercises, local notes/export and English/Marathi learning. Do not claim a fully multilingual social network or offline messaging.
 - [ ] Submit before the deadline and keep the confirmation. A deployed site is not automatically a submitted entry.
 - [ ] Make sure your final claims match what actually passed: test accounts, sample catalog, self-reported skills, and live AI only if you observed it work.

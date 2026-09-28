@@ -199,6 +199,8 @@ def table_widths(headers: list[str]) -> list[float]:
         return [CONTENT_WIDTH * r for r in [0.08, 0.42, 0.40, 0.10]]
     if count == 4 and headers[0].lower() == "account":
         return [CONTENT_WIDTH * r for r in [0.10, 0.18, 0.29, 0.43]]
+    if count == 4 and headers[0].lower() == "time":
+        return [CONTENT_WIDTH * r for r in [0.10, 0.31, 0.33, 0.26]]
     if count == 2:
         first = headers[0].lower()
         second = headers[1].lower()

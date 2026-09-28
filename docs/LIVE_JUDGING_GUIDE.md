@@ -1,140 +1,224 @@
-# A clear three-minute STEMBridge demonstration
+# STEMBridge: prepare and present a clear live demonstration
 
-> **Twist update:** the announced requirement is offline support. It is implemented, with English/Marathi in the learning area as a bonus. Use the [OFFLINE_TWIST_GUIDE](OFFLINE_TWIST_GUIDE.md) for the 90-second twist segment, preparation and precise evidence. The production website was reloaded and used with its server stopped; full browser Network → Offline testing and the hosted account flow still need the participant check. The latest completed checkpoint here is 115 tests, TypeScript and build at 3:01 PM. This base script and its original PDF predate the twist; the addendum replaces its older “no twist supplied” answer. Keep the full presentation inside the judge's time allowance.
+**Updated for the announced offline twist, approximately 3:06 PM IST, 28 September 2026. Submission deadline: 4:10 PM IST.** This guide includes the English/Marathi learning bonus. Freeze new features now and use the remaining time for the submitted website, real-account checks and rehearsal.
 
-The main story is: **a woman exploring STEM chooses a goal, sees a useful learning gap, finds someone relevant, and agrees on a next step.** Keep the demonstration focused on that journey.
+STEMBridge is a **website for women exploring STEM**. The story is: **choose a goal, keep learning when the connection drops, save a useful question, and reconnect with someone who can help.** Show that complete journey. You do not need to install a native app.
 
-This guide reflects the build checked at approximately **2:28 PM IST, 28 September 2026**. The deadline is **4:10 PM IST**. Local checks pass; the real-account walkthrough, live Gemini and deployment must be demonstrated successfully before you claim they work.
+At the latest completed code checkpoint, **3:01 PM IST**, all **115 tests across 12 files**, TypeScript checks and the production build passed. In the production browser on port 3001, the website was prepared, its server was stopped, and the website reopened from its saved copy. Catalog reading, exercise use, editing notes, another reload, completion, Marathi and a downloaded UTF-8 notes file were checked. Marathi also displayed at a 390-pixel width without missing glyphs or horizontal overflow.
 
-## Prepare before judges arrive
+That is evidence of a working saved website. It is **not the same test as disabling every browser network connection**. The available browser automation did not expose that switch. The owner must still run the real browser **Network > Offline** check on the exact presentation URL, and verify the hosted learner-to-mentor flow before presenting that flow as proven.
 
-- [ ] Finish the account and deployment checklist in [OWNER_NEXT_STEPS](OWNER_NEXT_STEPS.md).
-- [ ] Open the learner account in Chrome and the supporter in Edge on the actual presentation URL. Sign in beforehand; do not spend judging time typing passwords.
-- [ ] Use a supporter who chose **Learn and mentor**, Data & AI, relevant skills and Online, and enabled both directory visibility and requests.
-- [ ] Have the learner's **Build your first ML project** goal ready. Know which skills this profile actually lists.
-- [ ] Have a fresh pending request ready, or know which fresh request you will send live. The same active request cannot be created twice; use a different relevant goal/help type after a rehearsal.
-- [ ] Keep a separate signed-out preview available if you want to show Priya's exact **3/7** example. Call Priya a fictional sample. A real account with different skills may show a different count.
-- [ ] Rehearse the browser switch, **Connections → Received requests → Refresh inbox**, **Accept request** and the learner's refreshed result.
-- [ ] Keep any fallback screenshots or recording from your own successful run clearly labelled as recorded evidence. Prepare them only after that run has actually succeeded.
+## 1. Prepare the exact website you will show
 
-## The three-minute run
+Use the [owner's next steps](OWNER_NEXT_STEPS.md) for accounts and deployment, and give independent testers the [teammate testing guide](TEAM_TESTING_GUIDE.md). The judging preparation below is complete on its own.
 
-| Time | What you show | What you say |
-| --- | --- | --- |
-| 0:00–0:25 | Home and the chosen learner/goal | “STEMBridge helps women exploring STEM turn an interest into a practical next step and find someone who can help. We focused on Data & AI and Robotics & Makers.” |
-| 0:25–0:55 | **See my plan** and the listed requirements | “This goal states what it needs. We compare those requirements with the skills the learner has confirmed. The uncovered skills lead to useful resources and practice.” |
-| 0:55–1:20 | One learning resource and one relevant member's full profile | “This person is relevant because of these skills and the learner's current goal. The learner can check the bio, support preferences and what help is offered before asking.” |
-| 1:20–1:45 | The real registered supporter's profile and request form | “Instead of a vague connection, I can ask for one specific kind of help.” Send the prepared message, or show the already-pending request if time is tight. |
-| 1:45–2:25 | Supporter browser: **Connections → Received requests**, **Refresh inbox**, **Accept request** | “This is a separate signed-in account. The recipient decides whether to accept and proposes a practical next action.” Enter the next step and accept. |
-| 2:25–2:45 | Learner browser: **Connections → Sent requests → Refresh inbox** | “The learner now sees the accepted request and the agreed next step. It remains after refresh because both accounts share the saved request.” |
-| 2:45–3:00 | Stay on the accepted record | “The prototype closes the gap between a goal, a useful person and a next action. Next we would test it with a small real community and improve safety, availability and curated opportunities.” |
+Write these down before rehearsal:
 
-Use an example request that names the task: “Could you review my first notebook's train/test explanation and help me choose one next exercise?” A possible reply is: “Write a short project outline and choose one dataset. We can review the scope together.”
+- Presentation URL: ____________________
+- Browser and browser profile: ____________________
+- Final network-offline test: Pass / Fail / Not tested
+- Real learner-to-mentor acceptance on this URL: Pass / Fail / Not tested
+- Presenter and person operating the second account: ____________________
 
-If the live demo uses collaboration after a guidance rehearsal, say **peer support** and use **Ask to collaborate**. Do not call the request mentorship if the selected type is collaboration.
+### Prepare the offline proof
 
-## Optional: use the first-step panel for the middle minute
+1. Open the **production website**, with internet working, in the browser you will use on stage. If demonstrating locally, use the production build and `http://localhost:3001`; normal `next dev` at port 3000 is not the offline-reload demonstration.
+2. Open **Offline learning**. On a narrow phone, the navigation label is **Offline**.
+3. Wait for **Ready on this device**. Use **Prepare offline** or **Update offline copy** if needed. A registration alone is not readiness; the required website files must finish saving.
+4. Open the array exercise, **Make sense of an array**. Enter a short note such as: `My mentor question: why is this array's shape (2, 3)?` Check **I finished this exercise**, then reload and confirm both remain.
+5. Switch the learning language to Marathi and back to English. Confirm the exercise changes language, the letters display properly, and the note and completion do not change. The rest of the website remains English.
+6. Use **Download my notes** and open the downloaded file. Check that it contains the words you actually entered, including any Marathi text. Keep a backup before deliberately signing out, changing accounts or signing in from preview.
+7. Run the real browser network test below. Do it on the **submitted URL**, not only on localhost.
+8. Reconnect after testing. Leave the page in English and ready for the timed demonstration. Leave the demonstration exercise unticked so you can mark it complete live. Keep a short note ready to add to. Know where the real network switch is; do not hunt for it during judging.
 
-**Implemented and checked locally at 2:28 PM IST.** **My Hub → Find my first step** can replace the 0:25–1:20 plan/profile walkthrough. It is the same story, not a second presentation.
+Preparation belongs to one **origin and browser profile**. Port 3000, port 3001 and a hosted HTTPS address have separate storage. Chrome and Edge have separate storage too. Prepare the exact address in the exact browser you intend to show. A successful localhost test does not prepare the hosted website.
 
-| Time within this minute | Show and explain |
-| --- | --- |
-| First 15 seconds | Choose one: **I'm starting out**, **I'm returning to STEM** or **I want a project partner**. “Different situations need different kinds of support.” |
-| Next 20 seconds | Show the actual next action and one resource. For returning learners: “We keep the skills she already brings and choose a next step from there.” For a beginner: “Start with one manageable action.” For project partners: “Find someone to build with.” |
-| Next 15 seconds | Show the suggested mentor or peer. Point out the matching reason and support preference. |
-| Final 10 seconds | Show the editable outreach and move to request review. “She controls the message and decides whether to send it.” Continue with the separate-account acceptance. |
+Do not clear site data, unregister the service worker or open a fresh incognito window on stage. That removes or bypasses the prepared copy. A first-ever offline visit cannot work because that browser has not downloaded the website yet.
 
-These choices need no AI and stay in the panel rather than becoming public profile information. If there is no suitable local match, the panel may point to [Women in Machine Learning](https://www.wiml.org/) or [Women in Robotics chapters](https://www.womeninrobotics.org/chapters/). Describe these as external resources, not partners, automatic memberships or guaranteed access to mentors.
+### Do the real network test before judging
 
-## Small details that strengthen the demonstration
+1. With the prepared website open, press **F12** or **Ctrl+Shift+I** in Chrome or Edge.
+2. Open **Network**. Change the throttling dropdown from **No throttling** to **Offline**. Use this actual browser control, not a script that only changes an online/offline flag.
+3. Use a normal reload, **Ctrl+R**. Do not clear storage or use a force reload that bypasses the service worker.
+4. Confirm the interactive website reopens. A browser connection-error page is a failure. A simple “connect once” fallback is not proof that the full website is ready.
+5. Open an exercise. Add `Written with browser networking disabled.` to the note and change its completion tick.
+6. Reload normally again. Confirm the new sentence and tick remain. Show the explanation, switch English/Marathi and download the note while still offline.
+7. Try reading the catalog. An external tutorial may fail offline; it is not part of the saved exercises.
+8. If using a signed-in account, confirm only that account's saved plan appears. The live directory and private inbox must not be presented as current offline data. Account writes and connection requests must ask for internet or stay disabled.
+9. Restore **No throttling**. Let the live workspace refresh. Confirm reconnecting did not send a request, upload notes or perform any queued account action.
 
-Choose one or two if they fit the time; do not tour every page:
+For localhost, turning off Wi-Fi alone is weak evidence: the browser can still reach a server on the same computer. The completed server-stopped test proves the page did not need its website server, but the real browser Offline setting also checks the broader disconnected experience. Keep those claims separate.
 
-- **The plan changes:** in Priya's sample, confirming NumPy changes 3/7 to 4/7 and removes that gap/resource. Explain that you are demonstrating a changed self-report, not that clicking a checkbox teaches a skill. Restore the sample afterward.
-- **Search respects preferences:** search a skill or member name, combine with Online or a catalog category, then clear the search. Explain why the remaining result fits.
-- **Two distinct pathways:** switch the sample preview to Aisha to show the robotics goal and different resources. Label this a preview switch; it is not the real-account handoff.
-- **Optional AI, at most ten seconds:** only if a live response was tested, show a suggestion and its quoted evidence in **My profile**. Say the learner confirms it. Keep the main story on the goal and human connection.
+### Prepare the human connection, only if it has passed rehearsal
 
-## Explain the implementation in plain language
+- Use two emails you control. Sign in beforehand: learner in Chrome, supporter in Edge, both on the presentation URL. Do not type passwords during judging.
+- The supporter should choose **Learn and mentor**, the relevant domain and skills, Online support, directory visibility and incoming requests.
+- Use the learner's **Build your first ML project** goal, or another goal you have rehearsed. Read the account's actual skill count; a real account need not show the sample's 3/7.
+- Have one **real pending request** ready from learner to supporter. Open the supporter's **Connections > Received requests** before presenting. Use **Refresh inbox** if necessary.
+- Prepare this short next step for acceptance: `Explain your two array totals and write one question. We can review the next exercise together.` The supporter must still explicitly accept.
+- Rehearse switching browsers, accepting, then returning to the learner's **Connections > Sent requests > Refresh inbox**. Confirm the accepted result survives reload.
+- A rehearsal may consume the pending request. Do not try to send an identical active request twice. Use another relevant goal/help type or another clearly labelled test case. Do not delete records just to pretend the same action is fresh.
+- If accounts are not ready, use the honest preview branch below. Prepare its separate browser profile ahead of time. Stay in that preview for the demonstration; signing into an account clears preview notes.
 
-“Next.js runs the website. Supabase manages sign-in and shared records. Public profiles are opt-in; private learner information is kept separately. The database allows only the two people involved to read a request, and only the recipient to accept it. Ordinary matching code compares confirmed skills with the goal. Gemini, if connected, helps draft a profile from the learner's own description.”
+Sign in shortly before the demonstration. A valid existing session can open its own saved account plan offline; a saved snapshot is not a new login. If the session expires automatically, account notes remain on this device but are **locked from preview**. Reconnect and sign into the **same account** to recover them. An explicit sign-out or a different account signing in clears the private device notebook and account copy. Signing in from preview also clears the preview notebook. Download needed work before any deliberate identity change. On a shared computer, sign out when finished.
 
-If asked for more technical detail: there are five tables for profiles, learner state, circles, memberships and connection requests. Database row policies control visibility, and restricted functions control request creation, response and cancellation. A real PostgreSQL test suite runs the actual schema locally with the external Auth boundary emulated.
+## 2. The three-minute main demonstration
 
-## Questions you are likely to hear
+Use this run only after the exact URL has passed both the network-offline test and the real-account rehearsal. It totals **180 seconds**. The required twist receives **70 seconds of offline proof**, followed by a **10-second Marathi bonus**. Skip extra page tours.
 
-**Why women in STEM?**
+| Time      | What you show                                                                                    | What you say or do                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0:00-0:20 | Learner's My Hub and chosen goal                                                                 | “STEMBridge helps women exploring STEM turn an interest into a useful next step and find someone who can help. Our two pathways are Data & AI and Robotics & Makers.”                                                                                                                                                                                                                                                                          |
+| 0:20-0:45 | **See my plan**, or one **Find my first step** path                                              | “We start with her goal and the skills she already brings. We identify one manageable next action and a relevant kind of support.” Point to one gap and one useful exercise. Use only one panel.                                                                                                                                                                                                                                               |
+| 0:45-1:55 | **Offline learning**, readiness, real Offline setting, reload, exercise, note and another reload | “Our assigned twist was offline support. This browser has prepared the website. I am now disabling networking and reloading.” Show the real setting, reload, open the exercise, reveal its explanation, add a short mentor question, tick completion, then reload again. Point to the saved text and tick: “She can keep practising and prepare a useful question without internet. Completion records practice; it does not certify a skill.” |
+| 1:55-2:05 | Switch to Marathi while still offline                                                            | “We also added English and Marathi to this learning area. It works offline, and her own notes stay exactly as written.” Show the changed lesson and unchanged note. Switch back to English if convenient.                                                                                                                                                                                                                                      |
+| 2:05-2:45 | Reconnect; supporter accepts the prepared real request; learner refreshes                        | Restore the actual network setting. “Connecting with people needs internet. This is a separate account receiving her request.” In the supporter browser, accept the pending request with the prepared next step. Return to the learner, refresh sent requests and show the accepted action.                                                                                                                                                    |
+| 2:45-3:00 | Accepted next step and closing sentence                                                          | “The learning continues between connections, and the conversation starts from a specific task. Next we would test usefulness with women learners and mentors in a small community pilot.”                                                                                                                                                                                                                                                      |
 
-“The challenge is about access to learning support and connections for women exploring STEM. We offer different starting, returning and collaboration paths, preserve existing skills, make the first request editable, keep profiles opt-in, and connect to women-in-STEM communities. These choices can help others too; we do not claim they are exclusive to women. We would validate their usefulness with women learners and mentors in a small pilot. We have not measured impact yet, and we do not infer ability from gender.”
+The request should be specific: `Could you review my array exercise and explain why its shape is (2, 3)?` If the demonstrated type is collaboration, call it peer collaboration. Do not describe every request as mentorship.
 
-**How is this better than an ordinary directory?**
+The request is prepared beforehand to fit the time limit; say so if asked. Notes are not silently sent to the supporter. The learner chooses what to include in a request. There is no automatic offline request queue.
 
-“A directory starts with browsing people. Our demonstrated journey starts with what the learner wants to do, identifies relevant requirements and resources, and connects that goal to a person and an agreed action. We are showing that workflow, not claiming that no other platform has similar features.”
+If reconnecting or accepting does not work promptly, use the failure wording below. Do not spend the last minute repeatedly clicking. A previously verified accepted record or recording may support the explanation if clearly labelled as earlier evidence.
 
-**How does matching work? Is AI choosing who deserves help?**
+## 3. The 90-second short demonstration or account fallback
 
-“Matching uses visible code rules: domain, directory visibility, willingness to receive requests, Online preference and relevant confirmed skills. We show the reason for the recommendation. It does not decide deservingness, hiring eligibility or admission.”
+This totals **90 seconds**. Use it when the judging slot is shorter, or when real accounts have not passed the hosted walkthrough. The offline proof still has to be prepared and tested on the URL shown.
 
-**What does 3/7 mean?**
+| Time      | What you show                                                  | What you say or do                                                                                                                                                                                                                                                                                |
+| --------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0:00-0:15 | Goal and labelled sample preview                               | “STEMBridge connects a STEM goal with useful learning and support. This is a fictional sample profile. Our required twist is offline support.”                                                                                                                                                    |
+| 0:15-0:25 | Offline learning and **Ready on this device**                  | “The browser has saved the website and its original practice exercises.”                                                                                                                                                                                                                          |
+| 0:25-0:45 | Set real networking to Offline and reload normally             | “The website reopens even without a connection.” Show that it is interactive, not just a screenshot or a fallback notice.                                                                                                                                                                         |
+| 0:45-1:05 | One exercise, explanation, note, completion and another reload | Add a brief question, tick completion, reload and show that the work remains. “Learning can continue before the next mentor conversation.”                                                                                                                                                        |
+| 1:05-1:15 | Marathi, with the same note still visible                      | “This learning area also supports Marathi offline. User notes are never translated automatically.”                                                                                                                                                                                                |
+| 1:15-1:30 | Reconnect and explain the online continuation                  | “Requests and acceptance use separate online accounts. That flow is implemented, but we have not completed the hosted account demonstration.” If it was verified but omitted for time, say instead: “We verified the two-account flow separately; I can show that evidence after this short run.” |
 
-“Three of this sample goal's seven listed requirements match the learner's confirmed skill IDs. These are self-reported skills. It is not a qualification, employability score or certificate.”
+Never act as though a sample profile received a message. Do not substitute a local mocked test for a hosted account demonstration. A clear boundary is more credible than an invented success.
 
-**What does AI actually do?**
+## 4. Optional details for questions, not extra minutes
 
-“Only optional profile suggestions from text the learner chooses to send to Gemini. We restrict the skill vocabulary and check quoted evidence, including negative statements. The learner still reviews and confirms the result. Matching and request permissions do not depend on AI.” If the key remains absent, add: “The endpoint is implemented and tested with mocked responses; we have not demonstrated a live Gemini response.”
+Use these only if a judge asks or invites a longer demonstration:
 
-**Are these real people and opportunities?**
+- **Different needs:** **Find my first step** offers starting out, returning to STEM and finding a project partner. Returning support preserves existing skills. The introduction is editable and reviewed before sending.
+- **Clear matching:** show why a person fits the goal and confirmed skills, plus their support preferences. Visibility and willingness to receive requests are explicit choices.
+- **Two pathways:** Aisha's labelled robotics sample has different needs and exercises from Priya's Data & AI sample.
+- **Self-reported progress:** confirming NumPy changes Priya's sample from 3/7 to 4/7. That changes her self-report; a click does not teach or certify a skill. An offline exercise-completion tick does not make this change.
+- **Useful export:** open the text file produced by **Download my notes** and show the learner's actual words. Keep any private notes out of the projected view.
+- **Optional Gemini:** spend at most ten seconds on it, and only after a live response has been tested. It is not needed for offline exercises, Marathi, matching or requests.
 
-“The preview profiles and opportunity listings are labelled fictional or illustrative. Our demonstration accounts are controlled test accounts. The official learning resources link to real documentation. We do not claim an active mentor network, verified expertise, current internships or real applications.”
+External links to [Women in Machine Learning](https://www.wiml.org/) and [Women in Robotics chapters](https://www.womeninrobotics.org/chapters/) are independent community resources. They are not partnerships, automatic memberships or guaranteed mentor access. They require internet.
 
-**Is the connection real?**
+## 5. Explain the implementation in plain language
 
-After a successful hosted walkthrough: “Yes, these two separate test accounts share an actual saved request and response in Supabase. We checked refresh persistence.” Before that success: “The request flow is implemented and locally tested, but we have not completed the hosted account demonstration.” There is no chat or email notification.
+“Next.js runs the website. Supabase manages sign-in and shared records. Ordinary matching rules compare confirmed skills with the goal. A service worker saves the anonymous public website and the files it needs to reopen. Our eight practice exercises and both reading languages are bundled with those files. Notes and completion stay in this browser. A separate saved account copy contains only the current account's own plan information.”
 
-**What protects privacy?**
+“Before showing offline readiness, we check that the required HTML, JavaScript, styles and fonts were saved. API calls, sign-in responses, Supabase responses, the private inbox and external websites are not put in that service-worker cache. A new website version is prepared completely before replacing the last usable copy. If an update fails, the last complete copy can still work.”
 
-“Profiles begin hidden and closed to requests. Members explicitly opt into the directory. Private learner state belongs to its owner; requests belong to their participants. Visible-member counts exclude hidden profiles.” Describe the actual hosted checks you completed. Local SQL tests are evidence of the rules, not a security certification.
+“The account snapshot does not copy authentication tokens into itself and does not grant permission to sign in. The normal Supabase browser session remains separate. A missing or expired session cannot unlock another account's plan or notes. We do not queue cloud writes; reconnecting does not send anything on the user's behalf.”
 
-**Are emails and mentors verified?**
+For database detail, profiles, learner state, circles, memberships and requests are separate tables. Row policies restrict private records; restricted database functions control request creation, acceptance, decline and cancellation. The local PostgreSQL tests exercise the actual schema with the external Auth boundary emulated. That is useful permission evidence, not a security certification or proof of the deployed configuration.
 
-“Mentor skills and credentials are self-described.” If confirmation was turned off for the prototype, add: “These demonstration emails are unverified too.” If it stayed on and was tested, say that email ownership was confirmed; this does not verify expertise or identity more broadly.
+## 6. Questions judges are likely to ask
 
-**Why only two domains? What would scale next?**
+### Why women in STEM? Is it just the branding?
 
-“Two domains let us show different, coherent pathways within the deadline. We would first test usefulness with a small community, then improve mentor availability, reporting/blocking, curated real opportunities and learning-step progress. Expanding the catalog alone would not prove the recommendations are useful.”
+“The challenge concerns access to mentors, peers and opportunities for women exploring STEM. Our paths distinguish starting, returning and collaboration needs. We preserve existing skills, help compose a specific first request, make visibility opt-in and point to women-in-STEM communities. Offline practice and Marathi add ways to keep preparing between online conversations. These choices can help other people too; we do not infer ability from gender. A pilot with women learners and mentors would tell us which barriers we actually reduce. We have not measured impact yet.”
 
-**How did you test it?**
+### What did you do for the announced twist?
 
-“At the 2:28 PM checkpoint, 72 tests passed: 15 matching, 10 PostgreSQL permissions/lifecycle, 22 mocked AI endpoint, four discovery, 13 workspace-provider, two screen-flow and six first-step planner tests. TypeScript, production build and desktop/mobile checks also passed.” Add any later verified result. State separately whether your deployed two-account and third-account privacy checks passed.
+“Our assigned requirement was offline support. After one successful preparation, the website reopens with its catalog and eight original exercises. Learners can read instructions, reveal explanations, write notes, mark practice complete and export their notes without internet. A valid current account can also read its own saved plan. We added English and Marathi to the learning area as a bonus.”
 
-**What changed during debugging?**
+### Is the whole social network offline?
 
-“We fixed consecutive saved-state updates, repeated membership changes, drafts crossing account switches, and AI evidence that said the learner did not know a skill. Regression tests cover those cases. No SQL migration was needed for those fixes.”
+“No. Live people, the connection inbox, sign-in, account changes, membership changes, requests and replies require internet. We do not present stale messages or availability as live. The offline value is continued learning and preparation for the next conversation.”
 
-**What did you do for the twist?**
+### What happens on the first visit, or when the website changes?
 
-Only name an actual announced requirement and an implemented, checked response. No twist had been supplied at this guide's checkpoint. If none arrived, say so; do not invent one.
+“This browser needs one online visit and a completed preparation. We show readiness after checking the files, not merely after installing a worker. Updates are committed only after the new bundle is complete; failed updates preserve the last complete bundle. Browser storage can be cleared or evicted, so offline availability is not a permanent guarantee.”
 
-**What is the business model or impact?**
+### Where are the notes and account data? What happens on sign-out?
 
-“We have not validated a business model or measured outcomes. A reasonable next experiment is a small college/community pilot measuring whether learners find useful help and complete the agreed next action, with participants' consent.” Present that as a proposed experiment, not a result.
+“Notes are local to this browser and do not sync across devices. They can be exported. The saved account copy contains only the owner's own profile and plan information, not other members or the private inbox. Explicit sign-out or a different account signing in clears the private device notebook and snapshot. Signing into an account from preview also clears preview notes. Automatic session expiry instead locks account notes from preview; the same account can recover them after signing in online. On a shared device, export needed work and sign out.”
 
-## When a service fails during judging
+Do not claim local browser storage is encrypted against someone who controls the computer. The project provides account boundaries within the website; it is not a substitute for a trusted device.
 
-| Problem | Honest response and next action |
-| --- | --- |
-| A request does not appear | Click **Refresh inbox** once and check the correct incoming/sent tab. If it still fails, show a previously verified accepted record or labelled recording and explain the live failure. |
-| Authentication or network fails | Use the labelled sample preview to show goal → requirements → resources → relevant people. State that the live account handoff is unavailable in this attempt. |
-| Gemini errors or has no key | Use manual skill selection. Explain the optional assistance and do not spend the presentation debugging it. |
-| Deployment is unavailable | If allowed by the event, present the working local site and state it is local. Give judges only links you have actually checked. |
+### Does reconnecting upload the notes or send pending requests?
 
-Avoid describing sample profiles as real members, test expertise as verified, saved resources as learned skills, or a planned feature as built. A useful prototype with clear evidence is a stronger presentation than an unsupported claim.
+“No. There is no background send queue. Notes remain on the device. The learner reviews a message and explicitly sends it while online. This avoids duplicate or accidental outreach.”
 
-## Just before submission
+### Are you caching external courses?
 
-- [ ] Time one complete run to three minutes.
-- [ ] Confirm the browser shows the intended learner and supporter, not a Supabase admin page.
-- [ ] Keep passwords, API keys and private dashboard details out of the screen share.
-- [ ] Confirm the submitted website/repository links open for someone outside your accounts.
-- [ ] State what works, what uses sample content and what still needs verification.
-- [ ] Submit through the organizer's required channel before **4:10 PM IST**, with a buffer for upload problems.
+“No. The eight short exercises are original STEMBridge material, included in the website. The full official tutorials are separate links and still need internet. We are not claiming to download entire external courses.”
+
+### Is the entire website multilingual?
+
+“The bonus covers the offline learning area in English and Marathi: authored lessons, instructions, explanations, prompts and controls. Account screens, catalog listings and other users' messages are not fully translated. The language choice is saved locally, and changing it never rewrites a learner's notes.”
+
+### How does matching work? What does 3/7 mean?
+
+“Matching uses understandable rules: domain, directory visibility, willingness to receive requests, support preferences and relevant confirmed skills. Three of seven means three of this sample goal's seven listed requirements match the learner's self-reported skill IDs. It is not a hiring score, qualification or certificate. Neither matching nor exercise completion decides who deserves help.”
+
+### What does Gemini do? Do you need an API key for this demonstration?
+
+“Gemini is optional profile assistance. With the learner's consent, it can suggest supported skills from her own description. The learner reviews and confirms them. The offline pack, Marathi, matching and connection workflow need no Gemini key.”
+
+If live Gemini has not been verified, add: “Its endpoint is implemented and tested with mocked responses; we are not claiming a verified live Gemini demonstration.” Do not improvise an API-key setup on stage.
+
+### Are the people, opportunities and connections real?
+
+“Preview people and opportunity listings are fictional or illustrative and labelled accordingly. Our live demonstration uses controlled test accounts. Official documentation links are real sources. We do not claim a populated mentor network, verified expertise, current internship openings or real applications.”
+
+After a successful hosted account rehearsal: “These two separate accounts share a real saved Supabase request and acceptance; we checked refresh persistence.” Before that success: “The flow is implemented and locally tested; the hosted account demonstration is still unverified.” There is no chat, call or email-notification feature.
+
+### What did you test, and what remains?
+
+“At 3:01 PM, 115 tests across 12 files, TypeScript and the production build passed. The checks include matching, database permissions, account boundaries, request lifecycle, offline caching, snapshots, notes and language behavior. The production browser also reopened the website with its server stopped, preserved edited notes and completion, displayed Marathi and exported the actual UTF-8 notes. The 390-pixel layout was checked.”
+
+Then state the owner's actual final results: “On this submitted URL, we also passed the real browser Offline test and the two-account flow” **only if both were performed successfully**. Otherwise name the missing check. Tests, server-stopped evidence and a deployed network-offline walkthrough are different evidence.
+
+### Why no offline messaging, chat or calls? What would you add next?
+
+“We prioritized a complete learning-to-support journey within the deadline. Offline message queues introduce stale-recipient, duplicate-send and conflict problems. Calls add technical complexity without proving that a learner receives useful help. Next we would pilot the workflow, improve reporting and blocking, verify mentor availability, curate real opportunities and measure completion of agreed next steps. We would add cloud notebook sync only with clear consent and conflict handling.”
+
+### What is your impact or business model?
+
+“Neither is validated yet. A practical next experiment is a small college or community pilot, with consent, measuring whether learners find useful help and complete an agreed next action. That is our proposed evaluation, not an outcome we have already achieved.”
+
+## 7. If something fails during judging
+
+| Problem                                              | Honest response and next action                                                                                                                                                                                                         |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Offline preparation is incomplete                    | Stay online and retry preparation before the demonstration. Do not call a fallback page a working offline website. If stage time has started, state the failure and show only earlier successful evidence clearly labelled as recorded. |
+| Full offline reload fails on the submitted URL       | Name the URL-specific failure. You may show the verified local production run if the rules allow, but state that it is local. Do not imply the hosted offline requirement passed.                                                       |
+| Account session expires offline                      | Explain that the account view is locked. Reconnect and sign into the same account to recover account notes. Do not create a different account or clear the notebook as a supposed recovery step.                                        |
+| Notes cannot be saved                                | Keep the visible text and download or copy it. Read the storage warning. Do not claim reload persistence without checking it.                                                                                                           |
+| An update cannot be checked but the saved copy works | Explain the displayed saved-copy message and continue with the prepared version. Retry the update after reconnecting.                                                                                                                   |
+| A request is missing or acceptance fails             | Refresh the correct inbox once. If it still fails, use a previously verified accepted record or labelled recording, or state that the live account handoff is unavailable. Never show a sample as the recipient of a real request.      |
+| The network does not return promptly                 | Finish with the offline work and explain the intended online continuation. Do not promise that a request was queued or sent.                                                                                                            |
+| Marathi glyphs fail on the presentation device       | Switch to English, acknowledge the device-specific rendering issue and keep the required offline demonstration. Do not spend the slot debugging fonts.                                                                                  |
+| Gemini has no key or errors                          | Use manual skills. Offline and Marathi do not need Gemini.                                                                                                                                                                              |
+| The hosted site is unavailable                       | Use a prepared local production website only if event rules allow, and call it local. Give judges only links that have actually been checked.                                                                                           |
+
+Do not fake offline mode by changing a label or an online flag. Do not describe a screenshot as an interactive reload, a plan as an implemented feature, or a sample mentor as a verified person.
+
+## 8. Final rehearsal and submission
+
+From approximately **3:06 PM**, use the remaining time in this order: final submitted-URL preparation and tests, one timed rehearsal, fixes only for actual blockers, then submission. Aim to submit by **4:00 PM** so the **4:10 PM** deadline has a buffer. If setup takes longer, drop optional demonstration details instead of adding new features.
+
+- [ ] The exact submitted URL opens for someone outside the owner's account.
+- [ ] That URL is prepared in the presentation browser and shows readiness.
+- [ ] The real browser Offline setting, normal reload, note edit and second reload passed on that URL.
+- [ ] The notebook download opens and contains the actual latest text.
+- [ ] Marathi displays correctly; switching language preserves notes and completion.
+- [ ] Any live two-account claim is backed by a successful rehearsal on that URL.
+- [ ] The pending request, supporter browser and next-step text are ready if using the three-minute main run.
+- [ ] A fresh or recently refreshed session avoids expiry during the short demonstration.
+- [ ] The presenter rehearsed the full run in 180 seconds, or the short branch in 90 seconds.
+- [ ] The actual network setting is restored to online after rehearsal.
+- [ ] No passwords, API keys, admin dashboards or private messages are visible in the presentation.
+- [ ] Sample content, test accounts and any recorded evidence are clearly labelled.
+- [ ] Website, repository and any required video or presentation links are correct and accessible.
+- [ ] The team submits through the organizer's required channel before **4:10 PM IST**.
+
+The strongest finish is the evidence: the learner's work survives losing a connection, her question becomes more specific, and a real supporter can agree on the next step when they are online again.
