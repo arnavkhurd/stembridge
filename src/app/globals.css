@@ -349,6 +349,9 @@ summary:focus-visible {
   gap: 10px;
   margin-top: 48px;
 }
+.nav-label-short {
+  display: none;
+}
 .nav-item {
   display: flex;
   align-items: center;
@@ -1789,6 +1792,12 @@ details.resource-link p {
   .nav-item.active {
     background: transparent;
     color: #3d6149;
+  }
+  .nav-label-full {
+    display: none;
+  }
+  .nav-label-short {
+    display: inline;
   }
   .nav-item.active:before {
     content: "";

@@ -10,3 +10,5 @@ test-results/
 .sites-runtime/
 .npm-cache/
 .artifacts/
+tmp/pdfs/
+__pycache__/

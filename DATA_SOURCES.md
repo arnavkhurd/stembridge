@@ -24,6 +24,14 @@ The tiny classifier, circuit planning, sensor build and prototype-sharing entrie
 
 ## Requirements and matching
 
+### External women-in-STEM communities
+
+The first-step panel links to [Women in Machine Learning](https://www.wiml.org/) for its mentorship and networking resources, and [Women in Robotics chapters](https://www.womeninrobotics.org/chapters/) for local chapters and an online community. Both official pages were opened on **28 September 2026**. These are independent external organisations, not STEMBridge partners or in-app mentors. Check their own membership terms, eligibility and event availability; opening a link does not join either community.
+
+### First-step choices
+
+Starting out, returning to STEM, and finding a project partner change the proposed action, relevant mentor/peer role, and editable introduction. The planner uses the current goal and existing confirmed skills. It never treats a career break as lost competence, never confirms skills automatically, and does not require AI. It selects a resource only when the first missing requirement and the resource's stated prerequisites match; otherwise it explains the gap. Choices and unsent drafts are temporary panel state. Only an explicitly reviewed and submitted request is stored and shared with its recipient.
+
 Skill requirements attached to sample opportunities are illustrative product data, not research about the complete job market. All listed requirements are counted equally in this prototype. Coverage uses confirmed self-report and a small canonical skill vocabulary; it does not independently assess proficiency.
 
 The suggested path uses curated foundation-before-practice ordering. It is a helpful learning sequence, not a proven shortest route. Resource prerequisites remain visible, unresolved gaps remain explicit, and saving a link does not add a skill.

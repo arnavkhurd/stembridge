@@ -10,7 +10,24 @@ Search opportunities by topic or skill, search members by their public profile i
 
 The sample preview uses fictional people and illustrative opportunities. Live networking requires a configured Supabase project and real registered test accounts; sample cards are not a live community. The current verification record is in [BUILD_STATUS.md](BUILD_STATUS.md).
 
+## Hackathon twist: keep learning offline
+
+**Implemented:** prepare this browser once, then reopen the website, catalog and eight original STEM exercises without the website server. Notes and practice completion save on this device, survive reload, and export as a text file. The learning area is available in **English and Marathi**; this is not a translation of the entire website. Neither feature needs Gemini or another SQL migration.
+
+A previously loaded account can read its own saved profile, goal, skills and bookmarks while its Supabase session remains unexpired. The saved copy is labelled and contains no directory or inbox. Account changes, sign-in and communication need internet; no requests queue for later. Device notes do not sync to the cloud and are cleared on explicit sign-out or a different account signing in. Automatic session expiry preserves the notes but locks them until the same account signs in again; preview cannot read, edit or export them. Download important work before an intentional sign-out.
+
+Use a production build for the offline demonstration:
+
+```powershell
+npm run build
+npm run start -- -p 3001
+```
+
+Open [http://localhost:3001](http://localhost:3001), choose **Offline learning**, and wait for **Ready on this device**. Prepare the exact deployed URL separately. The [offline twist guide](docs/OFFLINE_TWIST_GUIDE.md) contains preparation, real browser-network testing, judging steps and honest feature boundaries. The earlier three PDFs predate this twist; use the separate twist addendum with them.
+
 ## Run locally
+
+**New:** My Hub → **Find my first step** offers different actions for starting out, returning to STEM and finding a project partner. It checks learning prerequisites, preserves existing skills and carries an editable introduction into request review. The [owner checklist](docs/OWNER_NEXT_STEPS.md), [team testing guide](docs/TEAM_TESTING_GUIDE.md) and [live judging guide](docs/LIVE_JUDGING_GUIDE.md) explain setup, independent testing and presentation. Printable copies are in `output/pdf/`.
 
 Install a current supported Node.js LTS release and npm, then run these commands from the project folder:
 
@@ -60,13 +77,13 @@ npm run start
 
 The test suite covers requirement comparison, data integrity, online-only filtering, matching reasons and distinct pathways. It also executes the actual SQL schema in PGlite PostgreSQL to check row permissions, signup initialization, request transitions and forbidden actions. The external Supabase Auth boundary is emulated in these local tests. The two-account browser flow and third-account hosted privacy checks are documented in [docs/RLS_CHECKS.sql](docs/RLS_CHECKS.sql); local tests do not substitute for those hosted checks.
 
-**Verification:** all 65 tests across six files, TypeScript and the production build passed at approximately 14:08 IST on 28 September 2026; `git diff --check` found no whitespace errors. Desktop and 390px mobile browser checks passed for combined search/filter results, empty results and clearing search, member details and sign-in handoff, consecutive bookmarks surviving reload, and confirmed-skill changes updating coverage and the suggested resources. There was no horizontal page overflow, and browser error logs were empty. The audit also fixed queued state writes, repeated membership changes, account draft isolation and negated AI skill evidence; no SQL migration was needed. Hosted REST connectivity and anonymous-access denial pass; authenticated Supabase/request lifecycle, live Gemini and deployment remain pending verification.
+**Verification:** all **115 tests across 12 files**, TypeScript and the production build passed at approximately **15:01 IST on 28 September 2026**. In the production browser at port 3001, the prepared website remained interactive after its server process was stopped: reload, catalog/details, exercise entry, edited notes surviving a second reload, Marathi preference, notes/completion and text export were checked. The downloaded Marathi-note file was verified on disk at approximately 14:53. At 390px width there was no horizontal overflow and Marathi letters rendered correctly. This proves the cached website works with its server unavailable; full browser **Network → Offline** testing and the hosted URL still need the guided participant check. Automated tests separately cover `navigator.onLine === false`, blocked writes, session expiry and account isolation. Hosted REST connectivity and anonymous-access denial pass; authenticated Supabase/request lifecycle, live Gemini and deployment remain pending verification.
 
 See [JUDGE_NOTES.md](JUDGE_NOTES.md) for the demonstration, [DATA_SOURCES.md](DATA_SOURCES.md) for provenance, and [BUILD_STATUS.md](BUILD_STATUS.md) for actual verification outcomes and remaining setup. [The feature roadmap](docs/FEATURES.md) separates implemented features, useful later additions and work to avoid before the updated **4:10 PM IST** deadline.
 
 ## Optional Vercel deployment
 
-1. This workspace already has `origin` configured as [arnavkhurd/stembridge](https://github.com/arnavkhurd/stembridge) and is on `main`, with local commit `5186322` (`first commit`) and uncommitted changes at the latest inspection. Reuse that repository and remote. This local evidence does not confirm that the latest changes were pushed or deployed.
+1. This workspace already has `origin` configured as [arnavkhurd/stembridge](https://github.com/arnavkhurd/stembridge) and is on `main`, with local commit `40e2f37` (`second commit, major features added, prod ready build`) and uncommitted changes at the latest inspection. Reuse that repository and remote. This local evidence does not confirm that the latest changes were pushed or deployed.
 2. In the project terminal, run the following after your final checks. Before committing, confirm `.env.local`, `node_modules` and `.next` are absent from the staged-file list; `.env.example` is safe because it contains no key values.
 
 ```powershell

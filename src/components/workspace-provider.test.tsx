@@ -3,6 +3,15 @@ import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { sampleLearners } from "../lib/data";
+import {
+  emptyNotebook,
+  readOfflineNotebook,
+  saveNotebookEntry,
+} from "../lib/offline-notebook";
+import {
+  OFFLINE_WORKSPACE_KEY,
+  saveOfflineWorkspace,
+} from "../lib/offline-workspace";
 
 const mocks = vi.hoisted(() => ({ getClient: vi.fn() }));
 vi.mock("@/lib/supabase/client", () => ({
@@ -28,7 +37,10 @@ const deferred = <T,>() => {
   return { promise, resolve };
 };
 
-function fakeSupabase(initialUser: TestUser | null = { id: "account-a" }) {
+function fakeSupabase(
+  initialUser: TestUser | null = { id: "account-a" },
+  expiresAt = Math.floor(Date.now() / 1000) + 3600,
+) {
   const rows: Record<string, Row[]> = {
     profiles: ["account-a", "account-b"].map((id, index) => ({
       ...sampleLearners[index].profile,
@@ -48,7 +60,7 @@ function fakeSupabase(initialUser: TestUser | null = { id: "account-a" }) {
   let user = initialUser;
   let listener: (
     event: string,
-    session: { user: TestUser } | null,
+    session: { user: TestUser; expires_at?: number } | null,
   ) => void = () => undefined;
   const operations: Operation[] = [];
   const beforeQuery = vi
@@ -139,7 +151,7 @@ function fakeSupabase(initialUser: TestUser | null = { id: "account-a" }) {
       return { data: { subscription: { unsubscribe() {} } } };
     },
     getSession: vi.fn(async () => ({
-      data: { session: user ? { user } : null },
+      data: { session: user ? { user, expires_at: expiresAt } : null },
       error: null,
     })),
     signOut: vi.fn(async () => {
@@ -153,9 +165,12 @@ function fakeSupabase(initialUser: TestUser | null = { id: "account-a" }) {
     rows,
     operations,
     beforeQuery,
-    emit(next: TestUser | null) {
+    emit(next: TestUser | null, nextExpiresAt = expiresAt) {
       user = next;
-      listener(next ? "SIGNED_IN" : "SIGNED_OUT", next ? { user: next } : null);
+      listener(
+        next ? "SIGNED_IN" : "SIGNED_OUT",
+        next ? { user: next, expires_at: nextExpiresAt } : null,
+      );
     },
   };
 }
@@ -181,6 +196,10 @@ const writes = (db: ReturnType<typeof fakeSupabase>) =>
 beforeEach(() => {
   vi.clearAllMocks();
   window.localStorage.clear();
+  Object.defineProperty(navigator, "onLine", {
+    configurable: true,
+    value: true,
+  });
   Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
   mocks.getClient.mockReturnValue(null);
 });
@@ -464,5 +483,340 @@ describe("authentication races keep account data separate", () => {
     expect(workspace.preview).toBe(true);
     expect(workspace.profile?.id).toBe("preview-learner");
     expect(localStorage.getItem("stembridge.preview.v1")).toBeNull();
+  });
+});
+
+function seedOfflineAccount(id = "account-a") {
+  return saveOfflineWorkspace(
+    { ...sampleLearners[0].profile, id, is_demo: false },
+    {
+      ...sampleLearners[0].state,
+      user_id: id,
+      saved_ids: ["first-ml-project"],
+    },
+  );
+}
+
+async function setConnected(online: boolean) {
+  await act(async () => {
+    Object.defineProperty(navigator, "onLine", {
+      configurable: true,
+      value: online,
+    });
+    window.dispatchEvent(new Event(online ? "online" : "offline"));
+  });
+}
+
+describe("offline workspace boundaries", () => {
+  it("restores only the session owner's plan and saved items without querying the network", async () => {
+    const savedAt = seedOfflineAccount();
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await setConnected(false);
+    await mount();
+    expect(workspace.ready).toBe(true);
+    expect(workspace.offline).toBe(true);
+    expect(workspace.offlineSnapshot).toBe(true);
+    expect(workspace.snapshotSavedAt).toBe(savedAt);
+    expect(workspace.profile?.id).toBe("account-a");
+    expect(workspace.learner.saved_ids).toEqual(["first-ml-project"]);
+    expect(workspace.people).toEqual([]);
+    expect(workspace.requests).toEqual([]);
+    expect(workspace.memberships).toEqual([]);
+    expect(db.operations).toEqual([]);
+  });
+
+  it("never treats a saved workspace as authentication", async () => {
+    seedOfflineAccount();
+    const db = fakeSupabase(null);
+    mocks.getClient.mockReturnValue(db.client);
+    await setConnected(false);
+    await mount();
+    expect(workspace.preview).toBe(true);
+    expect(workspace.profile?.id).toBe("preview-learner");
+    expect(workspace.offlineSnapshot).toBe(false);
+    expect(localStorage.getItem(OFFLINE_WORKSPACE_KEY)).toBeNull();
+  });
+
+  it("drops expired-session snapshots and opens the preview", async () => {
+    seedOfflineAccount();
+    const db = fakeSupabase(
+      { id: "account-a" },
+      Math.floor(Date.now() / 1000) - 1,
+    );
+    mocks.getClient.mockReturnValue(db.client);
+    await setConnected(false);
+    await mount();
+    expect(workspace.preview).toBe(true);
+    expect(workspace.profile?.id).toBe("preview-learner");
+    expect(localStorage.getItem(OFFLINE_WORKSPACE_KEY)).toBeNull();
+    expect(db.operations).toEqual([]);
+  });
+
+  it("does not show another browser account's saved profile", async () => {
+    seedOfflineAccount("account-a");
+    const db = fakeSupabase({ id: "account-b" });
+    mocks.getClient.mockReturnValue(db.client);
+    await setConnected(false);
+    await mount();
+    expect(workspace.user?.id).toBe("account-b");
+    expect(workspace.profile).toBeNull();
+    expect(workspace.learner.user_id).toBe("account-b");
+    expect(workspace.error).toContain("no saved plan");
+    expect(localStorage.getItem(OFFLINE_WORKSPACE_KEY)).toBeNull();
+  });
+
+  it("blocks all live mutations immediately and never queues them for reconnect", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    await setConnected(false);
+    const before = db.operations.length;
+    await act(async () => {
+      const actions = [
+        workspace.saveProfile({ headline: "Must not save" }, {}),
+        workspace.updateLearner({ online_only: true }),
+        workspace.toggleSaved("first-ml-project"),
+        workspace.toggleMembership("data-ai"),
+        workspace.sendRequest(
+          "account-b",
+          "first-ml-project",
+          "mentorship",
+          "This must not be sent",
+        ),
+        workspace.respondRequest(
+          "request-a",
+          "accepted",
+          "This must not be sent",
+        ),
+        workspace.cancelRequest("request-a"),
+      ];
+      for (const result of await Promise.allSettled(actions)) {
+        expect(result.status).toBe("rejected");
+        if (result.status === "rejected")
+          expect(result.reason.message).toContain(
+            "Nothing has been sent or queued",
+          );
+      }
+    });
+    expect(db.operations).toHaveLength(before);
+    expect(db.client.rpc).not.toHaveBeenCalled();
+    expect(workspace.learner.saved_ids).toEqual([]);
+    await setConnected(true);
+    expect(writes(db)).toEqual([]);
+    expect(db.client.rpc).not.toHaveBeenCalled();
+    expect(workspace.offlineSnapshot).toBe(false);
+  });
+
+  it("refreshes a saved view offline and reloads confirmed cloud data on reconnect", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    await setConnected(false);
+    const queryCount = db.operations.length;
+    await act(async () => workspace.refresh());
+    expect(db.operations).toHaveLength(queryCount);
+    expect(workspace.offlineSnapshot).toBe(true);
+    expect(workspace.people).toEqual([]);
+    db.rows.profiles[0].headline = "New cloud headline";
+    await setConnected(true);
+    expect(workspace.profile?.headline).toBe("New cloud headline");
+    expect(workspace.offlineSnapshot).toBe(false);
+    expect(workspace.error).toBeNull();
+  });
+
+  it("erases own cached data and hides it when identity changes offline", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    expect(localStorage.getItem(OFFLINE_WORKSPACE_KEY)).not.toBeNull();
+    await setConnected(false);
+    await act(async () => db.emit({ id: "account-b" }));
+    expect(workspace.user?.id).toBe("account-b");
+    expect(workspace.profile).toBeNull();
+    expect(workspace.learner.user_id).toBe("account-b");
+    expect(localStorage.getItem(OFFLINE_WORKSPACE_KEY)).toBeNull();
+  });
+
+  it("keeps local preview edits working but rejects account sign-in and creation offline", async () => {
+    await setConnected(false);
+    await mount();
+    await act(async () => {
+      await workspace.toggleSaved("first-ml-project");
+      await expect(
+        workspace.signIn("owned@example.test", "password"),
+      ).rejects.toThrow("Reconnect to sign in");
+      await expect(
+        workspace.signUp("owned@example.test", "password", "Person"),
+      ).rejects.toThrow("Reconnect to create an account");
+    });
+    expect(workspace.learner.saved_ids).toContain("first-ml-project");
+    expect(workspace.offlineSnapshot).toBe(false);
+  });
+
+  it("removes the private snapshot on explicit sign-out", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    saveNotebookEntry(emptyNotebook("account-a"), "numpy-beginners", {
+      notes: "My private work",
+    });
+    await setConnected(false);
+    await act(async () => workspace.signOut());
+    expect(localStorage.getItem(OFFLINE_WORKSPACE_KEY)).toBeNull();
+    expect(localStorage.getItem("stembridge.notebook.v1")).toBeNull();
+    expect(workspace.preview).toBe(true);
+    expect(workspace.profile?.id).toBe("preview-learner");
+    expect(db.client.auth.signOut).toHaveBeenCalledWith({ scope: "local" });
+  });
+
+  it("expires an open offline session without continuing to expose its saved profile", async () => {
+    vi.useFakeTimers();
+    const db = fakeSupabase(
+      { id: "account-a" },
+      Math.floor(Date.now() / 1000) + 5,
+    );
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    saveNotebookEntry(emptyNotebook("account-a"), "numpy-beginners", {
+      notes: "Work written before expiry",
+      completed: true,
+    });
+    await setConnected(false);
+    expect(workspace.offlineSnapshot).toBe(true);
+    await act(async () => vi.advanceTimersByTimeAsync(5_001));
+    expect(workspace.preview).toBe(true);
+    expect(workspace.profile?.id).toBe("preview-learner");
+    expect(localStorage.getItem(OFFLINE_WORKSPACE_KEY)).toBeNull();
+    expect(workspace.error).toContain("session expired");
+    expect(localStorage.getItem("stembridge.notebook.v1")).toContain(
+      "Work written before expiry",
+    );
+    const locked = readOfflineNotebook("preview");
+    expect(locked.entries).toEqual({});
+    expect(locked.locked).toBe(true);
+    await setConnected(true);
+    await act(async () =>
+      db.emit({ id: "account-a" }, Math.floor(Date.now() / 1000) + 3600),
+    );
+    expect(readOfflineNotebook("account-a").entries["numpy-beginners"]).toEqual(
+      { notes: "Work written before expiry", completed: true },
+    );
+  });
+
+  it("preserves the same owner's notebook on initial session restoration", async () => {
+    saveNotebookEntry(emptyNotebook("account-a"), "numpy-beginners", {
+      notes: "Saved before reload",
+    });
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    expect(workspace.user?.id).toBe("account-a");
+    expect(
+      readOfflineNotebook("account-a").entries["numpy-beginners"].notes,
+    ).toBe("Saved before reload");
+  });
+
+  it("locks notes on automatic session loss and restores them to the same account", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    saveNotebookEntry(emptyNotebook("account-a"), "numpy-beginners", {
+      notes: "Keep my learning work",
+    });
+    await act(async () => db.emit(null));
+    expect(workspace.preview).toBe(true);
+    expect(readOfflineNotebook("preview").entries).toEqual({});
+    expect(readOfflineNotebook("preview").locked).toBe(true);
+    expect(localStorage.getItem("stembridge.notebook.v1")).toContain(
+      "Keep my learning work",
+    );
+    await act(async () => db.emit({ id: "account-a" }));
+    expect(
+      readOfflineNotebook("account-a").entries["numpy-beginners"].notes,
+    ).toBe("Keep my learning work");
+  });
+
+  it("clears a locked previous account's notebook when a different account signs in", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    saveNotebookEntry(emptyNotebook("account-a"), "numpy-beginners", {
+      notes: "Previous account work",
+    });
+    await act(async () => db.emit(null));
+    expect(localStorage.getItem("stembridge.notebook.v1")).not.toBeNull();
+    await act(async () => db.emit({ id: "account-b" }));
+    expect(localStorage.getItem("stembridge.notebook.v1")).toBeNull();
+    expect(readOfflineNotebook("account-b").entries).toEqual({});
+  });
+
+  it("clears the preview notebook when signing into an account", async () => {
+    const db = fakeSupabase(null);
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    saveNotebookEntry(emptyNotebook("preview"), "numpy-beginners", {
+      notes: "Sample notes",
+    });
+    await act(async () => db.emit({ id: "account-a" }));
+    expect(localStorage.getItem("stembridge.notebook.v1")).toBeNull();
+  });
+
+  it("does not let a pending online directory response overwrite an offline snapshot", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    const directory = deferred<Result | undefined>();
+    db.beforeQuery.mockImplementation(async (operation) =>
+      operation.table === "profiles" &&
+      operation.filters.some(([key]) => key === "discoverable")
+        ? directory.promise
+        : undefined,
+    );
+    let pending!: Promise<void>;
+    await act(async () => {
+      pending = workspace.refresh();
+    });
+    await setConnected(false);
+    expect(workspace.offlineSnapshot).toBe(true);
+    await act(async () => {
+      directory.resolve(undefined);
+      await pending;
+    });
+    expect(workspace.offlineSnapshot).toBe(true);
+    expect(workspace.people).toEqual([]);
+  });
+
+  it("rejects an offline click before an earlier online write has finished", async () => {
+    const db = fakeSupabase();
+    mocks.getClient.mockReturnValue(db.client);
+    await mount();
+    const slowWrite = deferred<Result | undefined>();
+    db.beforeQuery.mockImplementation(async (operation) =>
+      operation.table === "profiles" && operation.method === "update"
+        ? slowWrite.promise
+        : undefined,
+    );
+    let pending!: Promise<unknown>;
+    await act(async () => {
+      pending = workspace
+        .saveProfile({ headline: "Started online" }, {})
+        .catch((error) => error);
+    });
+    await setConnected(false);
+    await act(async () => {
+      await expect(workspace.toggleSaved("first-ml-project")).rejects.toThrow(
+        "Nothing has been sent or queued",
+      );
+    });
+    await setConnected(true);
+    await act(async () => {
+      slowWrite.resolve(undefined);
+      await pending;
+    });
+    expect(
+      writes(db).filter((operation) => operation.table === "learner_state"),
+    ).toEqual([]);
+    expect(workspace.learner.saved_ids).toEqual([]);
   });
 });

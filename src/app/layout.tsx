@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { WorkspaceProvider } from "@/components/workspace-provider";
+import { OfflineProvider } from "@/components/offline-provider";
 import "./globals.css";
 const manrope = localFont({
   src: "../../public/fonts/manrope-latin-wght-normal.woff2",
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={manrope.variable}>
       <body>
-        <WorkspaceProvider>{children}</WorkspaceProvider>
+        <OfflineProvider>
+          <WorkspaceProvider>{children}</WorkspaceProvider>
+        </OfflineProvider>
       </body>
     </html>
   );

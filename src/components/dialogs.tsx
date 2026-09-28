@@ -718,6 +718,7 @@ type RequestDialogProps = {
   person: Profile | null;
   item: CatalogItem | null;
   helpType?: HelpType;
+  initialMessage?: string;
   onClose: () => void;
   onNotice: (message: string) => void;
 };
@@ -725,6 +726,7 @@ export function RequestDialog({
   person,
   item,
   helpType,
+  initialMessage,
   onClose,
   onNotice,
 }: RequestDialogProps) {
@@ -741,6 +743,7 @@ export function RequestDialog({
           person={person}
           item={item}
           helpType={helpType}
+          initialMessage={initialMessage}
           onClose={onClose}
           onNotice={onNotice}
         />
@@ -763,6 +766,7 @@ function RequestForm({
   person,
   item,
   helpType: initialHelpType,
+  initialMessage,
   onClose,
   onNotice,
 }: RequestDialogProps & { person: Profile }) {
@@ -780,10 +784,14 @@ function RequestForm({
       : (initialHelpType ?? "mentorship");
   const [goalId, setGoalId] = useState(initialGoal.id);
   const [helpType, setHelpType] = useState<HelpType>(initialType);
-  const [message, setMessage] = useState(() =>
-    requestMessage(person, initialGoal, initialType, workspace.learner),
+  const [message, setMessage] = useState(
+    () =>
+      initialMessage ??
+      requestMessage(person, initialGoal, initialType, workspace.learner),
   );
-  const [editedMessage, setEditedMessage] = useState(false);
+  const [editedMessage, setEditedMessage] = useState(
+    initialMessage !== undefined,
+  );
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const sample = isSamplePerson(person);
@@ -913,6 +921,8 @@ function RequestForm({
           />
           <small>
             {message.length}/1,200 characters. Ask for one clear next step.
+            {initialMessage !== undefined &&
+              " If you change the goal or request type, update your message too."}
           </small>
         </div>
         {!workspace.user && (
@@ -954,12 +964,14 @@ type OpportunityDialogProps = {
   onClose: () => void;
   onRequest: (person: Profile, item: CatalogItem, helpType: HelpType) => void;
   onNotice: (message: string) => void;
+  onOfflineLesson?: (id: string) => void;
 };
 export function OpportunityDialog({
   item,
   onClose,
   onRequest,
   onNotice,
+  onOfflineLesson,
 }: OpportunityDialogProps) {
   return (
     <Modal
@@ -978,6 +990,7 @@ export function OpportunityDialog({
           onClose={onClose}
           onRequest={onRequest}
           onNotice={onNotice}
+          onOfflineLesson={onOfflineLesson}
         />
       )}
     </Modal>
@@ -989,6 +1002,7 @@ function OpportunityDetails({
   onClose,
   onRequest,
   onNotice,
+  onOfflineLesson,
 }: OpportunityDialogProps & { item: CatalogItem }) {
   const workspace = useWorkspace();
   const [error, setError] = useState<string | null>(null);
@@ -1081,8 +1095,19 @@ function OpportunityDetails({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Open resource <ArrowUpRight size={15} />
+              {workspace.offline
+                ? "Full resource · needs internet"
+                : "Open resource"}{" "}
+              <ArrowUpRight size={15} />
             </a>
+          )}
+          {item.kind === "resource" && onOfflineLesson && (
+            <Button
+              variant="secondary"
+              onClick={() => onOfflineLesson(item.id)}
+            >
+              Try an offline exercise
+            </Button>
           )}
           <Button
             variant="secondary"

@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Compass,
   Cpu,
+  Download,
   Globe2,
   Handshake,
   Home,
@@ -38,6 +39,9 @@ import {
 } from "@/components/ui";
 import { CatalogCard, CommunityCard, PersonCard } from "@/components/cards";
 import { MemberDialog } from "@/components/member-dialog";
+import { SupportDialog } from "@/components/support-dialog";
+import { OfflineLearning } from "@/components/offline-learning";
+import { useOffline } from "@/components/offline-provider";
 import { catalogMatchesSearch, personMatchesSearch } from "@/lib/discovery";
 import {
   AuthDialog,
@@ -63,13 +67,29 @@ import type {
   Profile,
 } from "@/lib/types";
 
-type View = "hub" | "communities" | "explore" | "connections";
+type View = "hub" | "communities" | "explore" | "connections" | "offline";
 type HelpType = ConnectionRequest["help_type"];
 const navigation = [
-  { id: "hub", label: "My Hub", icon: Home },
-  { id: "communities", label: "Communities", icon: Users },
-  { id: "explore", label: "Explore", icon: Compass },
-  { id: "connections", label: "Connections", icon: Handshake },
+  { id: "hub", label: "My Hub", mobileLabel: "My Hub", icon: Home },
+  {
+    id: "communities",
+    label: "Communities",
+    mobileLabel: "Circles",
+    icon: Users,
+  },
+  { id: "explore", label: "Explore", mobileLabel: "Explore", icon: Compass },
+  {
+    id: "connections",
+    label: "Connections",
+    mobileLabel: "Connect",
+    icon: Handshake,
+  },
+  {
+    id: "offline",
+    label: "Offline learning",
+    mobileLabel: "Offline",
+    icon: Download,
+  },
 ] as const;
 
 export function StemBridge() {
@@ -80,6 +100,7 @@ export function StemBridge() {
 
 function WorkspaceScreen() {
   const ws = useWorkspace();
+  const offlineSupport = useOffline();
   const [view, setView] = useState<View>("hub");
   const [communityId, setCommunityId] = useState<DomainId>("data-ai");
   const [category, setCategory] = useState<CatalogKind | "all">("all");
@@ -97,11 +118,13 @@ function WorkspaceScreen() {
   const [inbox, setInbox] = useState<"incoming" | "outgoing">("outgoing");
   const [authOpen, setAuthOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
   const [opportunity, setOpportunity] = useState<CatalogItem | null>(null);
   const [requestTarget, setRequestTarget] = useState<{
     person: Profile;
     item: CatalogItem;
     type: HelpType;
+    initialMessage?: string;
   } | null>(null);
   const [responseTarget, setResponseTarget] =
     useState<ConnectionRequest | null>(null);
@@ -109,6 +132,7 @@ function WorkspaceScreen() {
   const [responseError, setResponseError] = useState("");
   const [notice, setNotice] = useState("");
   const [offline, setOffline] = useState(false);
+  const [offlineLesson, setOfflineLesson] = useState<string>();
   const noticeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const introducedUser = useRef<string | null>(null);
 
@@ -221,6 +245,7 @@ function WorkspaceScreen() {
     person: Profile,
     item: CatalogItem = selectedGoal,
     type: HelpType = person.role === "learner" ? "collaboration" : "mentorship",
+    initialMessage?: string,
   ) => {
     if (!ws.user) {
       setOpportunity(null);
@@ -234,7 +259,7 @@ function WorkspaceScreen() {
       return;
     }
     setOpportunity(null);
-    setRequestTarget({ person, item, type });
+    setRequestTarget({ person, item, type, initialMessage });
   };
   const saveItem = (id: string) =>
     act(
@@ -323,6 +348,9 @@ function WorkspaceScreen() {
             </p>
           </div>
           <div className="page-header-actions">
+            <Button variant="secondary" onClick={() => navigate("offline")}>
+              <Download size={16} /> Offline learning
+            </Button>
             <Button variant="secondary" onClick={() => setProfileOpen(true)}>
               <Settings2 size={15} />
               My profile
@@ -349,6 +377,12 @@ function WorkspaceScreen() {
                 See my plan
                 <ArrowUpRight size={16} />
               </Button>
+              <button
+                className="text-button"
+                onClick={() => setSupportOpen(true)}
+              >
+                Find my first step <ArrowRight size={16} />
+              </button>
               <div className="coverage-preview">
                 <strong>{coverage.met.length}</strong> of {coverage.total}{" "}
                 skills in your profile
@@ -1043,15 +1077,21 @@ function WorkspaceScreen() {
           <Brand />
           <p className="sidebar-intro">A community for women in STEM</p>
           <nav className="main-nav" aria-label="Main navigation">
-            {navigation.map(({ id, label, icon: Icon }) => (
+            {navigation.map(({ id, label, mobileLabel, icon: Icon }) => (
               <button
                 key={id}
                 className={cn("nav-item", view === id && "active")}
                 aria-current={view === id ? "page" : undefined}
+                aria-label={label}
                 onClick={() => navigate(id)}
               >
                 <Icon />
-                <span>{label}</span>
+                <span className="nav-label-full" aria-hidden="true">
+                  {label}
+                </span>
+                <span className="nav-label-short" aria-hidden="true">
+                  {mobileLabel}
+                </span>
                 {id === "connections" && incomingPending > 0 && (
                   <span className="nav-count">{incomingPending}</span>
                 )}
@@ -1101,8 +1141,16 @@ function WorkspaceScreen() {
             </div>
             <div className="topbar-right">
               <span className="live-label">
-                <ShieldCheck size={13} />
-                {ws.preview ? "Explore the demo" : "Signed in"}
+                {offlineSupport.ready ? (
+                  <Download size={15} />
+                ) : (
+                  <ShieldCheck size={15} />
+                )}
+                {offlineSupport.ready
+                  ? "Offline ready"
+                  : ws.preview
+                    ? "Explore the demo"
+                    : "Signed in"}
               </span>
               {ws.user ? (
                 <>
@@ -1141,8 +1189,15 @@ function WorkspaceScreen() {
                 size={13}
                 style={{ display: "inline", marginRight: 7 }}
               />
-              You&apos;re offline. Your last view remains available; reconnect
-              to save account changes.
+              You&apos;re offline. Keep learning and saving device notes.
+              Reconnect for accounts, members and requests.
+              <button
+                className="text-button"
+                style={{ marginLeft: 16 }}
+                onClick={() => navigate("offline")}
+              >
+                Open offline learning
+              </button>
             </div>
           )}
           <main id="main-content" className="page-content">
@@ -1180,6 +1235,25 @@ function WorkspaceScreen() {
                 </button>
               </div>
             )}
+            {ws.offlineSnapshot && (
+              <div className="preview-banner" role="status">
+                <span>
+                  Saved copy of your plan
+                  {ws.snapshotSavedAt
+                    ? ` · ${new Date(ws.snapshotSavedAt).toLocaleString()}`
+                    : ""}
+                  . Other members and your inbox need internet.
+                </span>
+                {!offline && (
+                  <button
+                    className="text-button"
+                    onClick={() => void act(ws.refresh)}
+                  >
+                    Refresh from account
+                  </button>
+                )}
+              </div>
+            )}
             {!ws.ready ? (
               <div className="loading-surface" role="status">
                 <LoaderCircle
@@ -1188,6 +1262,11 @@ function WorkspaceScreen() {
                 />
                 Opening your workspace…
               </div>
+            ) : view === "offline" ? (
+              <OfflineLearning
+                goal={selectedGoal}
+                initialLesson={offlineLesson}
+              />
             ) : view === "hub" ? (
               hubView()
             ) : view === "communities" ? (
@@ -1218,6 +1297,14 @@ function WorkspaceScreen() {
         }
         onAuth={() => setAuthOpen(true)}
       />
+      <SupportDialog
+        open={supportOpen}
+        onClose={() => setSupportOpen(false)}
+        goal={selectedGoal}
+        onViewItem={setOpportunity}
+        onRequest={request}
+        onAuth={() => setAuthOpen(true)}
+      />
       <ProfileDialog
         open={profileOpen}
         onClose={() => setProfileOpen(false)}
@@ -1228,11 +1315,17 @@ function WorkspaceScreen() {
         onClose={() => setOpportunity(null)}
         onRequest={request}
         onNotice={notify}
+        onOfflineLesson={(id) => {
+          setOpportunity(null);
+          setOfflineLesson(id);
+          navigate("offline");
+        }}
       />
       <RequestDialog
         person={requestTarget?.person ?? null}
         item={requestTarget?.item ?? null}
         helpType={requestTarget?.type}
+        initialMessage={requestTarget?.initialMessage}
         onClose={() => setRequestTarget(null)}
         onNotice={(message) => {
           notify(message);

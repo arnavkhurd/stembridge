@@ -2,7 +2,12 @@
 import { act, createElement, type ComponentProps } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { sampleLearners } from "@/lib/data";
+import { sampleLearners, sampleProfiles } from "@/lib/data";
+import {
+  emptyNotebook,
+  readOfflineNotebook,
+  saveNotebookEntry,
+} from "@/lib/offline-notebook";
 import type { ConnectionRequest } from "@/lib/types";
 import type { useWorkspace } from "./workspace-provider";
 
@@ -47,6 +52,9 @@ function workspaceFor(id: string, sampleIndex: number): Workspace {
     configured: true,
     user: { id },
     preview: false,
+    offline: false,
+    offlineSnapshot: false,
+    snapshotSavedAt: null,
     profile: { ...sample.profile, id, is_demo: false },
     learner: { ...sample.state, user_id: id },
     people: [],
@@ -93,6 +101,28 @@ afterEach(async () => {
 });
 
 describe("account identity boundary", () => {
+  it("does not erase a saved notebook while an offline page restores its account", async () => {
+    window.history.replaceState({}, "", "/?view=offline");
+    saveNotebookEntry(emptyNotebook("account-a"), "numpy-beginners", {
+      notes: "Keep my offline work",
+    });
+    session.workspace = {
+      ...workspaceFor("preview", 0),
+      user: null,
+      ready: false,
+      preview: true,
+    };
+    await act(async () => root.render(createElement(StemBridge)));
+    expect(
+      readOfflineNotebook("account-a").entries["numpy-beginners"].notes,
+    ).toBe("Keep my offline work");
+    session.workspace = workspaceFor("account-a", 0);
+    await act(async () => root.render(createElement(StemBridge)));
+    expect(
+      host.querySelector<HTMLTextAreaElement>("#offline-notes")?.value,
+    ).toBe("Keep my offline work");
+    localStorage.clear();
+  });
   it("keeps a private acceptance draft during a same-user refresh but discards it on account switch", async () => {
     const accountA = workspaceFor("account-a", 0);
     const incoming: ConnectionRequest = {
@@ -149,5 +179,57 @@ describe("account identity boundary", () => {
     expect(host.textContent).not.toContain(privateDraft);
     expect(accountA.respondRequest).not.toHaveBeenCalled();
     expect(accountB.respondRequest).not.toHaveBeenCalled();
+  });
+});
+
+describe("first-step request handoff", () => {
+  it("keeps the edited introduction through review and sends only after explicit submit", async () => {
+    window.history.replaceState({}, "", "/?view=hub");
+    const workspace = workspaceFor("account-a", 0);
+    const recipient = {
+      ...sampleProfiles[0],
+      id: "10000000-0000-0000-0000-000000000001",
+      is_demo: false,
+    };
+    workspace.people = [recipient];
+    session.workspace = workspace;
+    await act(async () => root.render(createElement(StemBridge)));
+    await act(async () => buttonStartingWith("Find my first step").click());
+    await act(async () =>
+      host.querySelector<HTMLInputElement>('input[value="return"]')!.click(),
+    );
+    const draft =
+      "I would like feedback on one small NumPy example before choosing my next project task.";
+    const input = host.querySelector<HTMLTextAreaElement>("#support-message");
+    expect(input?.value).toContain("returning to STEM");
+    await act(async () => {
+      Object.getOwnPropertyDescriptor(
+        HTMLTextAreaElement.prototype,
+        "value",
+      )!.set!.call(input, draft);
+      input!.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    await act(async () => buttonStartingWith("Review request").click());
+    expect(workspace.sendRequest).not.toHaveBeenCalled();
+    expect(host.querySelector("#support-message")).toBeNull();
+    expect(
+      host.querySelector<HTMLTextAreaElement>("#request-message")?.value,
+    ).toBe(draft);
+    const form = host
+      .querySelector<HTMLTextAreaElement>("#request-message")!
+      .closest("form")!;
+    await act(async () =>
+      form.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      ),
+    );
+    expect(workspace.sendRequest).toHaveBeenCalledExactlyOnceWith(
+      recipient.id,
+      "first-ml-project",
+      "mentorship",
+      draft,
+    );
+    expect(workspace.saveProfile).not.toHaveBeenCalled();
+    expect(workspace.updateLearner).not.toHaveBeenCalled();
   });
 });

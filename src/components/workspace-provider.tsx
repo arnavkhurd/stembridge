@@ -18,6 +18,17 @@ import {
   skills,
 } from "@/lib/data";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import {
+  clearOfflineWorkspace,
+  isBrowserOffline,
+  readOfflineWorkspace,
+  RECONNECT_MESSAGE,
+  saveOfflineWorkspace,
+} from "@/lib/offline-workspace";
+import {
+  clearOfflineNotebook,
+  preserveNotebookForOwner,
+} from "@/lib/offline-notebook";
 import type {
   ConnectionRequest,
   DomainId,
@@ -40,6 +51,9 @@ type Workspace = {
   error: string | null;
   busy: boolean;
   preview: boolean;
+  offline: boolean;
+  offlineSnapshot: boolean;
+  snapshotSavedAt: string | null;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (
     email: string,
@@ -232,6 +246,11 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [requests, setRequests] = useState<ConnectionRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [pendingActions, setPendingActions] = useState(0);
+  const [offline, setOffline] = useState(false);
+  const [offlineSnapshot, setOfflineSnapshot] = useState(false);
+  const [snapshotSavedAt, setSnapshotSavedAt] = useState<string | null>(null);
+  const usingSnapshot = useRef(false);
+  const sessionExpiresAt = useRef<number | null>(null);
   const activeUserId = useRef<string | null>(null);
   const authGeneration = useRef(0);
   const loadSequence = useRef(0);
@@ -251,12 +270,48 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const restorePreview = useCallback(() => {
+    usingSnapshot.current = false;
+    setOfflineSnapshot(false);
+    setSnapshotSavedAt(null);
     const saved = readPreview();
     setProfile(saved.profile);
     setLearner(saved.learner);
     setPeople(sampleProfiles);
     setMemberships([]);
     setRequests([]);
+  }, []);
+
+  const restoreOffline = useCallback((userId: string) => {
+    const saved = readOfflineWorkspace(userId);
+    // Expired or unknown sessions cannot unlock a private device snapshot.
+    if (
+      !sessionExpiresAt.current ||
+      sessionExpiresAt.current <= Date.now() / 1000
+    ) {
+      clearOfflineWorkspace();
+      return false;
+    }
+    setPeople([]);
+    setMemberships([]);
+    setRequests([]);
+    if (!saved) return false;
+    setProfile(saved.profile);
+    setLearner(saved.learner);
+    usingSnapshot.current = true;
+    setOfflineSnapshot(true);
+    setSnapshotSavedAt(saved.savedAt);
+    return true;
+  }, []);
+
+  useEffect(() => {
+    const update = () => setOffline(isBrowserOffline());
+    update();
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
   }, []);
 
   const run = useCallback(
@@ -281,7 +336,22 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   // Each action reads the latest confirmed state when its turn starts. A failed
   // write cannot poison the queue, and work queued for another session is dropped.
   const runInSequence = useCallback(
-    <T,>(operation: () => Promise<T>): Promise<T> => {
+    <T,>(operation: () => Promise<T>, allowSavedView = false): Promise<T> => {
+      // Reject at click time too: an offline action must not wait behind an
+      // in-flight write and accidentally execute after the connection returns.
+      if (
+        !allowSavedView &&
+        activeUserId.current &&
+        (isBrowserOffline() || usingSnapshot.current)
+      ) {
+        return run(async () => {
+          throw new Error(
+            isBrowserOffline()
+              ? RECONNECT_MESSAGE
+              : "You're viewing a saved copy. Refresh your workspace after reconnecting before making account changes. Nothing has been sent or queued.",
+          );
+        });
+      }
       const generation = authGeneration.current;
       return run(() => {
         const pending = writeQueue.current
@@ -304,6 +374,12 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       if (activeUserId.current !== userId) return;
       const generation = authGeneration.current;
       const sequence = ++loadSequence.current;
+      if (isBrowserOffline()) {
+        if (restoreOffline(userId)) return;
+        throw new Error(
+          "You're offline and this account has no saved plan on this device. Reconnect to load it, or sign out to explore the preview.",
+        );
+      }
       const signal = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
       const isCurrent = () =>
         activeUserId.current === userId &&
@@ -370,8 +446,12 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       setPeople(results[2].data as Profile[]);
       setMemberships(results[3].data as Membership[]);
       setRequests(results[4].data as ConnectionRequest[]);
+      usingSnapshot.current = false;
+      setOfflineSnapshot(false);
+      setSnapshotSavedAt(saveOfflineWorkspace(ownProfile, ownLearner));
+      setError(null);
     },
-    [client],
+    [client, restoreOffline],
   );
 
   useEffect(() => {
@@ -383,10 +463,32 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     let authEventVersion = 0;
     let sessionWasResolved = false;
     let sessionTimer: ReturnType<typeof setTimeout> | undefined;
-    const applyUser = (next: WorkspaceUser | null) => {
+    const applyUser = (next: WorkspaceUser | null, expiresAt?: number) => {
       if (disposed) return;
       sessionWasResolved = true;
       clearTimeout(sessionTimer);
+      if (
+        isBrowserOffline() &&
+        next &&
+        (!expiresAt || expiresAt <= Date.now() / 1000)
+      ) {
+        next = null;
+        clearOfflineWorkspace();
+        setError(
+          "Your session needs an internet connection to renew. You can use the preview while offline.",
+        );
+      }
+      sessionExpiresAt.current = expiresAt ?? null;
+      // A session expiring must lock private notes, not destroy learning work.
+      // A different signed-in owner replaces that notebook; explicit sign-out
+      // clears it separately in signOut(). Initial same-owner reload preserves it.
+      if (next) preserveNotebookForOwner(next.id);
+      if (!next || (activeUserId.current && activeUserId.current !== next.id)) {
+        clearOfflineWorkspace();
+      } else {
+        // Discard a previous browser account's snapshot before loading this one.
+        readOfflineWorkspace(next.id);
+      }
       if (activeUserId.current !== (next?.id ?? null)) {
         ++authGeneration.current;
         ++loadSequence.current;
@@ -398,6 +500,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         setPeople([]);
         setMemberships([]);
         setRequests([]);
+        usingSnapshot.current = false;
+        setOfflineSnapshot(false);
+        setSnapshotSavedAt(null);
         setError(null);
       }
       activeUserId.current = next?.id ?? null;
@@ -417,6 +522,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         session?.user
           ? { id: session.user.id, email: session.user.email }
           : null,
+        session?.expires_at,
       );
     });
     const initialEventVersion = authEventVersion;
@@ -443,6 +549,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
           data.session?.user
             ? { id: data.session.user.id, email: data.session.user.email }
             : null,
+          data.session?.expires_at,
         );
       })
       .catch((cause) => {
@@ -474,9 +581,14 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     setPeople([]);
     setMemberships([]);
     setRequests([]);
+    usingSnapshot.current = false;
+    setOfflineSnapshot(false);
     void loadLive(user.id)
       .catch((cause) => {
-        if (!disposed) setError(readableError(cause).message);
+        if (!disposed) {
+          restoreOffline(user.id);
+          setError(readableError(cause).message);
+        }
       })
       .finally(() => {
         if (!disposed) setReady(true);
@@ -484,9 +596,44 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     return () => {
       disposed = true;
     };
-  }, [authResolved, user?.id, loadLive, restorePreview]); // The stable ID, not token refreshes, controls workspace loading.
+  }, [
+    authResolved,
+    user?.id,
+    offline,
+    loadLive,
+    restorePreview,
+    restoreOffline,
+  ]); // Online transitions reload confirmed data; token refreshes do not.
+
+  useEffect(() => {
+    if (!offline || !user || !sessionExpiresAt.current) return;
+    const expire = () => {
+      clearOfflineWorkspace();
+      ++authGeneration.current;
+      ++loadSequence.current;
+      activeUserId.current = null;
+      setUser(null);
+      setPendingActions(0);
+      restorePreview();
+      setError(
+        "Your session expired. Reconnect and sign in again to open your account; the preview still works offline.",
+      );
+    };
+    const remaining = sessionExpiresAt.current * 1000 - Date.now();
+    if (remaining <= 0) {
+      expire();
+      return;
+    }
+    const timer = setTimeout(expire, remaining);
+    return () => clearTimeout(timer);
+  }, [offline, user, restorePreview]);
 
   const requireUser = useCallback(() => {
+    if (isBrowserOffline()) throw new Error(RECONNECT_MESSAGE);
+    if (usingSnapshot.current)
+      throw new Error(
+        "You're viewing a saved copy. Refresh your workspace after reconnecting before making account changes. Nothing has been sent or queued.",
+      );
     if (!client)
       throw new Error(
         "Supabase is not connected yet. Set the project environment variables to enable accounts.",
@@ -502,6 +649,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const signIn = useCallback(
     (email: string, password: string) =>
       run(async () => {
+        if (isBrowserOffline())
+          throw new Error(
+            "Reconnect to sign in. You can keep using the preview offline.",
+          );
         if (!client)
           throw new Error(
             "Supabase is not connected yet. Account sign-in will be available after setup.",
@@ -518,6 +669,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const signUp = useCallback(
     (email: string, password: string, displayName: string) =>
       run(async () => {
+        if (isBrowserOffline())
+          throw new Error(
+            "Reconnect to create an account. You can keep using the preview offline.",
+          );
         if (!client)
           throw new Error(
             "Supabase is not connected yet. Account creation will be available after setup.",
@@ -538,8 +693,12 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       run(async () => {
         if (!client) return;
         const signingOutUser = activeUserId.current;
-        const result = await client.auth.signOut();
-        if (result.error) throw readableError(result.error);
+        clearOfflineWorkspace();
+        clearOfflineNotebook();
+        const result = await client.auth.signOut({ scope: "local" });
+        // Supabase removes the local session even when remote revocation fails.
+        if (result.error && activeUserId.current !== null)
+          throw readableError(result.error);
         if (
           activeUserId.current !== null &&
           activeUserId.current !== signingOutUser
@@ -561,7 +720,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
           throw new Error("Your session changed. Please try again.");
         if (user) await loadLive(user.id);
         else restorePreview();
-      }),
+      }, true),
     [user, loadLive, restorePreview, runInSequence],
   );
 
@@ -570,6 +729,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       profilePatch: Partial<Profile>,
       learnerPatch: Partial<LearnerState>,
     ) => {
+      if (user && isBrowserOffline()) throw new Error(RECONNECT_MESSAGE);
       if (activeUserId.current !== (user?.id ?? null))
         throw new Error(
           "Your session changed. Reopen your profile and try again.",
@@ -836,6 +996,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       error,
       busy: pendingActions > 0,
       preview: !user,
+      offline,
+      offlineSnapshot,
+      snapshotSavedAt,
       signIn,
       signUp,
       signOut,
@@ -861,6 +1024,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       requests,
       error,
       pendingActions,
+      offline,
+      offlineSnapshot,
+      snapshotSavedAt,
       signIn,
       signUp,
       signOut,
