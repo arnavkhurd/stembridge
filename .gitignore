@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+*.tsbuildinfo
+.vercel/
+playwright-report/
+test-results/
+.sites-runtime/
+.npm-cache/
+.artifacts/
