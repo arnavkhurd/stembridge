@@ -125,37 +125,37 @@ export const offlineMarathi: Record<
 
 export const offlineUiMarathi: Record<string, string> = {
   "Your account notes are kept on this device. Reconnect and sign in to the same account, or clear this notebook to start again.":
-    "तुमच्या खात्यातील नोंदी या उपकरणावर जपून ठेवल्या आहेत. इंटरनेट जोडा आणि त्याच खात्यात पुन्हा प्रवेश करा, किंवा नव्याने सुरुवात करण्यासाठी या वहीतील नोंदी काढून टाका.",
+    "तुमच्या खात्यातील नोट्स या डिव्हाइसवर जपून ठेवल्या आहेत. इंटरनेट जोडा आणि त्याच खात्यात पुन्हा लॉग इन करा, किंवा नव्याने सुरुवात करण्यासाठी या नोटबुकमधील नोट्स काढून टाका.",
   "Sign in to the same account or clear this notebook before writing new notes.":
-    "नवीन नोंदी लिहिण्याआधी त्याच खात्यात प्रवेश करा किंवा या वहीतील नोंदी काढून टाका.",
+    "नवीन नोट्स लिहिण्याआधी त्याच खात्यात लॉग इन करा किंवा या नोटबुकमधील नोट्स काढून टाका.",
   "Could not clear this notebook. Your notes are still here. Try again or clear this website's data in your browser settings.":
-    "या वहीतील नोंदी काढता आल्या नाहीत. तुमच्या नोंदी अजूनही येथे आहेत. पुन्हा प्रयत्न करा किंवा ब्राउझरच्या सेटिंगमध्ये या वेबसाइटचा डेटा काढून टाका.",
+    "या नोटबुकमधील नोट्स काढता आल्या नाहीत. तुमच्या नोट्स अजूनही येथे आहेत. पुन्हा प्रयत्न करा किंवा ब्राउझरच्या सेटिंगमध्ये या वेबसाइटचा डेटा काढून टाका.",
   "Learn wherever you are": "कुठेही असलात तरी शिकत राहा",
   "Keep learning, even offline.": "इंटरनेट नसतानाही शिकत राहा.",
   "Eight short exercises. Your own notes. One useful step at a time.":
-    "आठ छोटे सराव. तुमच्या स्वतःच्या नोंदी. एकावेळी एक उपयोगी पाऊल.",
-  "Download my notes": "माझ्या नोंदी डाउनलोड करा",
+    "आठ छोटे सराव. तुमच्या स्वतःच्या नोट्स. हळूहळू पुढे शिकत राहा.",
+  "Download my notes": "माझ्या नोट्स डाउनलोड करा",
   "Offline availability": "ऑफलाइन वापराची तयारी",
-  "Preparing this device…": "हे उपकरण तयार करत आहोत…",
-  "Ready on this device": "या उपकरणावर ऑफलाइन वापरासाठी तयार",
-  "Save the website for offline use": "ऑफलाइन वापरासाठी वेबसाइट जतन करा",
+  "Preparing this device…": "हे डिव्हाइस तयार करत आहोत…",
+  "Ready on this device": "या डिव्हाइसवर ऑफलाइन वापरासाठी तयार",
+  "Save the website for offline use": "ऑफलाइन वापरासाठी वेबसाइट सेव्ह करा",
   "You can reopen this website without internet. Exercises, your device notes and the catalog stay available.":
-    "इंटरनेट नसतानाही ही वेबसाइट पुन्हा उघडता येईल. सराव, या उपकरणावरील नोंदी आणि संधींची यादी उपलब्ध राहतील.",
+    "इंटरनेट नसतानाही ही वेबसाइट पुन्हा उघडता येईल. सराव, या डिव्हाइसवरील नोट्स आणि संधींची यादी उपलब्ध राहतील.",
   "You can reopen this website without internet. Exercises and the catalog stay available. Saving notes also needs this browser's storage.":
-    "इंटरनेट नसतानाही ही वेबसाइट पुन्हा उघडता येईल. सराव आणि संधींची यादी उपलब्ध राहतील. नोंदी जतन करण्यासाठी या ब्राउझरमध्ये माहिती साठवण्याची सुविधाही सुरू असावी लागते.",
+    "इंटरनेट नसतानाही ही वेबसाइट पुन्हा उघडता येईल. सराव आणि संधींची यादी उपलब्ध राहतील. नोट्स सेव्ह करण्यासाठी या ब्राउझरमध्ये माहिती साठवण्याची सुविधाही सुरू असावी लागते.",
   "Open the website with internet first and wait for “Ready on this device” before disconnecting.":
-    "आधी इंटरनेट सुरू असताना वेबसाइट उघडा. इंटरनेट बंद करण्याआधी ‘या उपकरणावर ऑफलाइन वापरासाठी तयार’ हा संदेश येईपर्यंत थांबा.",
+    "आधी इंटरनेट सुरू असताना वेबसाइट उघडा. इंटरनेट बंद करण्याआधी ‘या डिव्हाइसवर ऑफलाइन वापरासाठी तयार’ हा संदेश येईपर्यंत थांबा.",
   "A saved copy of your own profile and plan is kept in this browser. Account changes and connections need internet.":
-    "तुमच्या स्वतःच्या प्रोफाइलची आणि योजनेची प्रत या ब्राउझरमध्ये जतन केली जाते. खात्यात बदल करण्यासाठी आणि लोकांशी जोडण्यासाठी इंटरनेट लागते.",
+    "तुमच्या स्वतःच्या प्रोफाइलची आणि योजनेची प्रत या ब्राउझरमध्ये सेव्ह केली जाते. खात्यात बदल करण्यासाठी आणि लोकांशी जोडण्यासाठी इंटरनेट लागते.",
   "Your profile has not been saved for offline use on this device. Exercises still work; account changes and connections need internet.":
-    "या उपकरणावर ऑफलाइन वापरासाठी तुमचे प्रोफाइल जतन झालेले नाही. सराव करता येतात; खात्यात बदल करण्यासाठी आणि लोकांशी जोडण्यासाठी इंटरनेट लागते.",
+    "या डिव्हाइसवर ऑफलाइन वापरासाठी तुमचे प्रोफाइल सेव्ह झालेले नाही. सराव करता येतात; खात्यात बदल करण्यासाठी आणि लोकांशी जोडण्यासाठी इंटरनेट लागते.",
   "The demo works offline too. Real sign-in and connections need internet.":
-    "डेमो ऑफलाइनही चालतो. प्रत्यक्ष खात्यात प्रवेश करण्यासाठी आणि लोकांशी जोडण्यासाठी इंटरनेट लागते.",
-  "Update offline copy": "ऑफलाइन प्रत अद्ययावत करा",
+    "डेमो ऑफलाइनही चालतो. प्रत्यक्ष खात्यात लॉग इन करण्यासाठी आणि लोकांशी जोडण्यासाठी इंटरनेट लागते.",
+  "Update offline copy": "ऑफलाइन प्रत अपडेट करा",
   "Prepare offline": "ऑफलाइन वापरासाठी तयार करा",
   "Exercise topic": "सरावाचा विषय",
   "Data & AI": "डेटा आणि AI",
-  "Robotics & Makers": "रोबोटिक्स आणि निर्मिती",
+  "Robotics & Makers": "रोबोटिक्स आणि मेकर्स",
   "Offline exercises": "ऑफलाइन सराव",
   Completed: "पूर्ण",
   minutes: "मिनिटे",
@@ -164,54 +164,54 @@ export const offlineUiMarathi: Record<string, string> = {
   "{completed} of {total} exercises completed":
     "{total} पैकी {completed} सराव पूर्ण",
   "{minutes} minutes": "{minutes} मिनिटे",
-  "A useful place to start": "सुरुवातीसाठी उपयोगी सराव",
+  "A useful place to start": "सुरुवातीसाठी सोपा सराव",
   "Original STEMBridge practice. No account, code installation or hardware needed for these exercises. Full external tutorials still need internet.":
     "हे सराव STEMBridge ने तयार केले आहेत. यांसाठी खाते, कोड इन्स्टॉल करणे किंवा हार्डवेअरची गरज नाही. इतर वेबसाइटवरील संपूर्ण मार्गदर्शक पाहण्यासाठी इंटरनेट लागते.",
   "Selected exercise": "निवडलेला सराव",
   "Available offline": "ऑफलाइन उपलब्ध",
   "Hide explanation": "स्पष्टीकरण लपवा",
-  "Check your thinking": "तुमचा विचार तपासून पाहा",
+  "Check your thinking": "तुमचे उत्तर तपासून पाहा",
   "My notes & questions for a mentor":
-    "माझ्या नोंदी आणि मार्गदर्शकासाठी प्रश्न",
+    "माझ्या नोट्स आणि मार्गदर्शकासाठी प्रश्न",
   "Write your idea here. It stays on this device.":
     "तुमची कल्पना येथे लिहा. ती याच उपकरणावर राहील.",
   "Not saved — download or copy your notes.":
-    "नोंदी जतन झाल्या नाहीत — त्या डाउनलोड करा किंवा कॉपी करा.",
+    "नोट्स सेव्ह झाल्या नाहीत — त्या डाउनलोड करा किंवा कॉपी करा.",
   "Saved on this device · not sent to anyone":
-    "या उपकरणावर जतन केले · कोणालाही पाठवलेले नाही",
-  "Notes save here as you type.": "तुम्ही लिहिता तशा नोंदी येथे जतन होतात.",
+    "या डिव्हाइसवर सेव्ह केले · कोणालाही पाठवलेले नाही",
+  "Notes save here as you type.": "तुम्ही लिहिता तशा नोट्स येथे सेव्ह होतात.",
   "I finished this exercise": "हा सराव मी पूर्ण केला",
   "Completion records practice. It does not add a skill to your profile. When online, review your notes and share a question with a mentor.":
-    "सराव पूर्ण केल्याची नोंद होते. त्यामुळे तुमच्या प्रोफाइलमध्ये कौशल्य जोडले जात नाही. इंटरनेट मिळाल्यावर तुमच्या नोंदी पाहा आणि मार्गदर्शकाला प्रश्न विचारा.",
-  "Your device, your notes.": "तुमचे उपकरण, तुमच्या नोंदी.",
+    "सराव पूर्ण केल्याची नोंद होते. त्यामुळे तुमच्या प्रोफाइलमध्ये कौशल्य जोडले जात नाही. इंटरनेट मिळाल्यावर तुमच्या नोट्स पाहा आणि मार्गदर्शकाला प्रश्न विचारा.",
+  "Your device, your notes.": "तुमच्या नोट्स, तुमच्याच डिव्हाइसवर.",
   "Notes are stored only in this browser and do not sync between devices. Signing out or switching accounts clears them. Download a copy to keep your work, especially on a shared device.":
-    "नोंदी फक्त या ब्राउझरमध्ये राहतात; त्या इतर उपकरणांवर आपोआप दिसत नाहीत. खात्यातून बाहेर पडल्यावर किंवा खाते बदलल्यावर त्या काढून टाकल्या जातात. तुमचे काम जपण्यासाठी प्रत डाउनलोड करा, विशेषतः हे उपकरण इतरही वापरत असतील तर.",
-  "Yes, clear my notes": "हो, माझ्या नोंदी काढून टाका",
-  "Keep notes": "नोंदी ठेवा",
-  "Clear this notebook": "या वहीतील नोंदी काढून टाका",
-  "Could not save these notes.": "या नोंदी जतन करता आल्या नाहीत.",
+    "नोट्स फक्त या ब्राउझरमध्ये राहतात; त्या इतर डिव्हाइसवर आपोआप दिसत नाहीत. खात्यातून बाहेर पडल्यावर किंवा खाते बदलल्यावर त्या काढून टाकल्या जातात. तुमचे काम जपण्यासाठी प्रत डाउनलोड करा, विशेषतः हे डिव्हाइस इतरही वापरत असतील तर.",
+  "Yes, clear my notes": "हो, माझ्या नोट्स काढून टाका",
+  "Keep notes": "नोट्स ठेवा",
+  "Clear this notebook": "या नोटबुकमधील नोट्स काढून टाका",
+  "Could not save these notes.": "या नोट्स सेव्ह करता आल्या नाहीत.",
   "Choose an exercise from the notebook.": "या वहीतील एक सराव निवडा.",
   "Keep your notes within 5,000 characters.":
-    "नोंदी 5,000 अक्षरांच्या मर्यादेत ठेवा.",
+    "नोट्स 5,000 अक्षरांच्या मर्यादेत ठेवा.",
   "Your browser could not save these notes. Download or copy them before leaving this page.":
-    "तुमच्या ब्राउझरला या नोंदी जतन करता आल्या नाहीत. हे पान सोडण्याआधी त्या डाउनलोड करा किंवा कॉपी करा.",
+    "तुमच्या ब्राउझरला या नोट्स सेव्ह करता आल्या नाहीत. हे पान सोडण्याआधी त्या डाउनलोड करा किंवा कॉपी करा.",
   "Saving took too long. Reconnect and try again.":
-    "जतन करण्यासाठी खूप वेळ लागला. इंटरनेट पुन्हा जोडून प्रयत्न करा.",
+    "सेव्ह करण्यासाठी खूप वेळ लागला. इंटरनेट पुन्हा जोडून प्रयत्न करा.",
   "Offline support could not start.": "ऑफलाइन सुविधा सुरू करता आली नाही.",
   "Offline support could not start. Please try again.":
     "ऑफलाइन सुविधा सुरू करता आली नाही. कृपया पुन्हा प्रयत्न करा.",
   "Offline reload is available in the production website. Saved learning packs still work in this preview.":
-    "ऑफलाइन असताना वेबसाइट पुन्हा उघडण्याची सुविधा प्रकाशित वेबसाइटवर उपलब्ध आहे. या पूर्वदृश्यात जतन केलेले सराव वापरता येतात.",
+    "ऑफलाइन असताना वेबसाइट पुन्हा उघडण्याची सुविधा प्रकाशित वेबसाइटवर उपलब्ध आहे. या डेमोमध्ये सेव्ह केलेले सराव वापरता येतात.",
   "This browser needs HTTPS or localhost to save the website for offline use.":
-    "ऑफलाइन वापरासाठी वेबसाइट जतन करताना या ब्राउझरला HTTPS किंवा localhost पत्ता आवश्यक आहे.",
+    "ऑफलाइन वापरासाठी वेबसाइट सेव्ह करताना या ब्राउझरला HTTPS किंवा localhost पत्ता आवश्यक आहे.",
   "Connect once to save this website for offline use.":
-    "ऑफलाइन वापरासाठी ही वेबसाइट जतन करण्यासाठी एकदा इंटरनेट जोडा.",
+    "ऑफलाइन वापरासाठी ही वेबसाइट सेव्ह करण्यासाठी एकदा इंटरनेट जोडा.",
   "Could not save the website. Try again when connected.":
-    "वेबसाइट जतन करता आली नाही. इंटरनेट मिळाल्यावर पुन्हा प्रयत्न करा.",
+    "वेबसाइट सेव्ह करता आली नाही. इंटरनेट मिळाल्यावर पुन्हा प्रयत्न करा.",
   "Could not finish saving the website. Reconnect and try again.":
-    "वेबसाइट पूर्णपणे जतन करता आली नाही. इंटरनेट पुन्हा जोडून प्रयत्न करा.",
+    "वेबसाइट पूर्णपणे सेव्ह करता आली नाही. इंटरनेट पुन्हा जोडून प्रयत्न करा.",
   "Using your saved offline copy. Could not check for updates; try again when connected.":
-    "तुमची जतन केलेली ऑफलाइन प्रत वापरत आहोत. नवीन आवृत्ती तपासता आली नाही; इंटरनेट मिळाल्यावर पुन्हा प्रयत्न करा.",
+    "तुमची सेव्ह केलेली ऑफलाइन प्रत वापरत आहोत. नवीन आवृत्ती तपासता आली नाही; इंटरनेट मिळाल्यावर पुन्हा प्रयत्न करा.",
   "Reading language": "वाचनाची भाषा",
   "Learning language": "सरावाची भाषा",
   English: "English",
@@ -221,5 +221,5 @@ export const offlineUiMarathi: Record<string, string> = {
   "These exercises are available in English and Marathi. The rest of the website is in English.":
     "हे सराव इंग्रजी आणि मराठीत उपलब्ध आहेत. उर्वरित वेबसाइट इंग्रजीत आहे.",
   "Your notes stay exactly as you write them.":
-    "तुमच्या नोंदी तुम्ही लिहिल्या आहेत तशाच राहतात.",
+    "तुमच्या नोट्स तुम्ही लिहिल्या आहेत तशाच राहतात.",
 };

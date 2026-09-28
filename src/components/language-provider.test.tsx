@@ -48,7 +48,7 @@ describe("shared website language", () => {
     localStorage.setItem(LEGACY_LANGUAGE_KEY, "mr");
     await render();
     expect(document.documentElement.lang).toBe("mr");
-    expect(host.textContent).toContain("माझे केंद्र");
+    expect(host.textContent).toContain("माझा डॅशबोर्ड");
     const input = host.querySelector("input")!;
     const draft = input.value;
     await act(async () => host.querySelector("button")!.click());
@@ -67,7 +67,7 @@ describe("shared website language", () => {
     });
     await act(async () => host.querySelector("button")!.click());
     expect(document.documentElement.lang).toBe("mr");
-    expect(host.textContent).toContain("माझे केंद्र");
+    expect(host.textContent).toContain("माझा डॅशबोर्ड");
     expect(host.querySelector("input")!.value).toContain("मला मदत हवी आहे.");
   });
   it("uses English for an invalid preference and responds to another tab's saved language", async () => {

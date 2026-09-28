@@ -2,7 +2,7 @@
 export const contentMarathi: Record<string, string> = {
   Python: "Python",
   Arduino: "Arduino",
-  "Can help with {skills}.": "{skills} साठी मदत करू शकते.",
+  "Can help with {skills}.": "{skills} शिकण्यासाठी मदत करू शकतात.",
   "Shared skills: {skills}.": "समान कौशल्ये: {skills}.",
   "Python basics": "Python ची मूलतत्त्वे",
   "Git basics": "Git ची मूलतत्त्वे",
@@ -10,26 +10,26 @@ export const contentMarathi: Record<string, string> = {
   "NumPy basics": "NumPy ची मूलतत्त्वे",
   "pandas basics": "pandas ची मूलतत्त्वे",
   "ML foundations": "मशीन लर्निंगचा पाया",
-  "Small ML project": "लहान मशीन लर्निंग प्रकल्प",
+  "Small ML project": "छोटा मशीन लर्निंग प्रकल्प",
   "C basics": "C ची मूलतत्त्वे",
   "Arduino basics": "Arduino ची मूलतत्त्वे",
-  "Circuit basics": "विद्युत परिपथाची मूलतत्त्वे",
-  "Reading sensors": "सेन्सरचे मापन वाचणे",
-  "Small embedded project": "लहान एम्बेडेड प्रकल्प",
+  "Circuit basics": "सर्किटची मूलतत्त्वे",
+  "Reading sensors": "सेन्सरचे रीडिंग समजून घेणे",
+  "Small embedded project": "छोटा एम्बेडेड प्रकल्प",
   "Data & AI Circle": "डेटा आणि AI समुदाय",
   "Data & AI": "डेटा आणि AI",
-  "Robotics & Makers Circle": "रोबोटिक्स आणि निर्माते समुदाय",
-  "Robotics & Makers": "रोबोटिक्स आणि निर्माते",
+  "Robotics & Makers Circle": "रोबोटिक्स आणि मेकर्स समुदाय",
+  "Robotics & Makers": "रोबोटिक्स आणि मेकर्स",
   "A place to explore data, build your first ML project, and find someone to learn with.":
     "डेटा समजून घ्या, तुमचा पहिला मशीन लर्निंग प्रकल्प तयार करा आणि सोबत शिकणारी व्यक्ती शोधा.",
   "Connect with people exploring circuits, sensors, and hands-on embedded projects.":
-    "परिपथ, सेन्सर आणि प्रत्यक्ष एम्बेडेड प्रकल्प शिकणाऱ्या लोकांशी जोडा.",
+    "सर्किट्स, सेन्सर्स आणि एम्बेडेड प्रकल्पांवर काम करणाऱ्या लोकांशी संपर्क साधा.",
   "Data exploration": "डेटाचा अभ्यास",
   "First ML projects": "पहिले मशीन लर्निंग प्रकल्प",
   Sensors: "सेन्सर",
-  "Embedded systems": "एम्बेडेड प्रणाली",
+  "Embedded systems": "एम्बेडेड सिस्टिम्स",
   "Build your first ML project": "तुमचा पहिला मशीन लर्निंग प्रकल्प तयार करा",
-  "Make a sensor-powered prototype": "सेन्सर वापरणारा नमुना तयार करा",
+  "Make a sensor-powered prototype": "सेन्सर वापरून प्रोटोटाइप बनवा",
   "Data for Good: mini challenge": "समाजासाठी डेटा: छोटे आव्हान",
   "Makers prototype challenge": "प्रोटोटाइप बनवण्याचे आव्हान",
   "Data exploration internship": "डेटा अभ्यासाची इंटर्नशिप",
@@ -39,10 +39,10 @@ export const contentMarathi: Record<string, string> = {
   "Get started with scikit-learn": "scikit-learn शिकण्यास सुरुवात करा",
   "Practice: a tiny classifier": "सराव: छोटा वर्गीकरण प्रोग्राम",
   "Arduino built-in examples": "Arduino मधील तयार उदाहरणे",
-  "Practice: plan a simple circuit": "सराव: सोप्या परिपथाची योजना करा",
+  "Practice: plan a simple circuit": "सराव: सोप्या सर्किटचा आराखडा बनवा",
   "Practice: read and explain a sensor":
-    "सराव: सेन्सरचे मापन वाचा आणि समजावून सांगा",
-  "Practice: share your prototype": "सराव: तुमचा नमुना इतरांना दाखवा",
+    "सराव: सेन्सरचे रीडिंग वाचा आणि समजावून सांगा",
+  "Practice: share your prototype": "सराव: तुमचा प्रोटोटाइप शेअर करा",
   "Build a simple program that learns from data. Work with a peer and ask a mentor to review your results.":
     "डेटामधून शिकणारा सोपा प्रोग्राम तयार करा. सहकाऱ्यासोबत काम करा आणि मार्गदर्शकाकडून निकालांवर अभिप्राय घ्या.",
   "Build a small device that reads a sensor and displays the result. You’ll need a compatible Arduino board and sensor.":
@@ -58,7 +58,7 @@ export const contentMarathi: Record<string, string> = {
   "Learn to work with groups of numbers using NumPy arrays. Follow examples from the official beginner guide.":
     "NumPy अॅरे वापरून संख्यांच्या समूहावर काम करायला शिका. अधिकृत नवशिक्या मार्गदर्शकातील उदाहरणे वापरा.",
   "Learn to view, filter and organise data tables with pandas. Start with the official introductory guide.":
-    "pandas वापरून डेटाचे तक्ते पाहणे, गाळणे आणि मांडणे शिका. अधिकृत परिचय मार्गदर्शकापासून सुरुवात करा.",
+    "pandas वापरून डेटा टेबल पाहायला, फिल्टर करायला आणि व्यवस्थित मांडायला शिका. अधिकृत परिचय मार्गदर्शकापासून सुरुवात करा.",
   "Learn how to train and test a machine-learning model. Follow the official scikit-learn introduction.":
     "मशीन लर्निंग मॉडेलचे प्रशिक्षण आणि चाचणी करायला शिका. अधिकृत scikit-learn परिचय वापरा.",
   "STEMBridge practice exercise: load the built-in iris dataset in scikit-learn, split training and test data, fit one classifier, and explain one limitation in a notebook. Ask a peer to review the explanation.":
@@ -85,7 +85,7 @@ export const contentMarathi: Record<string, string> = {
   "Hands-on": "प्रत्यक्ष सराव",
   "Hardware required": "हार्डवेअर आवश्यक",
   "Team challenge": "सांघिक आव्हान",
-  "Data storytelling": "डेटामधून गोष्ट सांगणे",
+  "Data storytelling": "डेटामधून निष्कर्ष समजावणे",
   "Sample listing": "नमुना संधी",
   "In person": "प्रत्यक्ष भेटून",
   "Data analysis": "डेटा विश्लेषण",
@@ -98,30 +98,30 @@ export const contentMarathi: Record<string, string> = {
   "Peer review": "सहकाऱ्याचा अभिप्राय",
   "Free to read": "मोफत वाचा",
   "Hardware for building": "बनवण्यासाठी हार्डवेअर लागेल",
-  "No hardware needed to plan": "योजना करण्यासाठी हार्डवेअर नको",
-  Documentation: "दस्तऐवजीकरण",
+  "No hardware needed to plan": "आराखडा बनवण्यासाठी हार्डवेअर लागत नाही",
+  Documentation: "वापरण्याचे मार्गदर्शन",
   "Peer feedback": "सहकाऱ्याचा अभिप्राय",
-  "Learning resource": "शिकण्याचे साधन",
+  "Learning resource": "अभ्याससाहित्य",
   Competition: "स्पर्धा",
   Internship: "इंटर्नशिप",
   "Practice project": "सराव प्रकल्प",
-  "Save {title}": "{title} जतन करा",
-  "Unsave {title}": "{title} जतन केलेल्यांतून काढा",
+  "Save {title}": "{title} सेव्ह करा",
+  "Unsave {title}": "{title} सेव्ह केलेल्यांतून काढा",
   Online: "ऑनलाइन",
   "Online + hands-on": "ऑनलाइन आणि प्रत्यक्ष सराव",
-  "Official resource": "अधिकृत साधन",
-  "View resource": "साधन पाहा",
-  "View plan": "योजना पाहा",
+  "Official resource": "अधिकृत अभ्याससाहित्य",
+  "View resource": "अभ्याससाहित्य पाहा",
+  "View plan": "प्लॅन पाहा",
   Mentor: "मार्गदर्शक",
   Peer: "सहकारी",
   "Mentor & peer": "मार्गदर्शक आणि सहकारी",
   " · sample": " · नमुना",
   "View profile": "प्रोफाइल पाहा",
   "Ask for help": "मदत मागा",
-  Connect: "जोडा",
+  Connect: "संपर्क साधा",
   "Demo members": "नमुना सदस्य",
-  "{count} visible member": "{count} दिसणारा सदस्य",
-  "{count} visible members": "{count} दिसणारे सदस्य",
+  "{count} visible member": "{count} सदस्याचे प्रोफाइल उपलब्ध",
+  "{count} visible members": "{count} सदस्यांची प्रोफाइल उपलब्ध",
   "Leave community": "समुदायातून बाहेर पडा",
   "Join community": "समुदायात सामील व्हा",
   "Member profile": "सदस्याचे प्रोफाइल",
@@ -137,7 +137,7 @@ export const contentMarathi: Record<string, string> = {
   "No skills listed yet.": "अजून कौशल्ये दिलेली नाहीत.",
   "These skills are self-reported.":
     "ही कौशल्ये सदस्याने स्वतः नमूद केली आहेत.",
-  "Happy to help with": "या विषयांत मदत करू शकते",
+  "Happy to help with": "या विषयांसाठी मदत उपलब्ध",
   "For your next step": "तुमच्या पुढच्या पावलासाठी",
   "{name} lists {skills}, which could help with this goal.":
     "{name} यांच्या प्रोफाइलवर {skills} ही कौशल्ये आहेत. या ध्येयासाठी त्यांची मदत होऊ शकते.",
@@ -147,32 +147,32 @@ export const contentMarathi: Record<string, string> = {
   "Start with a short request. You can review your message before sending.":
     "छोट्या विनंतीपासून सुरुवात करा. पाठवण्यापूर्वी संदेश तपासता येईल.",
   "Sign in to send a connection request.":
-    "संपर्क विनंती पाठवण्यासाठी साइन इन करा.",
+    "संपर्क विनंती पाठवण्यासाठी लॉग इन करा.",
   Close: "बंद करा",
   "Meet real members": "खऱ्या सदस्यांना भेटा",
-  "Sign in to connect": "जोडण्यासाठी साइन इन करा",
+  "Sign in to connect": "संपर्क साधण्यासाठी लॉग इन करा",
   "Ask to collaborate": "सोबत काम करण्याची विनंती करा",
   "Ask for guidance": "मार्गदर्शन मागा",
-  "Find my first step": "माझे पहिले पाऊल शोधा",
+  "Find my first step": "सुरुवात कुठून करू?",
   "One useful action. Someone to help. A message you can make your own.":
-    "एक उपयोगी कृती. मदतीसाठी एक व्यक्ती. तुमच्या शब्दांत लिहिण्यासाठी संदेश.",
+    "पुढे काय करायचे ते ठरवा, योग्य मदत शोधा आणि स्वतःच्या शब्दांत संदेश लिहा.",
   "Your goal": "तुमचे ध्येय",
   "Practice goal": "सरावाचे ध्येय",
-  "What would help you today?": "आज तुम्हाला कशाची मदत हवी आहे?",
-  "I'm starting out": "मी सुरुवात करत आहे",
+  "What would help you today?": "आज तुम्हाला कोणती मदत हवी आहे?",
+  "I'm starting out": "मी नव्याने सुरुवात करत आहे",
   "I'm returning to STEM": "मी STEM मध्ये परत येत आहे",
   "I want a project partner": "मला प्रकल्पासाठी सहकारी हवा आहे",
   "Online support only": "फक्त ऑनलाइन मदत",
   "For this plan": "या योजनेसाठी",
   "Your next action": "तुमची पुढची कृती",
-  "A resource for this step": "या पावलासाठी शिकण्याचे साधन",
-  "Start with this resource": "या साधनापासून सुरुवात करा",
-  "Your learning starting point": "तुमच्या शिकण्याची सुरुवात",
-  "Practice exercise": "सराव कृती",
+  "A resource for this step": "या टप्प्यासाठी अभ्याससाहित्य",
+  "Start with this resource": "या अभ्याससाहित्यापासून सुरुवात करा",
+  "Your learning starting point": "शिकायला इथून सुरुवात करा",
+  "Practice exercise": "सराव",
   "Official guide": "अधिकृत मार्गदर्शक",
   "Open the guide": "मार्गदर्शक उघडा",
-  "Read the exercise": "सराव कृती वाचा",
-  "Suggested person": "सुचवलेली व्यक्ती",
+  "Read the exercise": "सराव पाहा",
+  "Suggested person": "तुमच्यासाठी सुचवलेली व्यक्ती",
   "A mentor for this step": "या पावलासाठी मार्गदर्शक",
   "Someone to learn with": "सोबत शिकण्यासाठी सहकारी",
   "Offers mentorship": "मार्गदर्शनासाठी उपलब्ध",
@@ -181,7 +181,7 @@ export const contentMarathi: Record<string, string> = {
     "हे काल्पनिक प्रोफाइल जुळणी कशी होते ते दाखवते. याला विनंती पाठवता येत नाही.",
   "No {role} accepting requests matches this step and these preferences yet. You can still try the action above or explore the community below.":
     "या पावलासाठी आणि पसंतीनुसार विनंत्या स्वीकारणारा {role} अजून उपलब्ध नाही. तरीही वरची कृती करून पाहा किंवा खालील समुदाय पाहा.",
-  "Make the first message easier": "पहिला संदेश लिहिणे सोपे करा",
+  "Make the first message easier": "पहिला संदेश लिहूया",
   "Say what you want to try and ask for one specific kind of help.":
     "तुम्हाला काय करून पाहायचे आहे ते सांगा आणि नेमकी कोणती मदत हवी ते विचारा.",
   "Your introduction": "तुमचा परिचय",
@@ -189,10 +189,10 @@ export const contentMarathi: Record<string, string> = {
     "{count}/१,२०० अक्षरे. पुढे जाण्यापूर्वी कोणताही भाग बदलू शकता.",
   "Review request": "विनंती तपासा",
   "Sign in to find registered members and send a real request.":
-    "नोंदणीकृत सदस्य शोधण्यासाठी आणि खरी विनंती पाठवण्यासाठी साइन इन करा.",
+    "नोंदणीकृत सदस्य शोधण्यासाठी आणि खरी विनंती पाठवण्यासाठी लॉग इन करा.",
   "There is no eligible recipient for this message yet. No request has been sent.":
     "या संदेशासाठी योग्य सदस्य अजून उपलब्ध नाही. कोणतीही विनंती पाठवलेली नाही.",
-  "Explore a wider community": "मोठ्या समुदायाशी परिचय करा",
+  "Explore a wider community": "आणखी समुदाय शोधा",
   "Explore local chapters and the virtual community for women in robotics.":
     "रोबोटिक्समधील महिलांसाठी स्थानिक गट आणि ऑनलाइन समुदाय पाहा.",
   "Explore mentorship and networking resources for women in machine learning.":
@@ -201,19 +201,19 @@ export const contentMarathi: Record<string, string> = {
   "Independent external community. Check their website for membership and event details.":
     "हा स्वतंत्र बाह्य समुदाय आहे. सदस्यत्व आणि कार्यक्रमांचे तपशील त्यांच्या वेबसाइटवर पाहा.",
   "Your support choice stays in this panel. Only the message you review and send is shared. Your confirmed skills are unchanged. Closing this panel clears its choices and drafts.":
-    "मदतीची तुमची निवड या पॅनेलमध्येच राहते. तुम्ही तपासून पाठवलेला संदेशच शेअर होतो. तुमची खात्री केलेली कौशल्ये बदलत नाहीत. पॅनेल बंद केल्यावर निवडी आणि मसुदे काढले जातात.",
-  "Try one exercise together": "एक सराव कृती सोबत करून पाहा",
+    "या विंडोतील निवडी इतरांना दिसत नाहीत. तुम्ही तपासून पाठवलेला संदेशच शेअर होतो. प्रोफाइलमधील निवडलेली कौशल्ये बदलत नाहीत. ही विंडो बंद केल्यावर इथल्या निवडी आणि मसुदे काढले जातात.",
+  "Try one exercise together": "एक सराव एकत्र करून पाहा",
   "Agree on a small first task": "पहिले छोटे काम ठरवा",
   "Make a small work sample": "तुमच्या कामाचा छोटा नमुना तयार करा",
   "Talk through your next project": "पुढच्या प्रकल्पावर चर्चा करा",
-  "Try one practice exercise": "एक सराव कृती करून पाहा",
+  "Try one practice exercise": "एक छोटा सराव करून पाहा",
   "Try one guided example": "मार्गदर्शकातील एक उदाहरण करून पाहा",
   "Share a short project outline": "प्रकल्पाचा छोटा आराखडा शेअर करा",
-  "Find a starting point for {skill}": "{skill} शिकण्याची सुरुवात शोधा",
+  "Find a starting point for {skill}": "{skill} शिकायला कुठून सुरुवात करावी?",
   "This covers {skill}. Your confirmed skills include its listed prerequisites.":
-    "यात {skill} शिकता येईल. यासाठी लागणारी पूर्वकौशल्ये तुमच्या खात्री केलेल्या कौशल्यांत आहेत.",
+    "यातून {skill} शिकता येईल. सुरुवातीला आवश्यक असलेली कौशल्ये तुम्ही तुमच्या प्रोफाइलमध्ये निवडली आहेत.",
   "The listed resource for {skill} expects {prerequisites}. Ask for an earlier starting point; we have not selected an advanced exercise.":
-    "{skill} साठी दिलेल्या साधनाला {prerequisites} आवश्यक आहेत. अधिक प्राथमिक सुरुवात विचारा; प्रगत सराव निवडलेला नाही.",
+    "{skill} शिकण्यासाठी दिलेले साहित्य वापरण्याआधी {prerequisites} येणे गरजेचे आहे. आधी मूलभूत गोष्टी कुठून शिकता येतील ते विचारा; तुमच्यासाठी प्रगत सराव निवडलेला नाही.",
   "We do not have a suitable resource for {skill} with these preferences. Ask for one small exercise to start with.":
     "या पसंतीनुसार {skill} साठी योग्य साधन उपलब्ध नाही. सुरुवातीला एक छोटी सराव कृती विचारा.",
   "Your profile lists all the skills in this goal. A work sample or a focused question is a useful next step.":
@@ -229,7 +229,7 @@ export const contentMarathi: Record<string, string> = {
   "Build on the skills you already have. Try “{resource}” and bring one example or question to a mentor.":
     "तुमच्याकडे आधीपासून असलेल्या कौशल्यांवर पुढे काम करा. “{resource}” करून पाहा आणि मार्गदर्शकाला एक उदाहरण किंवा प्रश्न दाखवा.",
   "Describe the skills you already use and ask a mentor for a small first task in {skill}. Returning does not change your confirmed skills.":
-    "तुम्ही वापरत असलेली कौशल्ये सांगा आणि मार्गदर्शकाला {skill} मधील पहिले छोटे काम विचारा. परत येण्याने तुमची खात्री केलेली कौशल्ये बदलत नाहीत.",
+    "तुम्ही वापरत असलेली कौशल्ये सांगा आणि मार्गदर्शकाला {skill} मधील पहिले छोटे काम विचारा. हा पर्याय निवडल्याने प्रोफाइलमधील तुमची कौशल्ये बदलत नाहीत.",
   "Write a short outline of something you would like to build. Ask a mentor how it could show the skills you already have.":
     "तुम्हाला बनवायच्या गोष्टीचा छोटा आराखडा लिहा. त्यातून तुमची कौशल्ये कशी दिसतील ते मार्गदर्शकाला विचारा.",
   "Start with “{resource}”. Try one example or task, then write down one question to discuss with a mentor.":
@@ -239,12 +239,13 @@ export const contentMarathi: Record<string, string> = {
   "Write the problem you want to solve and what you plan to build. Ask a mentor for feedback on the scope.":
     "कोणता प्रश्न सोडवायचा आणि काय बनवायचे ते लिहा. कामाच्या आवाक्यावर मार्गदर्शकाचा अभिप्राय घ्या.",
   "Can help with {skills}, which your profile does not yet list.":
-    "तुमच्या प्रोफाइलवर अजून नसलेल्या {skills} साठी मदत करू शकते.",
+    "तुमच्या प्रोफाइलमध्ये अजून नसलेली {skills} ही कौशल्ये शिकण्यासाठी मदत करू शकतात.",
   "Offers skills relevant to this goal: {skills}.":
     "या ध्येयाशी संबंधित कौशल्ये: {skills}.",
   "You both list {skills}.": "तुमच्या दोघांच्या प्रोफाइलवर {skills} आहेत.",
-  "Shares your {domain} interest.": "तुमच्यासारखीच {domain} मध्ये आवड आहे.",
-  "Interested in {domain}.": "{domain} मध्ये आवड आहे.",
+  "Shares your {domain} interest.":
+    "तुमच्याप्रमाणेच {domain} या क्षेत्राची आवड आहे.",
+  "Interested in {domain}.": "{domain} या क्षेत्राची आवड आहे.",
   "Open to online connections.": "ऑनलाइन संपर्कासाठी उपलब्ध.",
   "Offers in-person connections.": "प्रत्यक्ष भेटीसाठी उपलब्ध.",
 };
