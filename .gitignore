@@ -12,3 +12,7 @@ test-results/
 .artifacts/
 tmp/pdfs/
 __pycache__/
+
+# Private rehearsal notes and generated handoff guides.
+.local-notes/
+output/pdf/

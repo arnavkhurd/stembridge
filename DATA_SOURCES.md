@@ -45,4 +45,4 @@ No outcome, salary, hiring probability, completion time, mentor capacity or comm
 - [Google Gemini structured generation example](https://ai.google.dev/gemini-api/docs/migrate-to-interactions): consulted for the existing `generateContent` JSON-response interface. The application uses a small server-side REST call and validates the result.
 - [PGlite getting started](https://pglite.dev/docs/) and [API reference](https://pglite.dev/docs/api): consulted for in-memory PostgreSQL execution of the actual application schema and parameterized permission tests.
 
-These sources inform implementation. They do not establish that the application's hosted configuration, security boundaries or live AI response have been tested; see BUILD_STATUS for that evidence.
+These sources inform implementation. They do not establish that a particular deployment's configuration, security boundaries or live AI response have been verified. Run the account walkthrough and database checks described in the README and setup guide for your deployment.

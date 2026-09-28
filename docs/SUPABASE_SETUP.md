@@ -2,7 +2,7 @@
 
 STEMBridge uses Supabase accounts and a shared database for profiles, community membership, saved learner information, and connection requests. The sample catalog contains fictional opportunities and explicitly labelled demonstration content. A request can reach only a registered, discoverable member who has chosen to receive requests.
 
-**Current workspace:** the Supabase project, schema and environment values are already supplied. Public community reads return two rows; anonymous reads of learner state, memberships and requests are denied. A read-only Auth check found signup/email-password enabled but **Confirm email ON** (`mailer_autoconfirm=false`). For immediate prototype signup, the participant must turn this setting off manually as described in step 4. The agent has not changed account settings. Gemini is not connected because its key is empty.
+**Current workspace:** the Supabase project, schema and environment values are already supplied. Public community reads return two rows; anonymous reads of learner state, memberships and requests are denied. A read-only Auth check found signup/email-password enabled but **Confirm email ON** (`mailer_autoconfirm=false`). For immediate prototype signup, the participant must turn this setting off manually as described in step 4. The agent has not changed account settings. The Gemini key is now configured locally. A synthetic live-provider/actual-route check passed at 3:45 PM with `gemini-3.5-flash-lite`; Supabase/Auth was mocked, so the authenticated browser and Vercel flow remain unverified.
 
 ## One-time setup
 
@@ -26,13 +26,13 @@ For a public release, configure custom SMTP, enable confirmation, implement/test
 
 1. Open [Google AI Studio's API Keys page](https://aistudio.google.com/apikey) and sign in. Complete the provider's initial terms/setup if prompted.
 2. Use an existing key for your project or choose **Create API key**. Select the default/existing project or create a project through the dialog. Keep the project on the **Free** plan for this optional prototype; billing is not a prerequisite for using available free-tier models. Account, region, model availability and quota still apply.
-3. Copy the key privately into `.env.local` as `GEMINI_API_KEY`. Do not prefix it with `NEXT_PUBLIC_`. Leave `GEMINI_MODEL=gemini-2.5-flash-lite` unless you deliberately choose another compatible model available to your account.
+3. Copy the key privately into `.env.local` as `GEMINI_API_KEY`. Do not prefix it with `NEXT_PUBLIC_`. Set `GEMINI_MODEL=gemini-3.5-flash-lite`. This model passed the current live diagnostic; the previous model returned 404 for this key.
 4. Save and restart `npm run dev`. Sign in to STEMBridge when Supabase is configured. Edit the profile, enter a short experience description, tick the explicit Gemini consent box, and request a suggestion.
 5. Review the quoted evidence and proposed skills, confirm the fields you accept, and save the profile. If the account has no free quota or the provider fails, keep using manual skill selection; do not claim a live response or silently substitute a sample.
 
-The endpoint returns suggestions for review, never a saved or verified skill profile. It accepts `{ "text": "...", "consent": true }`; a configured Supabase project requires a valid signed-in session. Without an AI key, manual entry remains available. Timeouts, provider quota errors and malformed responses do not save a profile. On Vercel, add `GEMINI_API_KEY` to the project environment settings and redeploy separately; `.env.local` is not uploaded from Git.
+The endpoint returns suggestions for review, never a saved or verified skill profile. It accepts `{ "text": "...", "consent": true }`; a configured Supabase project requires a valid signed-in session. Without an AI key, manual entry remains available. Timeouts, provider quota errors and malformed responses do not save a profile. On Vercel, add server-only `GEMINI_API_KEY` and set `GEMINI_MODEL=gemini-3.5-flash-lite`. Replace any older model override already present, then redeploy separately; `.env.local` is not uploaded from Git.
 
-Official references checked 28 September 2026: [Gemini API keys](https://ai.google.dev/gemini-api/docs/api-key), [free and paid tier information](https://ai.google.dev/gemini-api/docs/billing/). The current automated AI tests mock provider responses; a successful live suggestion is still required before calling the live integration verified.
+Official references checked 28 September 2026: [Gemini API keys](https://ai.google.dev/gemini-api/docs/api-key), [free and paid tier information](https://ai.google.dev/gemini-api/docs/billing/). The automated AI tests mock provider responses. Separately, at 3:45 PM the actual profile POST handler returned HTTP 200 against live `gemini-3.5-flash-lite` using synthetic text: Python/Git were suggested; negated NumPy and aspiration-only ML were excluded. Only Supabase/Auth was mocked in that diagnostic. The authenticated browser and deployed Vercel AI flow still require their own walkthrough.
 
 ## Permissions and request contract
 

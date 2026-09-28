@@ -2,111 +2,82 @@
 
 **Know your next step. Find the people who can help.**
 
-STEMBridge helps women exploring STEM turn a project goal into a practical next step, relevant learning material, and a specific request for mentor or peer support. The prototype focuses on Data & AI and Robotics & Makers.
+STEMBridge is a Women in STEM community website built for problem statement PS7. It connects a learner's project goal to relevant skills, resources, mentors and peers. The prototype focuses on **Data & AI** and **Robotics & Makers**.
 
-Choose a goal, confirm the skills you already bring, and inspect the listed requirements. The website connects the remaining requirements to learning resources and relevant people. An online-only preference changes the recommendations. Signed-in members can join a circle, save opportunities, and send requests that another account can accept or decline.
+[Open the live website](https://stembridge-ivory.vercel.app)
 
-Search opportunities by topic or skill, search members by their public profile information, and open a member's full profile before choosing guidance or collaboration. Search works alongside the existing filters.
+## Features
 
-The sample preview uses fictional people and illustrative opportunities. Live networking requires a configured Supabase project and real registered test accounts; sample cards are not a live community. The current verification record is in [BUILD_STATUS.md](BUILD_STATUS.md).
+- **Personal next steps:** choose a goal, list current skills, and see the requirements covered and what to learn next.
+- **Mentors and peers:** discover opted-in members, view profiles and send a focused request. Recipients can accept or decline; senders can cancel pending requests.
+- **Community circles:** join communities and find their visible members. A member can learn and mentor at the same time.
+- **Discovery:** search and filter resources, projects, competitions and internships; bookmark useful items.
+- **Different starting points:** find a first step for starting out, returning to STEM or seeking a project partner.
+- **English and Marathi:** switch the interface and authored content, retain the language choice and search translated catalog text. Personal writing stays unchanged.
+- **Offline continuity:** prepare once, then revisit public content and eight original exercises. Save device notes and completion, and export a text notebook.
+- **Optional Gemini:** suggest profile skills from an introduction, with supporting quotes. Users review the suggestions before saving.
 
-## Multilingual twist, with offline continuity
+## Prototype boundaries
 
-**Implemented:** a shared **English / Marathi** switch changes the main website: navigation, My Hub, communities, authored catalog content, profiles and account forms, plans, requests and offline exercises. The reading choice persists on this device. Search supports English and translated Marathi catalog/skill text. Personal names, bios, messages, notes and user-written next steps stay exactly as entered. External resources and unknown provider error messages keep their source language. No translation API, Gemini key or new SQL migration is needed.
+The sample preview contains **fictional people and illustrative opportunities**. Competition and internship cards are not current openings. Official resources link to their publishers. See [data sources and limits](DATA_SOURCES.md).
 
-**Offline support remains available as an extra:** prepare this browser once, then reopen the website, catalog and eight original STEM exercises without the website server. Notes and practice completion save on this device, survive reload and export as a text file. Both reading languages remain available in the prepared website.
+Matching uses transparent rules based on goals, listed skills, interests and connection preferences. Skill coverage is **self-reported**, not a proficiency or employability score. AI assists profile entry; it does not generate the community or make matching decisions.
 
-A previously loaded account can read its own saved profile, goal, skills and bookmarks while its Supabase session remains unexpired. The saved copy is labelled and contains no directory or inbox. Account changes, sign-in and communication need internet; no requests queue for later. Device notes do not sync to the cloud and are cleared on explicit sign-out or a different account signing in. Automatic session expiry preserves the notes but locks them until the same account signs in again; preview cannot read, edit or export them. Download important work before an intentional sign-out.
+Real networking requires Supabase and registered accounts. Profiles start hidden and closed to requests until members opt in. Requests use an in-app inbox. Ongoing chat, calls, email notifications, verified mentors and production moderation are outside this prototype.
 
-Use a production build for the offline demonstration:
+Offline mode does not send requests or update cloud accounts. Prepared public content and device notes work offline; saved account snapshots require the matching unexpired session. Directory and inbox data are not cached. Notes do not sync to the cloud; export important work before signing out. External websites need internet.
 
-```powershell
-npm run build
-npm run start -- -p 3001
-```
+## Technology
 
-Open [http://localhost:3001](http://localhost:3001), choose **Offline learning**, and wait for **Ready on this device**. Prepare the exact deployed URL separately. The updated [owner guide](docs/OWNER_NEXT_STEPS.md), [teammate testing guide](docs/TEAM_TESTING_GUIDE.md) and [live judging guide](docs/LIVE_JUDGING_GUIDE.md) cover multilingual access, offline continuity, current evidence and remaining checks. Their PDFs in `output/pdf/` replace the earlier versions. The separate [offline twist guide](docs/OFFLINE_TWIST_GUIDE.md) remains an optional focused reference.
+Next.js App Router, React, TypeScript, Tailwind CSS, Supabase Auth/PostgreSQL with row-level security, Google Gemini REST API, and a service worker. Tests use Vitest, Happy DOM and PGlite.
 
 ## Run locally
 
-**New:** My Hub → **Find my first step** offers different actions for starting out, returning to STEM and finding a project partner. It checks learning prerequisites, preserves existing skills and carries an editable introduction into request review. The [owner checklist](docs/OWNER_NEXT_STEPS.md), [team testing guide](docs/TEAM_TESTING_GUIDE.md) and [live judging guide](docs/LIVE_JUDGING_GUIDE.md) explain setup, independent testing and presentation. Printable copies are in `output/pdf/`.
+Use Node.js 24 LTS and npm.
 
-Install a current supported Node.js LTS release and npm, then run these commands from the project folder:
-
-```powershell
-npm install
+```sh
+npm ci
+cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Without environment variables, use the labelled sample preview. Preview profile changes and saved items use this browser's local storage; preview cards cannot receive real requests.
+On PowerShell use `Copy-Item .env.example .env.local` for the copy step. Do not overwrite an existing environment file. Open [localhost:3000](http://localhost:3000).
 
-**Current local setup:** Supabase's URL and publishable key are already configured. Hosted REST returns two community records and denies anonymous reads of private learner, membership and request tables. Signup is enabled, but **Confirm email is currently ON**; manually turn it off under **Authentication → Sign In / Providers → Email** for immediate prototype signup. Use email addresses you control for the two-account test; placeholder `.invalid` and `example.com` addresses were rejected and created no accounts. `GEMINI_API_KEY` was confirmed empty at 3:25 PM IST.
+Without Supabase, the labelled sample preview remains usable. For accounts:
 
-For a fresh checkout or a different Supabase project (the current workspace has already completed the project/schema/key setup):
+1. Create a Supabase project and run [supabase/schema.sql](supabase/schema.sql).
+2. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `.env.local`. Never expose a service-role key.
+3. Configure email/password authentication and the Site URL. See [Supabase setup](docs/SUPABASE_SETUP.md) for confirmation and testing.
+4. Restart. Create test accounts in independent browser sessions; enable directory visibility and incoming requests on the recipient.
 
-1. Create a project on Supabase's Free plan in your own account.
-2. Run the complete [supabase/schema.sql](supabase/schema.sql) in that project's SQL Editor.
-3. Copy `.env.example` to `.env.local` if the latter does not already exist. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` from Project Settings → API. Never put a secret/service-role key in the frontend.
-4. Enable email/password auth and turn **Confirm email** off for this disclosed, unverified-account prototype. Supabase's default email service is restricted; see the [setup guide](docs/SUPABASE_SETUP.md).
-5. Restart the development server. Create separate learner and supporter accounts in two independent browser sessions. Make the supporter discoverable and open to requests.
-6. Optionally add server-only `GEMINI_API_KEY` and restart. `GEMINI_MODEL` defaults to `gemini-2.5-flash-lite`. Manual profile editing remains available without AI.
+For optional AI add server-only `GEMINI_API_KEY`. The default is `gemini-3.5-flash-lite`; `GEMINI_MODEL` overrides it. Manual skill entry works without AI. Never commit `.env.local` or keys.
 
-The complete setup, account test and recovery steps are in [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md).
+## Test and build
 
-## What the numbers and recommendations mean
-
-- Requirement coverage compares confirmed, self-reported skill IDs with this listing's explicit requirements. Priya's sample profile covers three of seven requirements for the sample ML project. This is not an employability score or a verified skills assessment.
-- Recommendations use ordinary, readable matching rules. Domain, visibility, request availability and the online-only preference filter people; relevant skills determine the order and explanations.
-- AI only suggests profile fields from the learner's description after consent. The learner reviews them. AI does not invent people, rank deservingness, assess hiring eligibility or send requests.
-- Saving a resource does not add a skill. No outcome or internship is guaranteed. Some robotics activities require hardware even when their instructions are free to read.
-
-## Accounts and privacy
-
-Profiles start hidden and closed to requests. Members explicitly opt into the directory. A discoverable profile and its joined circles are visible to the community; circle totals describe **visible members**. Private learner state is separate from the public profile.
-
-Database rules restrict private learner records to their owner and requests to their sender/recipient. Request functions enforce who can create, respond or cancel. Requests are delivered to the in-app database inbox; no email notification is sent. The hosted permission checks must be completed before describing the configured backend as verified.
-
-Passwords are handled by Supabase Auth. The proposed hackathon setup disables email confirmation for immediate signup, but that setting is currently still ON and requires the participant's manual change. With confirmation off, account email identities are unverified; mentor credentials are not verified in either mode. Production moderation, abuse controls, email delivery, account deletion and identity verification are outside this prototype.
-
-## Checks and presentation
-
-```powershell
-npm run test
+```sh
+npm test
 npm run typecheck
 npm run build
-npm run start
+npm run start -- --port 3001
 ```
 
-The test suite covers requirement comparison, data integrity, online-only filtering, matching reasons and distinct pathways. It also executes the actual SQL schema in PGlite PostgreSQL to check row permissions, signup initialization, request transitions and forbidden actions. The external Supabase Auth boundary is emulated in these local tests. The two-account browser flow and third-account hosted privacy checks are documented in [docs/RLS_CHECKS.sql](docs/RLS_CHECKS.sql); local tests do not substitute for those hosted checks.
+Use the production build for offline checks. Open **Offline learning**, wait for **Ready on this device**, and test a reload with the network disabled. Prepare each browser and deployment separately.
 
-**Verification:** all **124 tests across 14 files**, TypeScript and the production build passed at approximately **15:30 IST on 28 September 2026**, including the main-site language integration. The production browser passed Marathi navigation, hub, goal plan, catalog search, signup/profile forms and a 390px layout without horizontal overflow; checkboxes were readable at 19 by 19 pixels. These are local checks, not hosted account proof. In the earlier production browser check at port 3001, the prepared website remained interactive after its server process was stopped: reload, catalog/details, exercise entry, edited notes surviving a second reload, Marathi preference, notes/completion and text export were checked. The downloaded Marathi-note file was verified on disk at approximately 14:53. At 390px width there was no horizontal overflow and Marathi letters rendered correctly. This proves the cached website works with its server unavailable; full browser **Network → Offline** testing and the hosted URL still need the guided participant check. Automated tests separately cover `navigator.onLine === false`, blocked writes, session expiry and account isolation. Hosted REST connectivity and anonymous-access denial pass; authenticated Supabase/request lifecycle, live Gemini and deployment remain pending verification.
+Tests cover matching, AI evidence, translations, profile state, member discovery, offline storage and account isolation. PGlite executes the schema to test permissions and request transitions. Local tests do not replace a real two-account walkthrough on the deployed site. See [RLS checks](docs/RLS_CHECKS.sql).
 
-See [JUDGE_NOTES.md](JUDGE_NOTES.md) for the demonstration, [DATA_SOURCES.md](DATA_SOURCES.md) for provenance, and [BUILD_STATUS.md](BUILD_STATUS.md) for actual verification outcomes and remaining setup. [The feature roadmap](docs/FEATURES.md) separates implemented features, useful later additions and work to avoid before the updated **4:10 PM IST** deadline.
+## Deploy on Vercel
 
-## Optional Vercel deployment
+Import this repository with the Next.js preset. Set the two Supabase variables and, for AI, `GEMINI_API_KEY` and `GEMINI_MODEL=gemini-3.5-flash-lite`. **Redeploy after environment changes.** Update an older model override even if the source default changed.
 
-1. This workspace already has `origin` configured as [arnavkhurd/stembridge](https://github.com/arnavkhurd/stembridge) and is on `main`, with local commit `40e2f37` (`second commit, major features added, prod ready build`) and uncommitted changes at the latest inspection. Reuse that repository and remote. This local evidence does not confirm that the latest changes were pushed or deployed.
-2. In the project terminal, run the following after your final checks. Before committing, confirm `.env.local`, `node_modules` and `.next` are absent from the staged-file list; `.env.example` is safe because it contains no key values.
+Set Supabase's Site URL and allowed redirects for the deployed origin. Verify sign-in, profile saving, visibility and requests with separate accounts on the deployed URL before presenting the live account flow.
 
-```powershell
-git status --short
-git add .
-git diff --cached --name-only
-git commit -m "Build STEMBridge prototype"
-git push -u origin main
-```
+## Code map
 
-3. In Vercel, choose **Add New → Project**, connect your GitHub account if needed, and **Import** the `stembridge` repository.
-4. Keep **Framework Preset: Next.js** and **Root Directory: `./`**. Use the framework's default build/output settings.
-5. Open **Environment Variables** before deploying. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. For AI, also add `GEMINI_API_KEY` and optionally `GEMINI_MODEL=gemini-2.5-flash-lite`. Use the same configured Supabase project as local development. Never add a service-role/secret key to a `NEXT_PUBLIC_` variable.
-6. Click **Deploy**. Open the resulting URL when the build completes. If you add or change environment variables later, redeploy; the browser's Supabase settings are built into the client bundle.
-7. In Supabase **Authentication → URL Configuration**, set **Site URL** to the deployed origin. Then run the learner/supporter walkthrough at the deployed URL in two independent browser sessions.
-8. Confirm a request persists across refresh, can be accepted only by its recipient, and remains invisible to a third account. Only then describe that hosted flow as verified and submit the actual deployment URL.
+- `src/components/`: interface, workspace state and offline learning.
+- `src/lib/data.ts`, `matching.ts`, `support-plan.ts`: catalog, matching and first-step planning.
+- `src/lib/i18n*.ts`: English/Marathi content.
+- `src/app/api/profile/route.ts`: consent-based Gemini suggestions, requiring sign-in when Supabase is configured.
+- `supabase/schema.sql`: database schema, permissions and request functions.
+- `public/sw.js`: offline public website cache.
 
-See [Vercel's GitHub deployment guide](https://vercel.com/docs/git/vercel-for-github). Do not commit `.env.local` or paste credentials into a public issue or screenshot. A successful build alone does not confirm database setup or hosted behavior. Publishing and submission remain participant actions unless separately authorized and completed.
-
-## Small file map
-
-- `src/components/`: interface and workspace state; `src/lib/data.ts` and `matching.ts`: typed catalog and transparent recommendations.
-- `src/lib/supabase/`, `src/proxy.ts`, `supabase/schema.sql`: account session handling and database access rules.
-- `src/app/api/profile/route.ts`: optional server-side Gemini profile suggestion; `docs/`: setup and permission checks.
+Internal rehearsal notes and generated handoff PDFs are kept locally and excluded from this repository.
